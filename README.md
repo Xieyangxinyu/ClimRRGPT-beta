@@ -25,7 +25,7 @@ exit # exit shell
 Lastly, create a ``.env`` file in the root directory of the project and add the following:
 ```
 OPENAI_API_KEY=<your openai api key>
-model=<your model name> # e.g. gpt-4-1106-preview
+model=<your model name  # e.g. gpt-4-1106-preview>
 ```
 Please check [OpenAI Model Pricing](https://openai.com/pricing) before choosing a model.
 
