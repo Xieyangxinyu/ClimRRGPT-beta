@@ -33,6 +33,12 @@ def get_author(authors_str):
     return formatted
 
 def literature_search(query):
+    '''
+    input: 
+        query: the query to search for. For example, 'What is the relationship between climate change and wildfire?'
+    output:
+        a string containing the titles and abstracts of the 5 most relevant papers
+    '''
     results = search(query)
     return "\n\n".join([f"{i + 1}. Title: {result['title']}. Authors: {get_author(result['authors'])}. Year: {result['year']}.\n Abstract: {result['abstract']}." for i, result in results.iterrows()])
 
