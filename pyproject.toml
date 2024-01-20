@@ -20,6 +20,7 @@ beautifulsoup4 = "^4.12.3"
 geopy = "^2.4.1"
 clipboard = "^0.0.4"
 plotly = "^5.18.0"
+matplotlib = "^3.8.2"
 
 
 [build-system]

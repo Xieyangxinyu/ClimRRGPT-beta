@@ -80,26 +80,24 @@ def run_conversation(messages, tools, available_functions, config):
         tool_choice="auto",
     )
     response_message = response.choices[0].message
-    print(response_message)
+    #print(response_message)
     if response_message.tool_calls:
         response_message.tool_calls = response_message.tool_calls[:1]
         tool_calls = response_message.tool_calls
         messages.append(response_message)
         for tool_call in tool_calls:
-            function_name = tool_call.function.name
-            function_to_call = available_functions[function_name]
-            function_args = json.loads(tool_call.function.arguments)
-            function_args["messages"] = messages[:-1]
             try:
+                function_name = tool_call.function.name
+                function_to_call = available_functions[function_name]
+                function_args = json.loads(tool_call.function.arguments)
                 function_response = function_to_call(**function_args)
+                if config["available_functions"][function_name]["appendix"]:
+                    path = config["path"] + "appendix/" + config["available_functions"][function_name]["appendix"]
+                    function_response = add_appendix(function_response, path)
             except Exception as e:
                 print(e)
-                function_response = "Something went wrong. Please try again."
+                function_response = str(e) 
                 #function_response = run_conversation(messages[:-1], tools, available_functions, config)
-            
-            if config["available_functions"][function_name]["appendix"]:
-                path = config["path"] + "appendix/" + config["available_functions"][function_name]["appendix"]
-                function_response = add_appendix(function_response, path)
             
             message = {
                 "tool_call_id": tool_call.id,
@@ -107,7 +105,7 @@ def run_conversation(messages, tools, available_functions, config):
                 "name": function_name,
                 "content": function_response,
             }
-            print(function_response)
+            #print(function_response)
             messages.append(message)
         return messages
     

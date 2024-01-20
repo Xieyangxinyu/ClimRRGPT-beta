@@ -1,0 +1,8 @@
+path: src/memory/
+available_functions:
+  checklist_complete:
+    description: "If all questions in the checklist are answers, call this function."
+    parameters:
+    required: []
+    appendix:
+    add_to_message: false

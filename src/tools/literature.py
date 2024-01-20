@@ -40,7 +40,7 @@ index = faiss.read_index("./data/wildfire_index.bin")
 # Load a sentence transformer model
 model = SentenceTransformer('all-MiniLM-L6-v2', device='mps')
 
-def search(query, k=5):
+def search(query, k=3):
     query_vector = model.encode([query]).astype(np.float32)
     _, indices = index.search(query_vector, k)
     return df.iloc[indices[0]].reset_index(drop=True)
@@ -61,7 +61,7 @@ def literature_search(query, messages = None):
     input: 
         query: the query to search for. For example, 'What is the relationship between climate change and wildfire?'
     output:
-        a string containing the titles and abstracts of the 5 most relevant papers
+        a string containing the titles and abstracts of the 3 most relevant papers
     '''
     results = search(query).to_dict('records')
     for _, result in enumerate(results):
@@ -97,7 +97,7 @@ def literature_search(query, messages = None):
             else:
                 result['doi'] = 'Failed to fetch data'
     
-    message = f"Here are the 5 most relevant papers for your query '{query}':\n\n"
+    message = f"Here are the 3 most relevant papers for your query '{query}':\n\n"
     for i, result in enumerate(results):
         message += f"{i+1}. Title: {result['title']}\n"
         message += f"Authors: {get_author(result['authors'])}\n"

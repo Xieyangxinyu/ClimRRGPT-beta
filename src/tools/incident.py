@@ -22,7 +22,7 @@ from geopy.distance import geodesic
 
 def extract_historical_fire_data(lat, lon, start_year=2015, end_year=2023, source_file="./data/Wildland_Fire_Incident_Locations_pruned.csv"):
     '''
-    Finds all fire incidents within 50 miles (approximately 80.4672 kilometers) of the given latitude and longitude, and within the given time range.
+    Finds all fire incidents within 10 miles (approximately 80.4672 kilometers) of the given latitude and longitude, and within the given time range.
     input:
         lat: latitude of the location
         lon: longitude of the location
@@ -32,10 +32,9 @@ def extract_historical_fire_data(lat, lon, start_year=2015, end_year=2023, sourc
     '''
 
     # check if the input is valid
-    if start_year < 2015 or end_year > 2023:
-        return "start_year must be later than 2015 and end_year must be earlier than 2023."
-    if start_year > end_year:
-        return "start_year must be earlier than end_year."
+    assert start_year >= 2015, "start_year must be later than 2015"
+    assert end_year <= 2023, "end_year must be earlier than 2023"
+    assert start_year <= end_year, "start_year must be earlier than end_year"
 
     # Load data
     data = pd.read_csv(source_file)
@@ -43,8 +42,8 @@ def extract_historical_fire_data(lat, lon, start_year=2015, end_year=2023, sourc
     # Filter data by year
     data = data[(data["year"] >= start_year) & (data["year"] <= end_year)]
 
-    # Convert 50 miles to kilometers
-    max_distance_km = 50 * 1.60934  # 50 miles in kilometers
+    # Convert 10 miles to kilometers
+    max_distance_km = 10 * 1.60934  # 10 miles in kilometers
 
     # Calculate distances
     distances = data.apply(lambda row: geodesic((lat, lon), (row['lat'], row['lon'])).kilometers, axis=1)
@@ -56,7 +55,7 @@ def extract_historical_fire_data(lat, lon, start_year=2015, end_year=2023, sourc
 
 import streamlit as st
 
-def generate_recent_wildfire_incident_summary_report(lat, lon, start_year=2015, end_year=2023, messages=None):
+def generate_recent_wildfire_incident_summary_report(lat, lon, start_year=2015, end_year=2023):
     data = extract_historical_fire_data(lat, lon, start_year, end_year)
     if type(data) == str:
         return data  + " Please try again."
@@ -70,7 +69,6 @@ def generate_recent_wildfire_incident_summary_report(lat, lon, start_year=2015, 
     # Create subplots with two rows and one column
     fig = sp.make_subplots(rows=2, cols=1, shared_xaxes=False, subplot_titles=("Wildfire Incidents per Year", "Wildfire Incidents per Month, Aggregated Across Years"))
 
-    print(incidents_per_year)
     # Add the first line chart to the first subplot
     fig.add_trace(go.Scatter(x=incidents_per_year.index, y=incidents_per_year, mode='lines', name='Yearly Incidents'), row=1, col=1)
 
@@ -84,7 +82,7 @@ def generate_recent_wildfire_incident_summary_report(lat, lon, start_year=2015, 
 
     # Summary of incidents
     summary = f"Incidents per Year:\n{incidents_per_year}\n\nIncidents per Month:\n{incidents_per_month}\n"
-    pickle.dump(fig, open("temp", "wb"))
+    pickle.dump([fig], open("temp", "wb"))
 
     return summary
     

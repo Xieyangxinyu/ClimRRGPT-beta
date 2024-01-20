@@ -13,7 +13,7 @@ available_functions:
     appendix: "FWI.md"
 
   history:
-    description: "Provide latitude and longitude to get the three closest fire history records within a 50-mile radius, dating back centuries. This is useful for understanding the long-term history of wildfires in the area and how they have changed over time."
+    description: "Provide latitude and longitude to get the three closest fire history records within a 10-mile radius, dating back centuries. This is useful for understanding the long-term history of wildfires in the area and how they have changed over time."
     parameters:
       lat:
         description: "The latitude of the location"
@@ -22,10 +22,10 @@ available_functions:
         description: "The longitude of the location"
         type: number
     required: ["lat", "lon"]
-    appendix: 
+    appendix: history.md
 
   incident:
-    description: "To provide summary statistics of recent wildfire incidents (year 2015 - 2023) within 50 miles of the specified area and time frame."
+    description: "To provide summary statistics of recent wildfire incidents (year 2015 - 2023) within 10 miles of the specified area and time frame."
     parameters:
       lat:
         description: "The latitude of the location"
@@ -46,7 +46,8 @@ available_functions:
     description: "Input a query related to the user's project or concern, and receive titles and abstracts of relevant papers."
     parameters:
       query:
-        description: "The query to search for based on the user's project. **Example:**\n- Effective wildfire mitigation techniques for forest ecosystems in Southern Kansas.\n- Fire-resistant construction materials and techniques for bridge building in wildfire-prone areas of Southern California.\n -Study of local vegetation types in Northern New Mexico and their influence on wildfire behavior and spread.\n"
+        description: "A detailed query to search for based on the user's project. Please be as specific as possible. **Example:**\n- Effective wildfire mitigation techniques for forest ecosystems in Southern Kansas.\n- Fire-resistant construction materials and techniques for bridge building in wildfire-prone areas of Southern California.\n -Study of local vegetation types in Northern New Mexico and their influence on wildfire behavior and spread.\n"
         type: string
     required: ["query"]
     appendix: literature.md
+

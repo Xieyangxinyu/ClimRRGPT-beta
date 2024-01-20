@@ -30,7 +30,7 @@ def get_wildfire_index(wildfire_df, cross_model):
     wildfire_index = wildfire_df[wildfire_df['Crossmodel'] == cross_model].iloc[0]
     return wildfire_index
 
-def FWI_retrieval(lat, lon, messages=None):
+def FWI_retrieval(lat, lon):
     '''
     input:
         lat: latitude of the location
@@ -43,7 +43,10 @@ def FWI_retrieval(lat, lon, messages=None):
     wildfire_index = get_wildfire_index(wildfire_df, cross_model)
 
     output = f"Historically (1995 - 2004), the Fire Weather Index (FWI) for location (lat: {lat}, lon: {lon}) is {wildfire_index['wildfire_spring_Hist']} in spring, {wildfire_index['wildfire_summer_Hist']} in summer, {wildfire_index['wildfire_autumn_Hist']} in autumn, and {wildfire_index['wildfire_winter_Hist']} in winter. In the mid-century (2045 - 2054), the FWI is projected to be {wildfire_index['wildfire_spring_Midc']} in spring, {wildfire_index['wildfire_summer_Midc']} in summer, {wildfire_index['wildfire_autumn_Midc']} in autumn, and {wildfire_index['wildfire_winter_Midc']} in winter. In the end-of-century (2085 - 2094), the FWI is projected to be {wildfire_index['wildfire_spring_Endc']} in spring, {wildfire_index['wildfire_summer_Endc']} in summer, {wildfire_index['wildfire_autumn_Endc']} in autumn and {wildfire_index['wildfire_winter_Endc']} in winter."
-    categories = ['Historically(1995 - 2004)', 'Mid-Century(2045 - 2054)', 'End-of-Century(2085 - 2094)']
+    
+    ## Visualizations
+    
+    categories = ['Historical(1995 - 2004)', 'Mid-Century(2045 - 2054)', 'End-of-Century(2085 - 2094)']
     fwi_values = [
         [wildfire_index['wildfire_spring_Hist'], wildfire_index["wildfire_spring_Midc"], wildfire_index["wildfire_spring_Endc"]],
         [wildfire_index['wildfire_summer_Hist'], wildfire_index["wildfire_summer_Midc"], wildfire_index["wildfire_summer_Endc"]],
@@ -57,9 +60,38 @@ def FWI_retrieval(lat, lon, messages=None):
 
     # Add title
     fig.update_layout(title=f'Fire Weather Index (FWI) Data for Location (lat: {lat}, lon: {lon})')
-    
+
+    # Load your DataFrame
+    df = pd.read_csv('./data/CCSM_2004_1995_crossmodel.csv', usecols=[cross_model])
+
+    # Clip negative values
+    df = df.clip(lower=0)
+
+    # Group by day of the year
+    grouped = df.groupby(df.index % 365)
+
+    # Calculate statistics
+    statistics = grouped[cross_model].agg(['median', 'min', 'max'])
+
+    # Create a Plotly figure
+    ts = go.Figure()
+
+    # Add Mean line
+    ts.add_trace(go.Scatter(x=statistics.index, y=statistics['median'], mode='lines', name='Median', line=dict(color='red')))
+    # Add Max line
+    ts.add_trace(go.Scatter(x=statistics.index, y=statistics['max'], mode='lines', name='Max', line=dict(dash='dash', color='purple')))
+    # Add Min line
+    ts.add_trace(go.Scatter(x=statistics.index, y=statistics['min'], mode='lines', name='Min', line=dict(dash='dash', color='orange')))
+    # Update layout
+    ts.update_layout(
+        title='Historical Fire Weather Index(FWI) (1995-2004) for Each Day of the Year',
+        xaxis_title='Day of the Year',
+        yaxis_title='FWI',
+        legend_title='Statistics'
+    )
+
     # save the figure as a pickle object
-    pickle.dump(fig, open("temp", "wb"))
+    pickle.dump([fig, ts], open("temp", "wb"))
 
     return output
 
