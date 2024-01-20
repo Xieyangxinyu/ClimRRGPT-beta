@@ -1,0 +1,52 @@
+path: src/tools/
+available_functions:
+  FWI:
+    description: "Input latitude and longitude to receive decade-level FWI projection data, including historical (1995 - 2004), mid-century (2045 - 2054), and end-of-century projections (2085 - 2094)."
+    parameters:
+      lat:
+        description: "The latitude of the location"
+        type: number
+      lon:
+        description: "The longitude of the location"
+        type: number
+    required: ["lat", "lon"]
+    appendix: "FWI.md"
+
+  history:
+    description: "Provide latitude and longitude to get the three closest fire history records within a 50-mile radius, dating back centuries. This is useful for understanding the long-term history of wildfires in the area and how they have changed over time."
+    parameters:
+      lat:
+        description: "The latitude of the location"
+        type: number
+      lon:
+        description: "The longitude of the location"
+        type: number
+    required: ["lat", "lon"]
+    appendix: 
+
+  incident:
+    description: "To provide summary statistics of recent wildfire incidents (year 2015 - 2023) within 50 miles of the specified area and time frame."
+    parameters:
+      lat:
+        description: "The latitude of the location"
+        type: number
+      lon:
+        description: "The longitude of the location"
+        type: number
+      start_year:
+        description: "The start year of the historical data, must be later than 2015"
+        type: number
+      end_year:
+        description: "The end year of the historical data, must be earlier than 2023"
+        type: number
+    required: ["lat", "lon", "start_year", "end_year"]
+    appendix: incident.md
+  
+  LiteratureSearch:
+    description: "Input a query related to the user's project or concern, and receive titles and abstracts of relevant papers."
+    parameters:
+      query:
+        description: "The query to search for based on the user's project. **Example:**\n- Effective wildfire mitigation techniques for forest ecosystems in Southern Kansas.\n- Fire-resistant construction materials and techniques for bridge building in wildfire-prone areas of Southern California.\n -Study of local vegetation types in Northern New Mexico and their influence on wildfire behavior and spread.\n"
+        type: string
+    required: ["query"]
+    appendix: literature.md

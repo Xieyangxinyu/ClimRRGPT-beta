@@ -12,7 +12,7 @@ model = os.getenv("OPENAI_MODEL")
 
 def checklist_of_questions(messages, context):
     
-    messages = messages + [{"role": "system", "content": context}]
+    messages = messages + [{"role": "system", "content": "List 3 clarifying questions you can ask the user.\n**Only output the list of questions.**"}]
     
     response = client.chat.completions.create(
         model=model,

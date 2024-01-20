@@ -19,6 +19,7 @@ watchdog = "^3.0.0"
 beautifulsoup4 = "^4.12.3"
 geopy = "^2.4.1"
 clipboard = "^0.0.4"
+plotly = "^5.18.0"
 
 
 [build-system]

@@ -141,7 +141,7 @@ def get_publications(url):
 
 # Re-defining the functions and re-loading the data as the code execution state was reset
 
-def find_closest_fire_histories_within_50_miles(lat, lon):
+def find_closest_fire_histories_within_50_miles(lat, lon, messages=None):
     """
     Finds the 3 closest fire history records to the given latitude and longitude within 50 miles.
     Returns a list of dictionaries of the fire history data, up to a maximum of max_results records.
@@ -170,9 +170,9 @@ def find_closest_fire_histories_within_50_miles(lat, lon):
 
     # if no records found, return a message
     if not combined_records:
-        return "No fire history records found within 50 miles."
+        return "No fire history records found within 50 miles. This only means that we do not find research data from NOAA’s fire history and paleoclimate services. I will let the user know and try to search for other data sources such as FWI and recent fire incidents."
     else:
-        return str(combined_records)
+        return str(combined_records) + "\n----------\nThis data is extracted from the International Multiproxy Paleofire Database (IMPD), an archive of fire history data derived from natural proxies such as tree scars and charcoal and sediment records. You can access the website: https://www.ncei.noaa.gov/products/paleoclimatology/fire-history\n----------\n\nDiscuss the research about the fire history of these sites and make sure to include all the links to data and metadata. Also include a 'References' section at the end of your answer.\n\n**Example**:\n As for the long term fire history, a study by Guiterman et al. (2015) used dendroecological methods (tree-ring analysis) to reconstruct a high-severity fire that occurred in 1993 in a ponderosa pine-dominated forest. The historical fire regime (1625-1871) at this site was characterized by frequent, low-severity fires, usually in dry years following wet years. Notably, fires ceased after 1871, coinciding with increased livestock grazing in the region.\n\n References:\nGuiterman et al., (2015), Dendroecological methods for reconstructing high-severity fire in pine-oak forests, Tree-Ring Research, 71(2), 67-77, 10.3959/1536-1098-71.2.67\n"
     
 
 if __name__ == '__main__':
