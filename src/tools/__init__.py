@@ -1,5 +1,5 @@
 
-from src.tools.history import find_closest_fire_histories_within_10_miles
+from src.tools.history import find_closest_fire_histories_within_50_miles
 from src.tools.incident import generate_recent_wildfire_incident_summary_report
 from src.tools.FWI import FWI_retrieval
 from src.tools.literature import literature_search

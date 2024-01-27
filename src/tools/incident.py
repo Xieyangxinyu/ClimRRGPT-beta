@@ -22,7 +22,7 @@ from geopy.distance import geodesic
 
 def extract_historical_fire_data(lat, lon, start_year=2015, end_year=2023, source_file="./data/Wildland_Fire_Incident_Locations_pruned.csv"):
     '''
-    Finds all fire incidents within 10 miles (approximately 80.4672 kilometers) of the given latitude and longitude, and within the given time range.
+    Finds all fire incidents within 50 miles (approximately 80.4672 kilometers) of the given latitude and longitude, and within the given time range.
     input:
         lat: latitude of the location
         lon: longitude of the location
@@ -42,8 +42,8 @@ def extract_historical_fire_data(lat, lon, start_year=2015, end_year=2023, sourc
     # Filter data by year
     data = data[(data["year"] >= start_year) & (data["year"] <= end_year)]
 
-    # Convert 10 miles to kilometers
-    max_distance_km = 10 * 1.60934  # 10 miles in kilometers
+    # Convert 50 miles to kilometers
+    max_distance_km = 10 * 1.60934  # 50 miles in kilometers
 
     # Calculate distances
     distances = data.apply(lambda row: geodesic((lat, lon), (row['lat'], row['lon'])).kilometers, axis=1)

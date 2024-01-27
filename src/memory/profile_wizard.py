@@ -10,7 +10,7 @@ with open("prompt/prompt.md", "r") as f:
 
 def beginning_messages(user):
     messages = [{"role": "assistant", "content": "Hello! I'm here to assist you with any questions or concerns you may have regarding wildfires. Could you please share with me why you are interested in learning about wildfires? Additionally, is there a specific project or task where wildfires could potentially have an impact on your plans?"},
-    {"role": "system", "content": f"Your task is to gather information about the user, i.e. your client, to understand their backgrounds and concerns and get answers for each question in the checklist. {user.summary}\n**Checklist**:{user.checklist}.\n\n Engage the user in conversation by **asking one short question at a time** with emojis. Every single one of your response should include a question. Limit your response to at most 2 sentences. **When you get all the answers, call the checklist_complete function.**"}]
+    {"role": "system", "content": f"Your task is to gather information about the user, i.e. your client, to understand their backgrounds and concerns and get answers for each question in the checklist. {user.profile}\n**Checklist**:{user.checklist}.\n\n Engage the user in conversation by **asking one short question at a time** with emojis. Every single one of your response should include a question. Limit your response to at most 2 sentences. **When you get all the answers, call the checklist_complete function.**"}]
     return messages
 
 def profile_wizard(user, messages):
@@ -36,7 +36,7 @@ def profile_wizard(user, messages):
         while len(messages) > 3:
             messages.pop()
         messages[0] = {"role": "system", "content": f"{prompt}"}
-        messages[1] = {"role": "assistant", "content": f"User Profile Summary: {user.summary}"}
+        messages[1] = {"role": "assistant", "content": f"User Profile Summary: {user.profile}"}
         messages[2] = {"role": "user", "content": "Tell me about how you plan to assist me!"}
     return response
 

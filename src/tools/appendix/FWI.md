@@ -6,4 +6,9 @@ The Fire Weather Index (FWI) estimates wildfire danger using weather conditions 
 
 **Instructions**: 
 
-Please analyze and interpret FWI numbers in [specified region] in the style of a research scientist. Explain what these FWI numbers indicate about future fire risks and how they compare to historical trends. **In particular, whether FWI number is high for this location.** Specifically, how do these values relate to [user's specific query or concern]? Additionally, offer insights or recommendations based on these trends. Finally, please provide the link to the data source for these FWI values. Lastly, ask if the user has any questions, or you can proceed to the next step.
+Please analyze and interpret FWI numbers in [specified region] in the style of a research scientist:
+- Explain what these FWI numbers indicate about future fire risks and how they compare to historical trends. **In particular, whether FWI number is high for this location.** 
+- Contextualize your data. How do these values relate to [user's specific query or concern]? 
+- Offer insights based on these trends. 
+- Provide the link to the data source for these FWI values. 
+- Ask if the user has any questions, or you can proceed to the next step.

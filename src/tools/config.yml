@@ -13,7 +13,7 @@ available_functions:
     appendix: "FWI.md"
 
   history:
-    description: "Provide latitude and longitude to get the three closest fire history records within a 10-mile radius, dating back centuries. This is useful for understanding the long-term history of wildfires in the area and how they have changed over time."
+    description: "Provide latitude and longitude to get the three closest fire history records within a 50-mile radius, dating back centuries. This is useful for understanding the long-term history of wildfires in the area and how they have changed over time."
     parameters:
       lat:
         description: "The latitude of the location"
@@ -25,7 +25,7 @@ available_functions:
     appendix: history.md
 
   incident:
-    description: "To provide summary statistics of recent wildfire incidents (year 2015 - 2023) within 10 miles of the specified area and time frame."
+    description: "To provide summary statistics of recent wildfire incidents (year 2015 - 2023) within 50 miles of the specified area and time frame."
     parameters:
       lat:
         description: "The latitude of the location"

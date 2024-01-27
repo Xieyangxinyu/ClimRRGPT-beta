@@ -141,13 +141,13 @@ def get_publications(url):
 
 # Re-defining the functions and re-loading the data as the code execution state was reset
 
-def find_closest_fire_histories_within_10_miles(lat, lon):
+def find_closest_fire_histories_within_50_miles(lat, lon):
     """
-    Finds the 3 closest fire history records to the given latitude and longitude within 10 miles.
+    Finds the 3 closest fire history records to the given latitude and longitude within 50 miles.
     Returns a list of dictionaries of the fire history data, up to a maximum of max_results records.
     """
     fire_data = pd.read_csv('./data/s1-NAFSS.csv')
-    max_distance_km = 10 * 1.60934  # 10 miles in kilometers
+    max_distance_km = 50 * 1.60934  # 50 miles in kilometers
     distances = fire_data.apply(lambda row: geodesic((lat, lon), (row['latitude'], row['longitude'])).kilometers, axis=1)
     fire_data['distance'] = distances
     nearby_records = fire_data[fire_data['distance'] <= max_distance_km].sort_values(by='distance')[:3]
@@ -171,7 +171,7 @@ def find_closest_fire_histories_within_10_miles(lat, lon):
     # if no records found, return a message
     if not combined_records:
         # throw an error message
-        raise Exception("No fire history records found within 10 miles of the given location. This only means that we do not find research data from NOAA’s fire history and paleoclimate services. I will let the user know and try to search for other data sources such as FWI and recent fire incidents.")
+        raise Exception("No fire history records found within 50 miles of the given location. This only means that we do not find research data from NOAA’s fire history and paleoclimate services. I will let the user know and try to search for other data sources such as FWI and recent fire incidents.")
     else:
         return str(combined_records)
     
@@ -179,4 +179,4 @@ def find_closest_fire_histories_within_10_miles(lat, lon):
         
 if __name__ == '__main__':
     # Testing the function
-    print(find_closest_fire_histories_within_10_miles(34.0356, -118.5156))
+    print(find_closest_fire_histories_within_50_miles(34.0356, -118.5156))

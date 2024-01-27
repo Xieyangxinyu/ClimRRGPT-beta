@@ -8,3 +8,9 @@ client = OpenAI()
 
 # read model from .env file
 model = os.getenv("OPENAI_MODEL")
+
+# create a directory for saving the chat history
+if not os.path.exists("chat_history"):
+    os.makedirs("chat_history")
+
+chat_history_path = "chat_history/"

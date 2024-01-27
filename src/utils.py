@@ -79,6 +79,7 @@ def run_conversation(messages, tools, available_functions, config):
         tools=tools,
         tool_choice="auto",
     )
+    messages.pop()
     response_message = response.choices[0].message
     #print(response_message)
     if response_message.tool_calls:

@@ -1,0 +1,10 @@
+init_message:
+  role: assistant
+  content: Hello! I'm here to assist you with any questions or concerns you may have regarding wildfires. Could you please share with me why you are interested in learning about wildfires? Additionally, is there a specific project or task where wildfires could potentially have an impact on your plans?
+summary_prompt:
+  role: system
+  content: |
+    Provide a comprehensive summary of the previous conversation, focusing on these key areas: 
+    1. Identify and emphasize crucial information regarding the wildfire, such as its current status, affected areas, and any specific challenges it presents to the user. This information is vital for formulating effective recommendations.
+    2. Catalogue all responses the user has given to your clarifying questions. Pay special attention to details like geographical coordinates (latitude and longitude) if the user mentioned a specific location. This will ensure accuracy in our context-specific advice.
+    3. Clarify the current stage of your action plan to assist the user with their wildfire-related concerns. What specific steps have been taken so far, and what is the immediate next action to be undertaken? This will help maintain a clear and focused approach moving forward.
