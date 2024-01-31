@@ -44,7 +44,12 @@ for message in st.session_state.messages:
 if user_prompt := st.chat_input("Ask me anything?"):
     st.session_state.messages.append({"role": "user", "content": user_prompt})
     st.session_state.openAI_messages.append({"role": "user", "content": user_prompt})
-    
+    # remove all messages from OpenAI_messages that are not user or assistant
+    if st.session_state.user.profile_complete:
+        st.session_state.openAI_messages = [message for message in st.session_state.openAI_messages if type(message) == dict]
+        st.session_state.openAI_messages = [message for message in st.session_state.openAI_messages if message["role"] in ["user", "assistant", "system"]]
+
+    temp = st.session_state.user.profile_complete
     with st.chat_message("user"):
         st.markdown(user_prompt)
 
@@ -59,22 +64,25 @@ if user_prompt := st.chat_input("Ask me anything?"):
             full_response = response_messages
         else:
             st.session_state.openAI_messages = response_messages
-        
-        if st.session_state.user.profile_complete and len(st.session_state.openAI_messages) > 7:
+        if temp != st.session_state.user.profile_complete:
+            memory = get_memory_prompt(st.session_state.user)
+            st.session_state.openAI_messages = [prompt_message, memory]
+
+        if st.session_state.user.profile_complete and len(st.session_state.openAI_messages) > 12:
             messages = st.session_state.openAI_messages
             memory = get_memory_prompt(st.session_state.user)
             try:
                 summary_message = client.chat.completions.create(
                     model=model,
-                    messages=messages[:-4] + [summary_prompt],
+                    messages=messages[2:-7] + [summary_prompt],
                 ).choices[0].message
-                messages = [prompt_message, memory, summary_message] + messages[-4:]
+                messages = [prompt_message, memory, summary_message] + messages[-7:]
             except:
                 summary_message = client.chat.completions.create(
                     model=model,
-                    messages=messages[:-5] + [summary_prompt],
+                    messages=messages[2:-8] + [summary_prompt],
                 ).choices[0].message
-                messages = [prompt_message, memory, summary_message] + messages[-5:]
+                messages = [prompt_message, memory, summary_message] + messages[-8:]
             
             save_content = ""
             for message in messages:

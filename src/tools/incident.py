@@ -81,7 +81,7 @@ def generate_recent_wildfire_incident_summary_report(lat, lon, start_year=2015, 
     fig.update_xaxes(title_text="Month", row=2, col=1)
 
     # Summary of incidents
-    summary = f"Incidents per Year:\n{incidents_per_year}\n\nIncidents per Month:\n{incidents_per_month}\n"
+    summary = f"Location: (lat: {lat}, lon: {lon}). \n\nIncidents per Year:\n{incidents_per_year}\n\nIncidents per Month:\n{incidents_per_month}\n"
     pickle.dump([fig], open("temp", "wb"))
 
     return summary

@@ -27,11 +27,11 @@ summary_prompt = {"role": prompts['summary_prompt']['role'], "content": prompts[
 
 def get_response(user: Profile, messages,):
     if user.profile_complete:
-        messages.append({"role": "system", "content": "Respond to the user. Think about if you need to ask clarifying questions."})
+        messages.append({"role": "system", "content": "Respond to the user. Think about if you need to ask clarifying questions. For example, you may want to ask the user for the exact location of interest."})
         response = run_conversation(messages, tools, available_functions, tools_config)
     else:
         response = profile_wizard(user, messages)
     return response
 
 def get_memory_prompt(user: Profile):
-    return {"role": "assistant", "content": f"Here is the user's profile: {user.profile}.\nHere is my plan to assist the user: {user.plan}."}
+    return {"role": "assistant", "content": f"Here is the user's profile: {user.profile}\nHere is my plan to assist the user: {user.plan}."}
