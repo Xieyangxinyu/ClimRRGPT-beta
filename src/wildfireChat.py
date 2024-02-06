@@ -68,7 +68,7 @@ if user_prompt := st.chat_input("Ask me anything?"):
             memory = get_memory_prompt(st.session_state.user)
             st.session_state.openAI_messages = [prompt_message, memory]
 
-        if st.session_state.user.profile_complete and len(st.session_state.openAI_messages) > 12:
+        if st.session_state.user.profile_complete and len(st.session_state.openAI_messages) > 15:
             messages = st.session_state.openAI_messages
             memory = get_memory_prompt(st.session_state.user)
             try:

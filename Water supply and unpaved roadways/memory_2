@@ -1,0 +1,111 @@
+system: As an expert consultant specializing in wildfire management, your role is to assist users with various aspects of wildfire understanding and mitigation. **Follow your plan step by step.**
+
+At the end of each of your response, ask the user's permission to proceed and if the user has questions.
+
+To ensure thorough assistance:
+- Always ask the user if you can move on to the next step of your plan or if they have any questions.
+- Frequently ask clarifying questions before your proceed with your plan. **This is the most important part of your role.** For example, if the user mentions a wildfire incident, ask for the location, date, and size of the incident.
+- Always back up your recommendations with data and literature. 
+- Only give 1 piece of recommendation at a time. Don't overwhelm the user with too much information.
+
+Here are the only ways that you can help:
+- Interpreting data such as the Fire Weather Index (FWI), long term fire history records, or recent fire incident data. Make sure you have asked for the location before interpreting data.
+- Researching relevant academic papers that could inform your recommendations.
+
+
+assistant: Here is the user's profile: The user is an individual with a strong interest in learning about wildfire and climate change, specifically focusing on the impact in the Sangre De Cristo Mountains. They are concerned about the potential risks and implications of wildfires in this region and are seeking information on how to better understand and address these challenges. Additionally, the user is keen on exploring the broader impact of wildfires on the local environment, communities, and public safety measures, with a particular interest in examining the intersection of wildfires and climate change, recognizing the potential exacerbating effects of changing environmental conditions. The user is specifically concerned about the impact of wildfires on water quality and the vulnerability of unpaved roadways and other critical infrastructure, aiming to address these challenges and understand the contribution of climate change to increasing wildfire risks in the region.
+Here is my plan to assist the user: Here's a step-by-step plan to effectively address your concerns:
+1. Understand your specific concerns and objectives related to wildfire risks and climate change impacts in the Sangre De Cristo Mountains region.
+2. Identify and interpret relevant data such as the Fire Weather Index, long-term fire history records, and recent fire incident data to assess the wildfire risks in the area.
+3. Research academic papers and scientific literature focusing on the intersection of wildfires and climate change in the region, with a specific emphasis on water quality, infrastructure vulnerability, and community safety. 
+4. Develop informed recommendations based on the data and research findings to help you better understand and mitigate wildfire risks, address the impact on water quality and infrastructure, and recognize the contribution of climate change to increasing wildfire risks in the region..
+
+
+assistant: 1. The user has expressed concerns about wildfire risks and climate change impacts in the Sangre De Cristo Mountains region. Specifically, the discussion has touched upon the Fire Weather Index (FWI) data, indicating projected increases in FWI values across all seasons, potentially leading to an elevated risk of fire occurrence. The escalation of FWI values signifies more favorable conditions for fire ignition and spread, highlighting the area's heightened wildfire risk.
+
+2. The user has not provided specific geographic coordinates or detailed information about recent fires or incidents in the Sangre De Cristo Mountains region. Their statements have primarily focused on their concerns about wildfires and the potential impact of climate change on fire frequency.
+
+3. The current stage of the action plan involves utilizing existing data sources, such as the Fire Weather Index (FWI) and seeking potential relevant fire incident data to assess the historical fire frequency. The immediate next action is to proceed with obtaining recent fire incident data for the Sangre De Cristo Mountains region to gain insight into historical fire frequency trends and patterns, further informing the analysis of wildfire risks and climate change impacts in the area.
+
+
+user: Sure
+
+
+assistant: Based on the fire incident data for the Sangre De Cristo Mountains region from 2015 to 2023, the average number of incidents per year is as follows:
+- 2016: 2
+- 2018: 1
+- 2019: 3
+- 2020: 4
+- 2022: 2
+
+When considering the incidents per month during this period, it is observed that the highest frequency of incidents occurred in July, which aligns with the typical peak of the fire season due to the dry and hot conditions during that time.
+
+These fire incident numbers indicate fluctuations in fire frequency over recent years, with an increasing trend in some years. The data also highlights the seasonal variability in fire occurrence, with the majority of incidents concentrated in the late spring and summer months.
+
+In the context of your specific concern about wildfire risks and the impact of climate change, the increasing trend in the number of fire incidents, particularly during the warmer and drier months, is concerning. This aligns with the projected increases in the Fire Weather Index (FWI) values, which indicate a heightened potential for fire activity, especially in the spring and summer seasons.
+
+You can access the data source for these fire incident numbers on the IRWIN (Integrated Reporting of Wildland Fire Information) incident service from 2015 to 2023 through the following link: [IRWIN Wildland Fire Incident Locations](https://data-nifc.opendata.arcgis.com/datasets/nifc::wildland-fire-incident-locations/about)
+
+Do you have any questions about the interpretation of the fire incident data or would you like to proceed to the next step?
+
+
+user: Interesting, so how does this impact water supply and unpaved roadways?
+
+
+assistant: The impact of wildfires on water supply and unpaved roadways can be multifaceted and potentially significant, especially in areas prone to increased fire risks like the Sangre De Cristo Mountains region. Let's delve into each of these aspects:
+
+1. **Water Supply**: 
+   - Wildfires can lead to significant changes in the hydrological cycle of a region, affecting water quantity, quality, and availability. The loss of vegetation in burn areas can increase the risk of soil erosion and sediment runoff into water bodies, impacting water quality.
+   - Post-fire debris, ash, and sediment can contaminate water sources, posing risks to water supply for both human consumption and ecological balance. More specifically, the presence of ash in water can lead to increased turbidity, pH imbalance, and the release of nutrients and heavy metals. 
+   - The potential for increased post-fire runoff due to the loss of vegetative cover can affect the rate of erosion and sedimentation in water sources, necessitating measures to safeguard water quality and mitigate impacts on downstream communities.
+
+2. **Unpaved Roadways**: 
+   - Wildfires can compromise the integrity of unpaved roadways, causing damage from heat, increased erosion, and soil compaction due to the movement of heavy equipment during fire suppression and recovery efforts.
+   - Ash, debris, and runoff from burned areas can lead to an increased risk of sedimentation, which may affect road surfaces and drainage systems. Additionally, the loss of vegetation cover can elevate the risk of landslides and debris flows in areas where roads traverse burn scars.
+   - Escalating wildfire risks necessitate proactive measures for maintaining and protecting unpaved roadways, as well as enhancing their resilience to minimize potential damage from fire-related impacts.
+
+Given these potential impacts, understanding the dynamic relationship between wildfires and their repercussions on water supply and unpaved roadways in the Sangre De Cristo Mountains region is crucial for developing effective mitigation strategies and response plans.
+
+Do you have any additional details about the specific locations or concerns related to water supply and roadways in the region? This would help in tailoring the analysis to address your precise areas of interest.
+
+
+user: Are these backed by scientific research?
+
+
+assistant: None
+
+
+tool: Here are the 3 most relevant papers for your query 'Impact of wildfires on water supply and unpaved roadways in fire-prone mountainous regions':
+
+1. Title: Assessing the long-term hydrologic response to wildfires in mountainous regions
+Authors: Aaron Havel, Ali Tasdighi, Mazdak Arabi
+Year: 2017.0
+DOI: https://doi.org/10.5194/hess-22-2527-2018
+Abstract: This study aims to understand the long-term hydrologic responses to wildfires in mountainous regions at various spatial scales. The Soil and Water Assessment Tool (SWAT) was used to evaluate hydrologic response of the upper Cache la Poudre watershed in Colorado to the 2012 High Park and Hewlett wildfire events. A baseline SWAT model was established to simulate the hydrology of the study area between the years 2000 and 2014. The effects of wildfires on land cover were accounted for in the model using the SWAT land use update module. The wildfire effects on curve numbers were determined comparing the probability distribution of curve numbers after calibrating the model for pre and post wildfire conditions. Daily calibration and testing of the model produced very good results. No-wildfire and wildfire scenarios were created and compared to quantify changes in average annual total runoff volume, water budgets, and full streamflow statistics at different spatial scales. At the watershed scale, wildfire conditions showed little impact on the hydrologic responses. However, a runoff increase up to 75 percent was observed between the scenarios in sub-watersheds with high burn intensity. Generally, higher surface runoff and decreased subsurface flow were observed under post-wildfire conditions. Flow-duration curves developed for burned sub-basins using full streamflow statistics showed that less frequent streamflows become greater in magnitude. A strong ( R 2 > 0.8) and significant ( p < 0.001) positive correlation was determined between runoff increase and percentage of burned area upstream. This study showed that the effects of wildfires on hydrology of a watershed are scale-dependent. Results also revealed that the wildfires had a higher effect on peak flows, which may increase the risk of flash floods in post-wildfire conditions.
+
+2. Title: Wildfire effects on road surface erosion, deposition, and road–stream connectivity
+Authors: Gabriel Sosa‐Pérez, Lee MacDonald
+Year: 2017.0
+DOI: https://doi.org/10.1002/esp.4018
+Abstract: High and moderate severity wildfires should increase sediment production from unpaved roads due to the increased surface runoff from upslope, and increase road-stream connectivity due to the decrease in downslope surface roughness as well as the increase in surface runoff and erosion. Because no study has documented these effects, we surveyed road surface erosion features and quantified road-stream connectivity as a function of fire severity and road segment characteristics. The data were collected one year after the High Park wildfire from 141 hydrologically distinct road segments along 6.8 km of an unpaved road west of Fort Collins, Colorado. Road segments below areas burned at high and moderate severity had significantly more rills than road segments below areas that burned at low severity. Road segment slope was an important control on the proportion of segment length with rills, and the strength of the relationship between road segment slope and the amount of rilling increased with burn severity. Flatter road segments tended to capture the sediment eroded from upslope burned areas. In areas burned at high and moderate severity all of the road segments had drainage features extending to a stream, and 78% of the segments in areas burned at low severity also were connected. These exceptionally high rates of road-stream connectivity are attributed to the increased runoff from upslope, the segment-scale collection and funneling of hillslope and road surface runoff to a single drainage point, and the reduced infiltration and trapping capacity of the burned area below the road. The results show the need to either outslope the roads or increase the frequency of constructed drainage features after wildfires, particularly for steeper road segments in areas burned at high or moderate severity. This article is protected by copyright. All rights reserved.
+
+3. Title: Assessing the hydrologic response to wildfires in mountainous regions
+Authors: Aaron Havel, Ali Tasdighi, Mazdak Arabi
+Year: 2018.0
+DOI: https://doi.org/10.5194/hess-22-2527-2018
+Abstract: This study aims to understand the hydrologic responses to wildfires in mountainous regions at various spatial scales. The Soil and Water Assessment Tool (SWAT) was used to evaluate the hydrologic responses of the upper Cache la Poudre Watershed in Colorado to the 2012 High Park and Hewlett wildfire events. A baseline SWAT model was established to simulate the hydrology of the study area between the years 2000 and 2014. A procedure involving land use and curve number updating was implemented to assess the effects of wildfires. Application of the proposed procedure provides the ability to simulate the hydrologic response to wildfires seamlessly through mimicking the dynamic of the changes due to wildfires. The wildfire effects on curve numbers were determined comparing the probability distribution of curve numbers after calibrating the model for pre- and post-wildfire conditions. Daily calibration and testing of the model produced very good results. No-wildfire and wildfire scenarios were created and compared to quantify changes in average annual total runoff volume, water budgets, and full streamflow statistics at different spatial scales. At the watershed scale, wildfire conditions showed little impact on the hydrologic responses. However, a runoff increase up to 75 % was observed between the scenarios in sub-watersheds with high burn intensity. Generally, higher surface runoff and decreased subsurface flow were observed under post-wildfire conditions. Flow duration curves developed for burned sub-watersheds using full streamflow statistics showed that less frequent streamflows become greater in magnitude. A linear regression model was developed to assess the relationship between percent burned area and runoff increase in Cache la Poudre Watershed. A strong ( R 2 > 0.8) and significant ( p < 0.001) positive correlation was determined between runoff increase and percentage of burned area upstream. This study showed that the effects of wildfires on hydrology of a watershed are scale-dependent. Also, using full streamflow statistics through application of flow duration curves revealed that the wildfires had a higher effect on peak flows, which may increase the risk of flash floods in post-wildfire conditions.
+
+----------
+
+# Instructions: 
+**Explain how these paper relate to the user's concern in the style of a news reporter.** For each paper that you plan to include in your answer, be sure to cite this paper with the in-text APA style. Also include a 'References' section at the end of your answer. 
+
+
+**Example**:
+The smoke and air pollution from wildfires can harm crops and livestock, impacting overall agricultural production in the area (Caldararo, 2015). Meanwhile, Reinhardt, E., Scott, J. H., & Iii, J. K. (2008) stress the importance of understanding the strengths and limitations of fuel treatments to evaluate their potential to achieve objectives, develop sensible fire management policies, and plan for their effective use. 
+
+References:
+Caldararo, N. (2015). Wildfire and Fire-adapted Ecology: How People Created the Current Fire Disasters. doi:http://doi.org/10.2139/ssrn.2649620
+Reinhardt, E., Scott, J. H., & Iii, J. K. (2008). Objectives and considerations for wildland fuel treatment in forested ecosystems of the interior western United States. Forest Ecology and Management, 256(12), 1997-2006. DOI: https://doi.org/10.1016/j.foreco.2008.09.016
+
+
