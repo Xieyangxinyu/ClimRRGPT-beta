@@ -1,4 +1,5 @@
 import geopandas as gpd
+from plotly.subplots import make_subplots
 from shapely.geometry import Point
 import pandas as pd
 import pickle
@@ -30,6 +31,21 @@ def get_wildfire_index(wildfire_df, cross_model):
     wildfire_index = wildfire_df[wildfire_df['Crossmodel'] == cross_model].iloc[0]
     return wildfire_index
 
+def categorize_fwi(value):
+    """Categorize the FWI value into its corresponding class and return the value and category."""
+    if value <= 9:
+        return 'Low'
+    elif value <= 21:
+        return 'Medium'
+    elif value <= 34:
+        return 'High'
+    elif value <= 39:
+        return 'Very High'
+    elif value <= 53:
+        return 'Extreme'
+    else:
+        return 'Very Extreme'
+
 def FWI_retrieval(lat, lon):
     '''
     input:
@@ -47,20 +63,59 @@ def FWI_retrieval(lat, lon):
     ## Visualizations
     
     categories = ['Historical(1995 - 2004)', 'Mid-Century(2045 - 2054)', 'End-of-Century(2085 - 2094)']
-    fwi_values = [
+    fwi_values_all = [
         [wildfire_index['wildfire_spring_Hist'], wildfire_index["wildfire_spring_Midc"], wildfire_index["wildfire_spring_Endc"]],
         [wildfire_index['wildfire_summer_Hist'], wildfire_index["wildfire_summer_Midc"], wildfire_index["wildfire_summer_Endc"]],
         [wildfire_index['wildfire_autumn_Hist'], wildfire_index["wildfire_autumn_Midc"], wildfire_index["wildfire_autumn_Endc"]],
         [wildfire_index['wildfire_winter_Hist'], wildfire_index["wildfire_winter_Midc"], wildfire_index["wildfire_winter_Endc"]]
     ]
+    fwi_values = [[round(value, 2) for value in sublist] for sublist in fwi_values_all]
+
+    # Combine each FWI value with its category
+    fwi_values_with_categories = [[(value, categorize_fwi(value)) for value in sublist] for sublist in fwi_values]
+
+    data = {
+    'FWI Class': ['Low', 'Medium', 'High', 'Very High', 'Extreme', 'Very Extreme'],
+    'FWI Values in Class': ['0-9 FWI', '9-21 FWI', '21-34 FWI', '34-39 FWI', '39-53 FWI', 'Above 53 FWI']
+    }
+
+    
+
     fig = go.Figure(data=[go.Table(
-            header=dict(values=['Category', 'Spring', 'Summer', 'Autumn', 'Winter']),
-            cells=dict(values=[categories] + fwi_values)
-            )])
-
+    header=dict(
+        values=['Category', 'Spring', 'Summer', 'Autumn', 'Winter'],
+        fill_color='royalblue',  # Header background color
+        align='left',
+        font=dict(color='white', size=14)  # Header text color and size
+    ),
+    cells=dict(
+        values=[categories] + fwi_values_with_categories,
+        fill_color=['paleturquoise', 'lavender'],  # Cell background colors
+        align='left',
+        font=dict(color='black', size=14)  # Cell text color and size
+    )
+    )])     
     # Add title
+    fig.update_layout(height=400)
     fig.update_layout(title=f'Fire Weather Index (FWI) Data for Location (lat: {lat}, lon: {lon})')
+   
 
+    fig2 = go.Figure(data=[go.Table(
+    header=dict(values=['FWI Class', 'FWI Values in Class'],
+                fill_color='paleturquoise',
+                align='left', font=dict(color='black', size=14)),
+    cells=dict(values=[data['FWI Class'], data['FWI Values in Class']],
+               fill_color='lavender',
+               align='left',font=dict(color='black', size=14)))
+    ])
+    fig2.update_layout(height=380)
+
+    pickle.dump([fig, fig2], open("temp", "wb"))
+
+
+
+    '''
+    
     # Load your DataFrame
     df = pd.read_csv('./data/CCSM_2004_1995_crossmodel.csv', usecols=[cross_model])
 
@@ -91,7 +146,11 @@ def FWI_retrieval(lat, lon):
     )
 
     # save the figure as a pickle object
-    pickle.dump([fig, ts], open("temp", "wb"))
+    # pickle.dump([fig, ts], open("temp", "wb"))
+    # pickle.dump([ts], open("temp", "wb"))
+    # with open("temp", "wb") as file:
+    #     pickle.dump(ts, file)
+    '''
 
     return output
 
