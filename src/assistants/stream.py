@@ -1,5 +1,3 @@
-import streamlit as st
-
 def check_tool_call(event):
     return event.event == 'thread.run.requires_action'
 
@@ -15,7 +13,6 @@ def manage_tool_call(event, on_tool_call_created):
             "output": output if output else "Success!"
         })
     return tool_outputs
-    
 
 def check_message_delta(event):
     return event.event == 'thread.message.delta' and event.data.object == 'thread.message.delta'
