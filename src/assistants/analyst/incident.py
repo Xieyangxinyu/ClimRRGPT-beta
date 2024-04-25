@@ -55,7 +55,7 @@ def extract_historical_fire_data(lat, lon, start_year=2015, end_year=2023, sourc
 
 import streamlit as st
 
-def generate_recent_wildfire_incident_summary_report(lat, lon, start_year=2015, end_year=2023):
+def recent_fire_incident_data(lat, lon, start_year=2015, end_year=2023):
     data = extract_historical_fire_data(lat, lon, start_year, end_year)
     if type(data) == str:
         return data  + " Please try again."
@@ -82,11 +82,10 @@ def generate_recent_wildfire_incident_summary_report(lat, lon, start_year=2015, 
 
     # Summary of incidents
     summary = f"Location: (lat: {lat}, lon: {lon}). \n\nIncidents per Year:\n{incidents_per_year}\n\nIncidents per Month:\n{incidents_per_month}\n"
-    pickle.dump([fig], open("temp", "wb"))
 
-    return summary
+    return summary, [fig]
     
 if __name__ == "__main__":
     #prune_data()
-    incidents_nearby = generate_recent_wildfire_incident_summary_report(33.9534, -117.3962, 2016, 2022)
+    incidents_nearby = recent_fire_incident_data(33.9534, -117.3962, 2016, 2022)
     print(incidents_nearby)

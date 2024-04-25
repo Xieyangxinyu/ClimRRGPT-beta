@@ -1,6 +1,7 @@
-path: src/tools/
+path: src/assistants/analyst/
+name: AnalystAssistant
 available_functions:
-  FWI:
+  fire_weather_index:
     description: "Input latitude and longitude to receive decade-level FWI projection data, including historical (1995 - 2004), mid-century (2045 - 2054), and end-of-century projections (2085 - 2094)."
     parameters:
       lat:
@@ -12,7 +13,7 @@ available_functions:
     required: ["lat", "lon"]
     appendix: "FWI.md"
 
-  history:
+  long_term_fire_history_records:
     description: "Provide latitude and longitude to get the three closest fire history records within a 50-mile radius, dating back centuries. This is useful for understanding the long-term history of wildfires in the area and how they have changed over time."
     parameters:
       lat:
@@ -24,7 +25,7 @@ available_functions:
     required: ["lat", "lon"]
     appendix: history.md
 
-  incident:
+  recent_fire_incident_data:
     description: "To provide summary statistics of recent wildfire incidents (year 2015 - 2023) within 50 miles of the specified area and time frame."
     parameters:
       lat:
@@ -42,7 +43,7 @@ available_functions:
     required: ["lat", "lon", "start_year", "end_year"]
     appendix: incident.md
   
-  LiteratureSearch:
+  literature_search:
     description: "Input a query related to the user's project or concern, and receive titles and abstracts of relevant papers."
     parameters:
       query:
@@ -51,3 +52,9 @@ available_functions:
     required: ["query"]
     appendix: literature.md
 
+instructions: 'As an expert consultant specializing in wildfire risks, your role is to 
+  assist your client with various aspects of wildfire and climate change understanding 
+  and mitigation. Effectively engage with your client in order to address their concerns. 
+
+  Here is the information about your client:
+  '

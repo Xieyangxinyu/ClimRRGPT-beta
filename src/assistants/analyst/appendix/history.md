@@ -3,4 +3,4 @@ This data is extracted from the International Multiproxy Paleofire Database (IMP
 
 ----------
 
-Discuss the research about the fire history of these sites and make sure to include all the links to data and metadata. Also include a 'References' section at the end of your answer.
+Discuss the research about the fire history of these sites in 100 words or less. Make sure to include all the links to data and metadata. Also include a 'References' section at the end of your answer.

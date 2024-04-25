@@ -46,7 +46,7 @@ def categorize_fwi(value):
     else:
         return 'Very Extreme'
 
-def FWI_retrieval(lat, lon):
+def fire_weather_index(lat, lon):
     '''
     input:
         lat: latitude of the location
@@ -110,10 +110,6 @@ def FWI_retrieval(lat, lon):
     ])
     fig2.update_layout(height=380)
 
-    pickle.dump([fig, fig2], open("temp", "wb"))
-
-
-
     '''
     
     # Load your DataFrame
@@ -152,7 +148,7 @@ def FWI_retrieval(lat, lon):
     #     pickle.dump(ts, file)
     '''
 
-    return output
+    return output, [fig, fig2]
 
 if __name__ == "__main__":
-    print(FWI_retrieval(37.8044, -122.2711))
+    print(fire_weather_index(37.8044, -122.2711))

@@ -1,7 +1,7 @@
 ----------
 
 # Instructions: 
-**Explain how these paper relate to the user's concern in the style of a news reporter.** For each paper that you plan to include in your answer, be sure to cite this paper with the in-text APA style. Also include a 'References' section at the end of your answer. 
+**Explain how these paper relate to your client's concern in the style of a news reporter.** For each paper that you plan to include in your answer, be sure to cite this paper with the in-text APA style. Also include a 'References' section at the end of your answer. 
 
 
 **Example**:

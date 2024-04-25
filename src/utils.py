@@ -10,12 +10,38 @@ def load_config(path):
         config = yaml.load(f, Loader=yaml.FullLoader)
     return config
 
+def get_assistant(config, initialize_instructions):
+        """
+        This function returns the assistant id from the config file.
+        """
+        name = config["name"]
+        instructions = initialize_instructions()
+        tools = populate_tools(config)
+        if tools:
+            assistant = client.beta.assistants.create(
+                name=name,
+                instructions=instructions,
+                tools=tools,
+                model=model
+            )
+        else:
+            assistant = client.beta.assistants.create(
+                name=name,
+                instructions=instructions,
+                model=model
+            )
+        #with open(f"{config['path']}", "w") as f:
+        #    yaml.dump(config, f)
+        return assistant
+
 def populate_tools(config):
     """
     This function populates the tools dictionary with the functions
     defined in the config file.
     """
     tools = []
+    if "available_functions" not in config.keys():
+        return None
     for tool_name, tool_meta_data in config["available_functions"].items():
         tool = {}
         tool["type"] = "function"
@@ -35,6 +61,9 @@ def populate_tools(config):
         tools.append(tool)
     return tools
 
+def create_thread():
+    thread = client.beta.threads.create()
+    return thread
 
 def add_appendix(response: str, appendix_path: str):
     """

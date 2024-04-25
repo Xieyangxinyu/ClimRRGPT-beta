@@ -141,7 +141,7 @@ def get_publications(url):
 
 # Re-defining the functions and re-loading the data as the code execution state was reset
 
-def find_closest_fire_histories_within_50_miles(lat, lon):
+def long_term_fire_history_records(lat, lon):
     """
     Finds the 3 closest fire history records to the given latitude and longitude within 50 miles.
     Returns a list of dictionaries of the fire history data, up to a maximum of max_results records.
@@ -171,12 +171,11 @@ def find_closest_fire_histories_within_50_miles(lat, lon):
     # if no records found, return a message
     if not combined_records:
         # throw an error message
-        raise Exception("No fire history records found within 50 miles of the given location. This only means that we do not find research data from NOAA’s fire history and paleoclimate services. I will let the user know and try to search for other data sources such as FWI and recent fire incidents.")
+        return "No fire history records found within 50 miles of the given location. This only means that we do not find research data from NOAA''s fire history and paleoclimate services. I will let the user know and try to search for other data sources such as FWI and recent fire incidents."
     else:
         return f"Location: (lat: {lat}, lon: {lon}). \n\n" + str(combined_records)
     
 
-        
 if __name__ == '__main__':
     # Testing the function
-    print(find_closest_fire_histories_within_50_miles(34.0356, -118.5156))
+    print(long_term_fire_history_records(34.0356, -118.5156))
