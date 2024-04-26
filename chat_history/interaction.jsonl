@@ -1,15 +1,4 @@
 {
     "role": "assistant",
-    "liked": true,
-    "disliked": false,
-    "feedback": "I don't like the first question",
-    "content": "Hello! I\u2019m glad to have you here today. To better understand your needs and concerns regarding wildfires, I'll need to ask you a few questions. This is part of our standard pre-consultation checklist. Rest assured you can say \"I don't know\" to any question that you're unsure about. Let's get started!\n\nFirstly, could you please describe your professional background and expertise?"
-}{
-    "role": "user",
-    "content": "I'm a risk manager"
-}{
-    "role": "assistant",
-    "liked": false,
-    "disliked": true,
-    "content": "Thank you for sharing that. As a risk manager, your insights will be valuable in assessing wildfire risks effectively. \n\nNext, could you tell me about your primary concerns or questions about wildfires?"
+    "content": "Hello! Today we'll complete a pre-consultation checklist with a series of questions regarding your background and concerns about wildfires. This will help us tailor our consultation to your specific needs. You can say \"I don't know\" if you're unsure about any question. Let's start with your professional background. Could you please describe your expertise and professional experience?"
 }

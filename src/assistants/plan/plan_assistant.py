@@ -1,5 +1,5 @@
 from src.assistants.assistant import Assistant
-from src.config import client
+from src.config import client, model
 import streamlit as st
 
 class Plan(Assistant):
@@ -9,9 +9,15 @@ class Plan(Assistant):
         self.function_dict = {
             "plan_complete": self.plan_complete,
         }
+        # create an assistant
+        self.feedback_assistant = client.beta.assistants.create(
+                name="FeedbackAssistant",
+                instructions= f"Check the response carefully for correctness and give constructive criticism for how to improve it. The plan assistant only has access to these datasets:\n{self.config['available_datasets']}",
+                model=model
+            )
     
     def initialize_instructions(self):
-        return self.config["instructions"] + "\n" + self.checklist
+        return f"{self.config['instructions']}\n{self.config['available_datasets']}\n{self.config['example']}\nHere is the information about your client: {self.checklist}"
     
     def plan_complete(self, plan: str):
         args = {"checklist": self.checklist,
@@ -19,9 +25,38 @@ class Plan(Assistant):
         self.update_assistant("AnalystAssistant", args, new_thread = True)
         return "Change Thread"
     
+    def get_assistant_response(self, user_message=None, thread_id=None):
+        message_placeholder = st.empty()
+        message_placeholder.markdown("Let me think about that for a moment...🧐▌")
+        if user_message:
+            _ = client.beta.threads.messages.create(
+                thread_id=thread_id,
+                role="user",
+                content=user_message
+            )
+
+        run = client.beta.threads.runs.create_and_poll(
+            thread_id=thread_id,
+            assistant_id=self.assistant.id
+        )
+
+        while run.status == 'running':
+            pass
+
+        if run.status == 'completed': 
+            run = client.beta.threads.runs.create_and_poll(
+                thread_id=thread_id,
+                assistant_id=self.feedback_assistant.id
+            )
+            while run.status == 'running':
+                pass
+        
+        message_placeholder.empty()
+        return super().get_assistant_response(user_message, thread_id)
+    
     def respond_to_tool_output(self, thread_id, run_id, tool_outputs):
         message_placeholder = st.empty()
-        message_placeholder.markdown("Let me think about that for a moment. ...🧐▌")
+        message_placeholder.markdown("Let me think about that for a moment...🧐▌")
         if tool_outputs:
             if tool_outputs[0]['output'] == "Plan":
                 tool_outputs[0]['output'] = self.config['dataset_decision'] + '\n' + self.checklist
@@ -30,23 +65,16 @@ class Plan(Assistant):
                     run_id=run_id,
                     tool_outputs=tool_outputs,
                 )
-                if run.status == 'completed': 
-                    messages = client.beta.threads.messages.list(
-                        thread_id=thread_id
-                    )
-                    print(messages.data[0].content[0].text.value)
-                run = client.beta.threads.messages.create(
-                    thread_id=thread_id,
-                    role="user",
-                    content="Explain to me what your plan is and ask me if I have any questions."
-                )
+                while run.status == 'running':
+                    pass
                 if run.status == 'completed': 
                     messages = client.beta.threads.messages.list(
                         thread_id=thread_id
                     )
                     print(messages.data[0].content[0].text.value)
                 message_placeholder.empty()
-                full_response, _, _ = self.get_assistant_response(thread_id=thread_id)
+                full_response, _, _ = self.get_assistant_response(user_message="Explain to me what your plan is and ask me if I have any questions.",
+                                                                  thread_id=thread_id)
             else:
                 message_placeholder.empty()
                 full_response = super().respond_to_tool_output(thread_id, run_id, tool_outputs)

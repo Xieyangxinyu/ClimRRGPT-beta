@@ -39,7 +39,7 @@ class Assistant(ABC):
     
     def get_assistant_response(self, user_message=None, thread_id = None):
         message_placeholder = st.empty()
-        message_placeholder.markdown("Let me think about that for a moment. ...🧐▌")
+        message_placeholder.markdown("Let me think about that for a moment...🧐▌")
         if thread_id == None:
             thread = create_thread()
             thread_id = thread.id
@@ -61,7 +61,7 @@ class Assistant(ABC):
     
     def respond_to_tool_output(self, thread_id, run_id, tool_outputs):
         message_placeholder = st.empty()
-        message_placeholder.markdown("Let me think about that for a moment. ...🧐▌")
+        message_placeholder.markdown("Let me think about that for a moment...🧐▌")
         if tool_outputs:
             stream = client.beta.threads.runs.submit_tool_outputs(
                 thread_id=thread_id,

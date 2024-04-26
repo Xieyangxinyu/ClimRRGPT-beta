@@ -57,7 +57,7 @@ class AnalystAssistant(Assistant):
     
     def get_assistant_response(self, user_message=None, thread_id = None):
         message_placeholder = st.empty()
-        message_placeholder.markdown("Let me think about that for a moment. ...🧐▌")
+        message_placeholder.markdown("Let me think about that for a moment...🧐▌")
 
         tools = self.assistant.tools
         if user_message:
