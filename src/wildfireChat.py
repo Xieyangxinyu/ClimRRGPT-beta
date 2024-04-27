@@ -61,7 +61,24 @@ if "copied" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
     st.session_state.thread_id = None
-    st.session_state.assistant = AssistantRouter("ChecklistAssistant")
+    #st.session_state.assistant = AssistantRouter("ChecklistAssistant")
+    
+
+    st.session_state.checklist = '''
+Profession: Risk manager.
+Concern: High-intensity fire near Las Vegas, NM, and primary risk factors concerning wildfires.
+Location: Sangre de Cristo Mountains.
+Time: Immediate need for post-fire mitigation strategies.
+Scope: Concerned about the impact on water supply.
+'''
+    st.session_state.plan = '''
+Step 1: Analyze Recent Fire Incident Data We will analyze recent fire incident data to understand the frequency, size, location, and timing of wildfires in your area since this can provide insights into the current situation. This analysis helps us determine the immediate actions that need to be taken to mitigate risks effectively.
+Step 2: Literature Search on Wildfire Mitigation and Water Supply Management I'll conduct a thorough literature search focusing on successful wildfire mitigation strategies implemented in regions with similar geographic and climatic conditions. This will also include studies on managing the water supply post-wildfires, which is a critical concern for your area.
+Step 3: Recommendations for Immediate Post-Fire Mitigation Based on the insights gained from the recent fire data analysis and literature review, I will draft a set of tailored recommendations. These will focus on immediate and effective strategies for post-fire mitigation, emphasizing safeguarding the water supply and reducing future wildfire risks.
+Step 4: Engage with Stakeholders I'll prepare a presentation of our findings and proposed strategies to engage with local stakeholders. This will ensure that the suggestions are practical and have the support needed for implementation.
+'''
+    st.session_state.assistant = AssistantRouter("AnalystAssistant", args={"checklist": st.session_state.checklist, "plan": st.session_state.plan})
+    
     with st.chat_message("assistant"):
         full_response = st.session_state.assistant.get_assistant_response()
     st.session_state.messages.append({"role": "assistant", "content": full_response})

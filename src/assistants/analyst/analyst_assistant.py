@@ -5,7 +5,6 @@ from src.assistants.analyst.incident import recent_fire_incident_data
 from src.assistants.analyst.literature import literature_search
 from src.config import client, model
 import streamlit as st
-from utils import populate_tools
 
 class AnalystAssistant(Assistant):
     def __init__(self, config_path, update_assistant, checklist, plan):

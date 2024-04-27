@@ -40,16 +40,16 @@ class Plan(Assistant):
             assistant_id=self.assistant.id
         )
 
-        while run.status == 'running':
-            pass
+        while run.status != 'completed':
+            continue
 
         if run.status == 'completed': 
             run = client.beta.threads.runs.create_and_poll(
                 thread_id=thread_id,
                 assistant_id=self.feedback_assistant.id
             )
-            while run.status == 'running':
-                pass
+            while run.status != 'completed':
+                continue
         
         message_placeholder.empty()
         return super().get_assistant_response(user_message, thread_id)
@@ -65,7 +65,7 @@ class Plan(Assistant):
                     run_id=run_id,
                     tool_outputs=tool_outputs,
                 )
-                while run.status == 'running':
+                while run.status != 'completed':
                     pass
                 if run.status == 'completed': 
                     messages = client.beta.threads.messages.list(
