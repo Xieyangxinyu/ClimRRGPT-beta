@@ -6,7 +6,7 @@ This summary statistics is extracted from Point Locations for all wildfires with
 
 Please analyze and interpret fire incident numbers in [specified region] in the style of a research scientist in 100 words or less:
 - Explain what these fire incident numbers indicate about current fire risks.
-- Contextualize your data. How do these values relate to [user's specific query or concern]? 
+- Contextualize your data. How do these values relate to [your client's specific query or concern]? For example, how does the trend impact the user's community or industry? What's the broader impact on the people and the economy?
 - Offer insights based on these trends. 
 - Provide the link to the data source.
 - Ask if your client has any questions, or you can proceed to the next step.

@@ -37,11 +37,6 @@ initial_checklist: '- **Profession:** [Describe the client''s professional backg
 
   - **Location:** [Identify the area of concern for assessing wildfire risks.]
 
-  - **Time:** [Specify the urgency or timeline for addressing the client''s concerns.]
-
-  - **Scope:** [Identify the specific aspects of wildfire risks that the client is
-  interested in exploring.] 
-
   '
 instructions: 'You are an assistant with expertise in wildfire risk management and
   the impact of climate change. Your goal is to effectively gather information from

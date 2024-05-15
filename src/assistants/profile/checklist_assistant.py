@@ -17,15 +17,14 @@ class ChecklistAssistant(Assistant):
         return self.config["instructions"] + "\n" + check_list
     
     def get_assistant_response(self, user_message=None, thread_id=None):
-        message_placeholder = st.empty()
-        message_placeholder.markdown("Let me think about that for a moment...🧐▌")
         if user_message:
-            return super.get_assistant_response(user_message = user_message + "\nWhen you are all done, call the function `checklist_complete()` with your completed checklist.", thread_id = thread_id)
+            return super().get_assistant_response(user_message = user_message + "\n\nUpon completing the checklist, share your checklist with me to confirm the accuracy of the information.\nWhen you are all done, call the function `checklist_complete()` with your completed checklist.", thread_id = thread_id)
         else:
-            return super.get_assistant_response(thread_id = thread_id)
+            return super().get_assistant_response(thread_id = thread_id)
     
     def checklist_complete(self, checklist: str):
-        if self.checklist == "initial_checklist":
+        
+        if False: #self.checklist == "initial_checklist":
             follow_up = client.chat.completions.create(
                 model=model,
                 messages = [

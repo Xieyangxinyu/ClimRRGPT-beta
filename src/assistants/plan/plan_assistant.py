@@ -1,6 +1,7 @@
 from src.assistants.assistant import Assistant
 from src.config import client, model
 import streamlit as st
+import json
 
 class Plan(Assistant):
     def __init__(self, config_path, update_assistant, checklist):
@@ -12,7 +13,7 @@ class Plan(Assistant):
         # create an assistant
         self.feedback_assistant = client.beta.assistants.create(
                 name="FeedbackAssistant",
-                instructions= f"Check the response carefully for correctness and give constructive criticism for how to improve it. The plan assistant only has access to these datasets:\n{self.config['available_datasets']}",
+                instructions= f"Check the response carefully for correctness and give constructive criticism for how to improve it. The plan assistant only has access to these datasets:\n{self.config['available_datasets']}.\n\n",
                 model=model
             )
     
@@ -24,6 +25,7 @@ class Plan(Assistant):
                 "plan": plan}
         self.update_assistant("AnalystAssistant", args, new_thread = True)
         return "Change Thread"
+    
     
     def get_assistant_response(self, user_message=None, thread_id=None):
         message_placeholder = st.empty()
@@ -40,16 +42,26 @@ class Plan(Assistant):
             assistant_id=self.assistant.id
         )
 
+        if run.status == 'requires_action':
+            for tool in run.required_action.submit_tool_outputs.tool_calls:
+                self.on_tool_call_created(tool)
+                message_placeholder.empty()
+            return "", run.id, []
+
         while run.status != 'completed':
-            continue
+            pass
 
         if run.status == 'completed': 
-            run = client.beta.threads.runs.create_and_poll(
+            run_2 = client.beta.threads.runs.create_and_poll(
                 thread_id=thread_id,
                 assistant_id=self.feedback_assistant.id
             )
-            while run.status != 'completed':
-                continue
+            while run_2.status != 'completed':
+                pass
+            messages = client.beta.threads.messages.list(
+                        thread_id=thread_id
+                    )
+            print(messages.data[0].content[0].text.value)
         
         message_placeholder.empty()
         return super().get_assistant_response(user_message, thread_id)

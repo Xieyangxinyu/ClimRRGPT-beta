@@ -2,14 +2,14 @@ from src.assistants.profile import ChecklistAssistant
 from src.assistants.plan import Plan
 from src.assistants.analyst import AnalystAssistant
 from src.config import client
-import os
 
 class AssistantRouter:
     def __init__(self, name, args={}):
         self.current_thread = client.beta.threads.create()
-        # save the thread id in `chat_history/threads.txt`
-        with open("chat_history/threads.txt", "w") as f:
+        # append the thread id in `chat_history/threads.txt`
+        with open("chat_history/threads.txt", "a") as f:
             f.write(f"{self.current_thread.id}\n")
+        
         self.new_thread = True
         self.assistant_dict = {
             "ChecklistAssistant": [ChecklistAssistant, "src/assistants/profile/config.yml"],

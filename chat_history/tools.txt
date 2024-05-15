@@ -1,0 +1,129 @@
+Historically (1995 - 2004), the Fire Weather Index (FWI) for location (lat: 35.5939, lon: -105.2239) is 14.1583004 in spring, 17.83429909 in summer, 20.21240044 in autumn, and 7.00713167 in winter. In the mid-century (2045 - 2054), the FWI is projected to be 18.6753006 in spring, 19.09799957 in summer, 17.17200089 in autumn, and 8.55791358 in winter. In the end-of-century (2085 - 2094), the FWI is projected to be 25.47319984 in spring, 22.27549934 in summer, 21.74290085 in autumn and 11.73830099 in winter.
+This data is extracted from the Climate Risk & Resilience Portal (ClimRR), developed by the Center for Climate Resilience and Decision Science (CCRDS) at Argonne National Laboratory. You can access the website:https://disgeoportal.egs.anl.gov/ClimRR/
+The Fire Weather Index (FWI) estimates wildfire danger using weather conditions that influence the spread of wildfires. The FWI is comprised of multiple components that are developed using daily readings of temperature, relative humidity, wind speed, and 24-hour precipitation. This weather information is used to estimate the total fuel available for combustion (dry organic material) and the rate of fire spread. The FWI is useful for evaluating weather-based conditions that heighten the danger of wildfire spread once ignition has occurred; it does not account for sources of ignition, which can have both natural and human causes. Areas in the U.S. Southwest, which are often exceptionally dry, will have higher average daily FWI values than areas in the Northeast. **Values above 25 typically represent a high level of danger in the northern regions, whereas values above 40-45 often represent a high level of danger in the Southwest.**
+
+----------
+
+**Instructions**: 
+
+Please analyze and interpret FWI numbers in [specified region] in the style of a research scientist in 100 words or less:
+- Explain what these FWI numbers indicate about future fire risks and how they compare to historical trends. **In particular, whether FWI number is high for this location.** 
+- Contextualize your data. How do these values relate to [your client's specific query or concern]? For example, how does the trend impact the user's community or industry? What's the broader impact on the people and the economy?
+- Offer insights based on these trends. 
+- Provide the link to the data source for these FWI values. 
+- Ask if your client has any questions, or you can proceed to the next step.### Analysis and Interpretation of FWI Data:
+
+The Fire Weather Index (FWI) values show a significant increase from the historical period (1995 - 2004) to the future projections for mid-century (2045 - 2054) and end-of-century (2085 - 2094). Historically, the FWI values were 7.0 to 20.2 across seasons, indicative of moderate fire risks. Projected values increase notably, especially in spring (25.5) and winter (11.7) by the end of the century, signaling a substantial rise in fire danger.
+
+### Contextual Analysis:
+
+This upward trend suggests heightened wildfire risks for the Sangre de Cristo Mountains and surrounding areas, impacting both natural ecosystems and human communities. For a risk manager, this entails increased frequency and intensity of fires, challenging emergency response and necessitating stronger preparedness and mitigation strategies.
+
+### Insights:
+
+Immediate action is required to manage and mitigate this growing risk. Enhanced vegetation management, updated community preparedness plans, and improved emergency response strategies are crucial. These trends highlight the urgency of incorporating climate projections into risk management processes.
+
+**Data Source:** You can access the detailed data from the Climate Risk & Resilience Portal (ClimRR) here: [ClimRR Portal](https://disgeoportal.egs.anl.gov/ClimRR/).
+
+Would you like to proceed with the analysis of long-term fire history records or have further questions on this data?
+Here are the 3 most relevant papers for your query 'climate change impacts on wildfire risks in mountainous regions similar to Sangre de Cristo Mountains':
+
+1. Title: Climate Change, Drought, and Wildfire Policy in the Rocky Mountains
+Authors: Christopher Craig et al.
+Year: 2019.0
+DOI: https://doi.org/10.5465/ambpp.2019.10466abstract
+Abstract: Residential populations continue to grow in wildland urban interface areas living in close proximity to forests, thus increasing wildfire risks. Extreme weather-induced wildfires threaten the healt...
+
+2. Title: Landscape-based fire scenarios and fire types in the Ayllón massif (Central Mountain Range, Spain), 19th and 20th centuries
+Authors: Catarina Sequeira, Cristina Montiel-Molina, Francisco Rego
+Year: 2019.0
+DOI: https://doi.org/10.18172/cig.3796
+Abstract: Wildfires have been a major landscape disturbance factor throughout history in inland mountain areas of Spain. This paper aims to understand the interaction of fire regimes and landscape dynamics during the last two centuries within a socio-spatial context. The study area selected for this historical and spatial analysis is the Ayllon massif, in the Central Mountain Range. The theoretical background used to identify the driving forces of fire regime changes over the 19th and 20th centuries in this mountain area includes landscape-based fire scenarios and fire-type concepts. Both concepts have been addressed in recent studies from a spatial planning and fire management approach in an attempt to understand current fire landscapes and wildfire risk. However, this is the first time that these concepts have been applied to show that both spatial and temporal scales are crucial for an understanding of the current wildfire panorama, and that fire history related to landscape dynamics is fundamental in socio-spatial differences in fire regimes. Four variables (fire history, land use, population and settlement system, and forest management) were assessed to define historical landscape-based fire scenarios, and three fire feature variables (fire extent, fire cause, and spatial distribution pattern) were considered to define historical fire-types. We found that the non-linear evolution of fire regimes during the 19th and 20th centuries was determined by fire-type changes according to landscape dynamics. Moreover, population and forest management have been the main driving forces of fire regime tipping points or pyrotransitions. This study validates the hypothesis that fire regime changes are the result of the interaction of fire history and landscape dynamics.
+
+3. Title: Influence of landscape gradients in wilderness management and spatial climate on fire severity in the Northern Rockies USA, 1984 to 2010
+Authors: Sandra Haire, Carol Miller, Kevin McGarigal
+Year: 2015.0
+Abstract: Management activities, applied over broad scales, can potentially affect attributes of fire regimes including fire severity. Wilderness landscapes provide a natural laboratory for exploring effects of management because in some federally designated wilderness areas the burning of naturally ignited fires is promoted. In order to better understand the contribution of fire management activities to fire effects, we examined patterns of severity across a management gradient defined by wilderness-non-wilderness boundaries in a northern Rocky Mountain study region. We identified a significant positive effect of the management gradient on severity for the time period 1984 to 2010, but the magnitude and direction of effects varied from year to year. However, the influence of management on severity was subsumed by the influence of spatial climate. Our findings represent an important step in constructing predictive models of severity with changes in both climate and fire management practices.
+
+----------
+
+# Instructions: 
+**Explain how these paper relate to your client's concern in the style of a news reporter.** For each paper that you plan to include in your answer, be sure to cite this paper with the in-text APA style. Also include a 'References' section at the end of your answer. 
+
+
+**Example**:
+The smoke and air pollution from wildfires can harm crops and livestock, impacting overall agricultural production in the area (Caldararo, 2015). Meanwhile, Reinhardt, E., Scott, J. H., & Iii, J. K. (2008) stress the importance of understanding the strengths and limitations of fuel treatments to evaluate their potential to achieve objectives, develop sensible fire management policies, and plan for their effective use. 
+
+References:
+Caldararo, N. (2015). Wildfire and Fire-adapted Ecology: How People Created the Current Fire Disasters. doi:http://doi.org/10.2139/ssrn.2649620
+Reinhardt, E., Scott, J. H., & Iii, J. K. (2008). Objectives and considerations for wildland fuel treatment in forested ecosystems of the interior western United States. Forest Ecology and Management, 256(12), 1997-2006. DOI: https://doi.org/10.1016/j.foreco.2008.09.016### Literature Review Summary
+
+**1. Climate Change and Wildfire Risks in Mountainous Regions:**
+
+- **Climate Change, Drought, and Wildfire Policy in the Rocky Mountains (Craig et al., 2019)**: This study explains how increasing temperatures and drought conditions in the Rocky Mountains are leading to more frequent and severe wildfires, with direct parallels to the Sangre de Cristo Mountains. It highlights the necessity for updated wildfire policies and management practices to adapt to these new conditions.
+  
+- **Landscape-based Fire Scenarios in the Ayllón Massif (Sequeira et al., 2019)**: Examines historical fire regimes in Spain’s Central Mountain Range and emphasizes the role of landscape dynamics and population changes in altering fire behaviors. This study underscores the importance of understanding landscape history and managing land and population for wildfire prevention.
+
+- **Influence of Landscape Gradients on Fire Severity in the Northern Rockies (Haire et al., 2015)**: Investigates how management practices and spatial climate influence fire severity. Findings suggest that both management activities and natural climate variations must be considered to predict and manage fire impacts effectively.
+
+**References:**
+Craig, C., et al. (2019). Climate Change, Drought, and Wildfire Policy in the Rocky Mountains. DOI: [https://doi.org/10.5465/ambpp.2019.10466abstract](https://doi.org/10.5465/ambpp.2019.10466abstract)
+
+Sequeira, C., Montiel-Molina, C., & Rego, F. (2019). Landscape-based fire scenarios and fire types in the Ayllón massif (Central Mountain Range, Spain), 19th and 20th centuries. DOI: [https://doi.org/10.18172/cig.3796](https://doi.org/10.18172/cig.3796)
+
+Haire, S., Miller, C., & McGarigal, K. (2015). Influence of landscape gradients in wilderness management and spatial climate on fire severity in the Northern Rockies USA, 1984 to 2010.
+
+---
+
+**2. Effective Vegetation Management Practices:**
+
+- **Vegetation Management: One Key to Wildfire Control (Stidger, 2004)**: Discusses how highway vegetation management programs, such as prescribed burns and moisture content optimization, contribute to wildfire control. This reinforces the notion that strategic vegetation management is crucial in mitigating wildfire risks.
+
+- **Managing Fire-prone Forests in the Western United States (Noss et al., 2006)**: Reviews ecological science relevant to fire and fuel management policies. It emphasizes precautionary and ecologically mindful restoration while warning against intensive post-fire logging and planting.
+
+- **FireSmart®-ForestWise Program in Canada (Westhaver et al., 2007)**: Details the FireSmart® program in Jasper National Park, designed to reduce wildfire risk while conserving wildlife habitats. This study shows how fuel treatments can be compatible with wildlife conservation and ecosystem restoration.
+
+**References:**
+Stidger, R. (2004). Vegetation Management: One Key to Wildfire Control. DOI: [https://doi.org/10.1036/1097-8542.br0124201](https://doi.org/10.1036/1097-8542.br0124201)
+
+Noss, R. F., et al. (2006). Managing fire-prone forests in the western United States. DOI: [https://doi.org/10.1890/1540-9295(2006)4[481:mffitw]2.0.co;2](https://doi.org/10.1890/1540-9295(2006)4[481:mffitw]2.0.co;2)
+
+Westhaver, A., Revel, R., & Hawkes, B. (2007). FireSmart®-ForestWise: Managing Wildlife and Wildfire Risk in the Wildland/Urban Interface-a Canadian Case Study.
+
+---
+
+**3. Community Preparedness and Resilience:**
+
+- **Wildfire and Community: Facilitating Preparedness and Resilience (Moench, 2016)**: Stresses the importance of community involvement in wildfire preparedness and resilience. It provides strategies for communities to better prepare and mitigate wildfire impacts.
+
+- **Improving Wildfire Preparedness: Lessons from Communities across the U.S. (Jakes et al., 2007)**: Details case studies of 15 communities that adapted to wildfire risks by focusing on landscape, government, citizens, and community cooperation.
+
+- **Wildland Fire Risk Modeling (Braun, 2006)**: Offers a comprehensive risk model integrating community resilience with hazard assessments. This approach assists in resource allocation and strategy development during wildfire emergencies.
+
+**References:**
+Moench, B. (2016). Wildfire and Community: Facilitating Preparedness and Resilience.
+
+Jakes, P., et al. (2007). Improving Wildfire Preparedness: Lessons from Communities across the U.S.
+
+Braun, K. (2006). Wildland fire risk—Integrating community resilience or community vulnerability attributes and hazard assessments, to provide a comprehensive risk model. DOI: [https://doi.org/10.1016/j.foreco.2006.08.045](https://doi.org/10.1016/j.foreco.2006.08.045)
+
+---
+
+**4. Economic and Ecological Impacts:**
+
+- **Economic Impacts of Wildfire (Diaz, 2012)**: Explores how wildfires affect economies beyond direct damages, underscoring impacts on rural community economies and natural resources.
+
+- **Wildfire Management Expenditures (Hand et al., 2014)**: Examines research on the cost-effectiveness of wildfire management. Addresses the balanced consideration of costs, benefits, and risks amid increasing wildfire activities.
+
+- **Impacts of Higher Temperatures on Wildfire Size (Wood, 2015)**: Investigates how rising temperatures influence wildfire size, predicting an increase between 20% to 79%. This study emphasizes the need for increased suppression expenditures.
+
+**References:**
+Diaz, J. (2012). Economic Impacts of Wildfire.
+
+Hand, M., et al. (2014). Introduction: A New Look at Wildfire Management Expenditures. DOI: [https://doi.org/10.1007/978-1-4939-0578-2_1](https://doi.org/10.1007/978-1-4939-0578-2_1)
+
+Wood, D. (2015). An Economic Approach to Measuring the Impacts of Higher Temperatures on Wildfire Size in the Western United States.
+
+---
+
+Would you like a more in-depth exploration of any specific paper or topic area?

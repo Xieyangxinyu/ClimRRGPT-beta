@@ -24,6 +24,7 @@ class Assistant(ABC):
         streaming = False
         for event in stream:
             if check_tool_call(event):
+                message_placeholder.empty()
                 tool_outputs += manage_tool_call(event, self.on_tool_call_created)
             if check_message_delta(event):
                 text_stream = get_text_stream(event)
@@ -70,6 +71,13 @@ class Assistant(ABC):
                 stream=True,
             )
             full_response, _, _ = self.stream_output(stream, message_placeholder)
+
+            with open("chat_history/tools.txt", "a") as f:
+                f.write("\n\n\n\n**Tool Outputs**\n")
+                f.write(tool_outputs[0]['output'])
+                f.write("\n**LLM Response**\n")
+                f.write(full_response)
+                f.write("\n")
         message_placeholder.empty()
         return full_response
 
