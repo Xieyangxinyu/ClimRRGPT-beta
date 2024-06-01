@@ -1,8 +1,6 @@
 import geopandas as gpd
-from plotly.subplots import make_subplots
 from shapely.geometry import Point
 import pandas as pd
-import pickle
 import plotly.graph_objects as go
 
 def initialize_data():
@@ -11,25 +9,86 @@ def initialize_data():
     wildfire_df = pd.read_csv('./data/FireWeatherIndex_Wildfire.csv')
     return grid_cells_gdf, grid_cells_crs, wildfire_df
 
-def get_crossmodel(lat, lon, grid_cells_gdf, grid_cells_crs):
+def retrieve_crossmodels_within_radius(lat, lon, grid_cells_gdf, grid_cells_crs):
     '''
-    input: 
-        lat: latitude of the location
-        lon: longitude of the location
-        grid_cells_gdf: GeoDataFrame of the grid cells
-        grid_cells_crs: CRS of the grid cells
+    Retrieves all Crossmodel indices within a specified radius of a given latitude and longitude.
+    
+    Parameters:
+    - lat: Latitude of the location.
+    - lon: Longitude of the location.
+    - radius_km: The radius in kilometers around the point to retrieve Crossmodel indices.
+    - grid_cells_gdf: GeoDataFrame of the grid cells.
+    - grid_cells_crs: Coordinate Reference System (CRS) of the grid cells.
+    
+    Returns:
+    - A list containing the Crossmodel indices for the grid cells within the specified radius.
     '''
-    # Re-creating the point with the correct coordinates and setting its CRS to match the grid cells CRS
-    point_corrected_crs = Point(lon, lat)
-    point_corrected_crs = gpd.GeoSeries([point_corrected_crs], crs="EPSG:4326")
-    point_corrected_crs = point_corrected_crs.to_crs(grid_cells_crs)
-    cross_model = grid_cells_gdf[grid_cells_gdf.contains(point_corrected_crs.iloc[0])]['Crossmodel'].reset_index(drop=True)[0]
-    #print(cross_model)
-    return cross_model
+    # Convert the radius in kilometers to meters (as most CRS use meters)
+    radius_meters = 36 * 1000
+
+    # Create a point from the given latitude and longitude
+    point = Point(lon, lat)
+    point_gseries = gpd.GeoSeries([point], crs="EPSG:4326")  # Assume input is in WGS84
+
+    # Transform the point to match the grid cell CRS
+    point_transformed = point_gseries.to_crs(grid_cells_crs)
+
+    # Create a buffer around the point in the correct CRS
+    buffer = point_transformed.buffer(radius_meters)
+
+    # Find grid cells that intersect the buffer area
+    intersecting_cells = grid_cells_gdf[grid_cells_gdf.intersects(buffer.geometry[0])]
+
+    # Retrieve the Crossmodel indices from the intersecting cells
+    crossmodel_indices = intersecting_cells['Crossmodel'].tolist()
+
+    return crossmodel_indices
 
 def get_wildfire_index(wildfire_df, cross_model):
     wildfire_index = wildfire_df[wildfire_df['Crossmodel'] == cross_model].iloc[0]
     return wildfire_index
+
+def extract_fwi_values_to_dataframe(wildfire_indices):
+    """
+    Extracts and organizes the FWI values for specific seasons and time periods into a pandas DataFrame,
+    focusing only on the specified FWI values to reduce computational complexity.
+    
+    Parameters:
+    - wildfire_indices: Dictionary containing the FWI for each Crossmodel, as obtained from FWI_retrieval function.
+    
+    Returns:
+    - A pandas DataFrame containing the FWI values for each season and time period across all indices, filtered based on specified FWI values.
+    """
+    # Define the FWI values of interest
+    fwi_values_all = [
+        'wildfire_spring_Hist', 'wildfire_spring_Midc', 'wildfire_spring_Endc', 
+        'wildfire_summer_Hist', 'wildfire_summer_Midc', 'wildfire_summer_Endc',
+        'wildfire_autumn_Hist', 'wildfire_autumn_Midc', 'wildfire_autumn_Endc',
+        'wildfire_winter_Hist', 'wildfire_winter_Midc', 'wildfire_winter_Endc'
+    ]
+
+    # Initialize a list to hold all rows for the DataFrame
+    data_rows = []
+
+    # Columns for the resulting DataFrame
+    columns = ['Crossmodel'] + fwi_values_all
+    
+    # Iterate over each Crossmodel entry in the wildfire_indices
+    for cross_model, index_values in wildfire_indices.items():
+        # Start with the Crossmodel identifier
+        fwi_values = [cross_model]
+        
+        # Append the FWI values for the specified FWI values
+        fwi_values += [index_values[key] for key in fwi_values_all]
+        
+        # Add the collected FWI values to the data rows
+        data_rows.append(fwi_values)
+
+    # Create a DataFrame from the aggregated data rows
+    fwi_df = pd.DataFrame(data_rows, columns=columns)
+    
+    return fwi_df
+
 
 def categorize_fwi(value):
     """Categorize the FWI value into its corresponding class and return the value and category."""
@@ -46,22 +105,58 @@ def categorize_fwi(value):
     else:
         return 'Very Extreme'
 
-def fire_weather_index(lat, lon):
+def categorize_fwi_color(value):
+    """Categorize the FWI value into its corresponding class."""
+    try:
+        if pd.isnull(value):
+            return '#808080'  # Gray for NaN FWI values
+        elif value <= 9:
+            return '#FFFF00'  # Yellow for Low
+        elif value <= 21:
+            return '#FFCC00'  # Light Orange for Medium
+        elif value <= 34:
+            return '#FF9900'  # Orange for High
+        elif value <= 39:
+            return '#FF6600'  # Dark Orange for Very High
+        elif value <= 53:
+            return '#FF3300'  # Red-Orange for Extreme
+        else:
+            return '#FF0000'  # Red for Very Extreme
+    except Exception as e:
+        return '#808080'  # Gray as fallback for any unexpected values or types
+
+
+def FWI_retrieval(lat, lon):
     '''
-    input:
-        lat: latitude of the location
-        lon: longitude of the location
-    output:
-        a string containing the Fire Weather Index (FWI) for a given latitude and longitude.
+    Retrieves the Fire Weather Index (FWI) for all locations within a specified radius of a given latitude and longitude.
+    
+    Parameters:
+    - lat: Latitude of the central location.
+    - lon: Longitude of the central location.
+    - radius_km: The radius in kilometers to search for grid cells around the central location.
+    
+    Returns:
+    - A dictionary containing the FWI for each Crossmodel within the specified radius.
     '''
     grid_cells_gdf, grid_cells_crs, wildfire_df = initialize_data()
-    cross_model = get_crossmodel(lat, lon, grid_cells_gdf, grid_cells_crs)
-    wildfire_index = get_wildfire_index(wildfire_df, cross_model)
 
-    output = f"Historically (1995 - 2004), the Fire Weather Index (FWI) for location (lat: {lat}, lon: {lon}) is {wildfire_index['wildfire_spring_Hist']} in spring, {wildfire_index['wildfire_summer_Hist']} in summer, {wildfire_index['wildfire_autumn_Hist']} in autumn, and {wildfire_index['wildfire_winter_Hist']} in winter. In the mid-century (2045 - 2054), the FWI is projected to be {wildfire_index['wildfire_spring_Midc']} in spring, {wildfire_index['wildfire_summer_Midc']} in summer, {wildfire_index['wildfire_autumn_Midc']} in autumn, and {wildfire_index['wildfire_winter_Midc']} in winter. In the end-of-century (2085 - 2094), the FWI is projected to be {wildfire_index['wildfire_spring_Endc']} in spring, {wildfire_index['wildfire_summer_Endc']} in summer, {wildfire_index['wildfire_autumn_Endc']} in autumn and {wildfire_index['wildfire_winter_Endc']} in winter."
+    
+    # Assuming retrieve_crossmodels_within_radius is already defined
+    cross_models = retrieve_crossmodels_within_radius(lat, lon, grid_cells_gdf, grid_cells_crs)
+    
+    # Dictionary to hold the wildfire index for each cross model
+    wildfire_indices = {}
+    
+    for cross_model in cross_models:
+        wildfire_index = get_wildfire_index(wildfire_df, cross_model)
+        wildfire_indices[cross_model] = wildfire_index
+
+    fwi_df = extract_fwi_values_to_dataframe(wildfire_indices)
+    wildfire_index = fwi_df.iloc[:, 1:].mean()
+
+    output = f"Historically (1995 - 2004), the Fire Weather Index (FWI) for location (lat: {lat}, lon: {lon}) is {wildfire_index['wildfire_spring_Hist']}({categorize_fwi(wildfire_index['wildfire_spring_Hist'])}) in spring, {wildfire_index['wildfire_summer_Hist']}({categorize_fwi(wildfire_index['wildfire_summer_Hist'])}) in summer, {wildfire_index['wildfire_autumn_Hist']}({categorize_fwi(wildfire_index['wildfire_autumn_Hist'])}) in autumn, and {wildfire_index['wildfire_winter_Hist']}({categorize_fwi(wildfire_index['wildfire_winter_Hist'])}) in winter. In the mid-century (2045 - 2054), the FWI is projected to be {wildfire_index['wildfire_spring_Midc']}({categorize_fwi(wildfire_index['wildfire_spring_Midc'])}) in spring, {wildfire_index['wildfire_summer_Midc']}({categorize_fwi(wildfire_index['wildfire_summer_Midc'])}) in summer, {wildfire_index['wildfire_autumn_Midc']}({categorize_fwi(wildfire_index['wildfire_autumn_Midc'])}) in autumn, and {wildfire_index['wildfire_winter_Midc']}({categorize_fwi(wildfire_index['wildfire_winter_Midc'])}) in winter. In the end-of-century (2085 - 2094), the FWI is projected to be {wildfire_index['wildfire_spring_Endc']}({categorize_fwi(wildfire_index['wildfire_spring_Endc'])}) in spring, {wildfire_index['wildfire_summer_Endc']}({categorize_fwi(wildfire_index['wildfire_summer_Endc'])}) in summer, {wildfire_index['wildfire_autumn_Endc']}({categorize_fwi(wildfire_index['wildfire_autumn_Endc'])}) in autumn and {wildfire_index['wildfire_winter_Endc']}({categorize_fwi(wildfire_index['wildfire_winter_Endc'])}) in winter."
     
     ## Visualizations
-    
     categories = ['Historical(1995 - 2004)', 'Mid-Century(2045 - 2054)', 'End-of-Century(2085 - 2094)']
     fwi_values_all = [
         [wildfire_index['wildfire_spring_Hist'], wildfire_index["wildfire_spring_Midc"], wildfire_index["wildfire_spring_Endc"]],
@@ -79,7 +174,6 @@ def fire_weather_index(lat, lon):
     'FWI Values in Class': ['0-9 FWI', '9-21 FWI', '21-34 FWI', '34-39 FWI', '39-53 FWI', 'Above 53 FWI']
     }
 
-    
 
     fig = go.Figure(data=[go.Table(
     header=dict(
@@ -110,45 +204,7 @@ def fire_weather_index(lat, lon):
     ])
     fig2.update_layout(height=380)
 
-    '''
-    
-    # Load your DataFrame
-    df = pd.read_csv('./data/CCSM_2004_1995_crossmodel.csv', usecols=[cross_model])
-
-    # Clip negative values
-    df = df.clip(lower=0)
-
-    # Group by day of the year
-    grouped = df.groupby(df.index % 365)
-
-    # Calculate statistics
-    statistics = grouped[cross_model].agg(['median', 'min', 'max'])
-
-    # Create a Plotly figure
-    ts = go.Figure()
-
-    # Add Mean line
-    ts.add_trace(go.Scatter(x=statistics.index, y=statistics['median'], mode='lines', name='Median', line=dict(color='red')))
-    # Add Max line
-    ts.add_trace(go.Scatter(x=statistics.index, y=statistics['max'], mode='lines', name='Max', line=dict(dash='dash', color='purple')))
-    # Add Min line
-    ts.add_trace(go.Scatter(x=statistics.index, y=statistics['min'], mode='lines', name='Min', line=dict(dash='dash', color='orange')))
-    # Update layout
-    ts.update_layout(
-        title='Historical Fire Weather Index(FWI) (1995-2004) for Each Day of the Year',
-        xaxis_title='Day of the Year',
-        yaxis_title='FWI',
-        legend_title='Statistics'
-    )
-
-    # save the figure as a pickle object
-    # pickle.dump([fig, ts], open("temp", "wb"))
-    # pickle.dump([ts], open("temp", "wb"))
-    # with open("temp", "wb") as file:
-    #     pickle.dump(ts, file)
-    '''
-
     return output, [fig, fig2]
 
 if __name__ == "__main__":
-    print(fire_weather_index(37.8044, -122.2711))
+    print(FWI_retrieval(37.8044, -122.2711))

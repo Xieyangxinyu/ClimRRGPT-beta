@@ -1,5 +1,5 @@
 from src.assistants.assistant import Assistant
-from src.assistants.analyst.FWI import fire_weather_index
+from src.assistants.analyst.FWI import FWI_retrieval
 from src.assistants.analyst.history import long_term_fire_history_records
 from src.assistants.analyst.incident import recent_fire_incident_data
 from src.assistants.analyst.literature import literature_search
@@ -14,7 +14,7 @@ class AnalystAssistant(Assistant):
         self.function_dict = {
             "long_term_fire_history_records": long_term_fire_history_records,
             "recent_fire_incident_data": recent_fire_incident_data,
-            "fire_weather_index": fire_weather_index,
+            "fire_weather_index": FWI_retrieval,
             "literature_search": literature_search
         }
 

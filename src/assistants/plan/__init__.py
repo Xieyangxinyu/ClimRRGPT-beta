@@ -1,1 +1,1 @@
-from src.assistants.plan.plan_assistant import Plan
+from src.assistants.plan.plan_assistant import PlanAssistant

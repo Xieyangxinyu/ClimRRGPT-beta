@@ -3,7 +3,7 @@ from src.config import client, model
 import streamlit as st
 import json
 
-class Plan(Assistant):
+class PlanAssistant(Assistant):
     def __init__(self, config_path, update_assistant, checklist):
         self.checklist = checklist
         super().__init__(config_path, update_assistant)
@@ -13,7 +13,7 @@ class Plan(Assistant):
         # create an assistant
         self.feedback_assistant = client.beta.assistants.create(
                 name="FeedbackAssistant",
-                instructions= f"Check the response carefully for correctness and give constructive criticism for how to improve it. The plan assistant only has access to these datasets:\n{self.config['available_datasets']}.\n\n",
+                instructions= f"**Task**: Check the response carefully for correctness and give constructive criticism for how to improve it.\n\n\nThe plan assistant only has access to these datasets:\n{self.config['available_datasets']}.\n\n",
                 model=model
             )
     

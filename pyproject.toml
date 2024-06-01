@@ -22,6 +22,7 @@ clipboard = "^0.0.4"
 plotly = "^5.18.0"
 matplotlib = "^3.8.2"
 rouge = "^1.0.1"
+kaleido = "0.2.1"
 
 
 [build-system]

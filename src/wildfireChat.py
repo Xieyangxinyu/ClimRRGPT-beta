@@ -62,6 +62,7 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
     st.session_state.thread_id = None
     st.session_state.assistant = AssistantRouter("ChecklistAssistant")
+
     with st.chat_message("assistant"):
         full_response = st.session_state.assistant.get_assistant_response()
     st.session_state.messages.append({"role": "assistant", "content": full_response})

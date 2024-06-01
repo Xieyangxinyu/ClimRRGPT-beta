@@ -1,5 +1,5 @@
 from src.assistants.profile import ChecklistAssistant
-from src.assistants.plan import Plan
+from src.assistants.plan import PlanAssistant
 from src.assistants.analyst import AnalystAssistant
 from src.config import client
 
@@ -13,12 +13,19 @@ class AssistantRouter:
         self.new_thread = True
         self.assistant_dict = {
             "ChecklistAssistant": [ChecklistAssistant, "src/assistants/profile/config.yml"],
-            "Plan": [Plan, "src/assistants/plan/config.yml"],
+            "PlanAssistant": [PlanAssistant, "src/assistants/plan/config.yml"],
             "AnalystAssistant": [AnalystAssistant, "src/assistants/analyst/config.yml"]
         }
+
         Assistant = self.assistant_dict[name][0]
         config_path = self.assistant_dict[name][1]
         self.current_assistant = Assistant(config_path, self.update_assistant, **args)
+
+        if False:
+            '''This is a short cut to plan assistant; for testing purposes'''
+            checklist = '- Profession: Risk Manager\n- Concern: High intensity fire near Las Vegas, NM; primary risk factors to be concerned about.\n- Location: Sangre de Cristo Mountains \n- Time: Immediate measures to mitigate risks\n- Scope: Water resources and unpaved roads\n'
+            args = {"checklist": checklist}
+            self.update_assistant("PlanAssistant", args, new_thread = True)
     
     def update_assistant(self, name, args, new_thread = False):
         Assistant = self.assistant_dict[name][0]
