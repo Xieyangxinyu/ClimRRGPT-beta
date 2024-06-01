@@ -15,3 +15,9 @@ def score_rouge_similarity(text1, text2):
     rouge = Rouge()
     scores = rouge.get_scores(text1, text2)
     return scores[0]['rouge-l']['f']
+
+
+# TODO: whether hallucination comes up in the generated text
+# - new info
+# - irrelevant info
+# - self-contradictory info

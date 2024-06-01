@@ -196,3 +196,11 @@ Lastly, understanding that these values particularly highlight a fire weather co
 For further details, refer to the source of this data [here](https://disgeoportal.egs.anl.gov/ClimRR/).
 
 Do you have any specific questions about these data or shall we proceed to step 2, where we will conduct a targeted literature search on fire management and mitigation strategies?
+
+
+
+
+**Tool Outputs**
+Please tell your client that you will ask a few more follow-up questions to ask them for more details.
+**LLM Response**
+Thank you for confirming the information. I will now ask a few more follow-up questions to gather more details to assist you better. Let's proceed!

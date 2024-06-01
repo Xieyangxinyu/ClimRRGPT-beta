@@ -1,6 +1,5 @@
 from src.assistants.assistant import Assistant
 from src.config import client, model
-import streamlit as st
 
 class ChecklistAssistant(Assistant):
     def __init__(self, config_path, update_assistant, checklist="initial_checklist"):
@@ -43,6 +42,17 @@ class ChecklistAssistant(Assistant):
                     {"role": "user", "content": self.config["format_instructions"]}
                     ]
                 ).choices[0].message.content
+            # TODO:
+            # 1. understand typical concerns of people with a specific type of profession and concern
+            # e.g. emergency/hazard mitigation planners are interested in 1/ location 2/ intensity of hazard 3/ probability of hazard 4/ vulnerability of the community impacted by the hazard
+            # e.g. community planners are interested in 1/ location of the new community 2/ what risk will the new community face 3/ how to design the community to mitigate the risk
+            # e.g. flood plan developers are interested in how wildfire will change the flood risk in the area
+            # e.g. land managers ...
+            # few shot prompting? generate more questions and filter out the most relevant ones that can be addressed by subsequent data and literature review in the overall experience
+            # 2. check if these typical concerns are covered in the checklist
+            # 3. if not, ask follow-up questions to check if these concerns should be added to the checklist
+
+
             print(updated_checklist)
             args = {
                 "checklist": checklist + '\n' + updated_checklist
