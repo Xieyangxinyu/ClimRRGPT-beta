@@ -4,8 +4,11 @@ from src.assistants.analyst import AnalystAssistant
 from src.config import client
 
 class AssistantRouter:
-    def __init__(self, name, args={}):
-        self.current_thread = client.beta.threads.create()
+    def __init__(self, name, thread_id = None, args={}):
+        if thread_id:
+            self.current_thread = client.beta.threads.retrieve(thread_id)
+        else:
+            self.current_thread = client.beta.threads.create()
         # append the thread id in `chat_history/threads.txt`
         with open("chat_history/threads.txt", "a") as f:
             f.write(f"{self.current_thread.id}\n")
@@ -49,4 +52,23 @@ class AssistantRouter:
             self.current_assistant.visualizations = None
         return full_response
     
+    def resume_conversation(self):
+        current_thread = self.current_thread
+        thread_messages = client.beta.threads.messages.list(current_thread.id).data
 
+        while thread_messages[0].role != 'user' and len(thread_messages) > 1:
+            thread_messages = thread_messages[1:]
+        thread = client.beta.threads.create()
+        for message in thread_messages[::-1]:
+            role = message.role
+            content = message.content[0].text.value
+            client.beta.threads.messages.create(
+                thread.id,
+                role=role,
+                content=content,
+            )
+
+        client.beta.threads.delete(current_thread.id)
+        self.current_thread = thread
+
+            

@@ -43,7 +43,7 @@ class AnalystAssistant(Assistant):
             print(follow_up)
             if "Directly respond to the client's questions." in follow_up:
                 return follow_up, []
-        addtional_message = [{"role": "system", "content": "First, decide what you would like to do for this step in less than 20 words. Next, identify a single tool to use for this step: 'fire_weather_index', 'long_term_fire_history_records', 'recent_fire_incident_data', or 'literature_search'.\n\nFor example, 'Analyze the Fire Weather Index dataset. `fire_weather_index`.' or 'Assess the impact of the rise in recent wildfire activity with some literature search. `literature_search`.' or 'Develop recommendations to mitigate wildfire risks with some literature search. `literature_search`.' \n\n**Only output** the tool you would like to use."}]
+        addtional_message = [{"role": "system", "content": "First, decide what you would like to do for this step in less than 20 words. Next, identify a single tool to use for this step: 'fire_weather_index', 'long_term_fire_history_records', 'recent_fire_incident_data', or 'literature_search'.\n\nFor example, 'Analyze the Fire Weather Index dataset. `fire_weather_index`.' or 'Assess the impact of the rise in recent wildfire activity with some literature search. `literature_search`.' or 'Develop recommendations to mitigate wildfire risks. `no tool needed`.' \n\n**Only output** the tool you would like to use."}]
         follow_up = self.get_follow_up(thread_id, addtional_message)
         try:
             chosen_tool = follow_up.split("`")[1].split("`")[0]

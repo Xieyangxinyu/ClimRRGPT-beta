@@ -61,6 +61,7 @@ class ChecklistAssistant(Assistant):
             self.update_assistant("ChecklistAssistant", args)
             return "Please tell your client that you will ask a few more follow-up questions to ask them for more details."
         
+        
         args = {"checklist": checklist}
-        self.update_assistant("Plan", args)
+        self.update_assistant("PlanAssistant", args)
         return "Plan"

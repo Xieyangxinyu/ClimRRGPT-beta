@@ -61,11 +61,14 @@ if "copied" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
     st.session_state.thread_id = None
-    st.session_state.assistant = AssistantRouter("ChecklistAssistant")
+    #st.session_state.assistant = AssistantRouter("ChecklistAssistant")
+    checklist = '- Profession: Risk Manager\n- Concern: High intensity fire near Las Vegas, NM; primary risk factors to be concerned about.\n- Location: Sangre de Cristo Mountains \n- Time: Immediate measures to mitigate risks\n- Scope: Water resources and unpaved roads\n'
+    args = {"checklist": checklist}
+    st.session_state.assistant = AssistantRouter("ChecklistAssistant", thread_id='thread_mN7cRIaFBiTFQBo4oAW7t7MK', args=args)
 
-    with st.chat_message("assistant"):
-        full_response = st.session_state.assistant.get_assistant_response()
-    st.session_state.messages.append({"role": "assistant", "content": full_response})
+    #with st.chat_message("assistant"):
+    #    full_response = st.session_state.assistant.get_assistant_response()
+    #st.session_state.messages.append({"role": "assistant", "content": full_response})
     st.rerun()
 
 
@@ -87,10 +90,15 @@ with open("chat_history/interaction.jsonl", "w") as file:
         index += display_reponse(message, index)
 
 if user_prompt := st.chat_input("Ask me anything?"):
-    with st.chat_message("user"):
-        st.markdown(user_prompt)
-    
-    st.session_state.messages.append({"role": "user", "content": user_prompt})
+    if user_prompt.lower() == 'resume conversation':
+        print("RESUMING ...")
+        st.session_state.assistant.resume_conversation()
+        print("UPDATED>>>")
+        user_prompt = None
+    else:
+        with st.chat_message("user"):
+            st.markdown(user_prompt)
+        st.session_state.messages.append({"role": "user", "content": user_prompt})
 
     with st.chat_message("assistant"):
         full_response = st.session_state.assistant.get_assistant_response(user_prompt)

@@ -19,9 +19,20 @@ follow_up_instructions: 'As an expert consultant specializing in wildfire risk m
   - researching relevant academic papers.
 
 
+  **Task:**
   Ask 3 detailed the follow-up questions based on your client''s profile below so
-  that you can help your client better.
+  that you can help your client better. Here are steps to follow:
 
+  1/ Think deeply about the client''s profession and concerns. 
+  What are the most important aspects of wildfire risks that they should consider? 
+  For example, emergency/hazard mitigation planners are interested in the location, intensity, probability of hazard, and vulnerability of the community impacted by the hazard; 
+  community planners are interested in the risk the community will face, and how to design the community to mitigate the risk;
+  flood plan developers are interested in how wildfire will change the flood risk in the area; 
+  land managers are interested in how wildfire will impact the ecosystem and biodiversity.
+
+  2/ Check if these typical concerns are covered in the checklist. If not, add follow-up questions to address them.
+
+  Now, think step by step and ask 3 detailed the follow-up questions in the end.
   '
 format_instructions: '
   Write your three questions using the following template. Only output the questions and keep the square brackets.
