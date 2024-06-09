@@ -43,7 +43,7 @@ def extract_historical_fire_data(lat, lon, start_year=2015, end_year=2023, sourc
     data = data[(data["year"] >= start_year) & (data["year"] <= end_year)]
 
     # Convert 50 miles to kilometers
-    max_distance_km = 10 * 1.60934  # 50 miles in kilometers
+    max_distance_km = 50 * 1.60934  # 50 miles in kilometers
 
     # Calculate distances
     distances = data.apply(lambda row: geodesic((lat, lon), (row['lat'], row['lon'])).kilometers, axis=1)
@@ -83,7 +83,7 @@ def recent_fire_incident_data(lat, lon, start_year=2015, end_year=2023):
     # Summary of incidents
     summary = f"Location: (lat: {lat}, lon: {lon}). \n\nIncidents per Year:\n{incidents_per_year}\n\nIncidents per Month:\n{incidents_per_month}\n"
 
-    maps = get_pinned_map(lat, lon, 10 * 1.60934) # 50 miles in kilometers
+    maps = get_pinned_map(lat, lon, 50 * 1.60934) # 50 miles in kilometers
     return summary, maps, [fig]
     
 if __name__ == "__main__":
