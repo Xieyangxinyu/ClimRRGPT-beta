@@ -3,6 +3,7 @@ from src.assistants.analyst.FWI import FWI_retrieval
 from src.assistants.analyst.history import long_term_fire_history_records
 from src.assistants.analyst.incident import recent_fire_incident_data
 from src.assistants.analyst.literature import literature_search
+from src.assistants.analyst.census import get_census_info
 from src.config import client, model
 import streamlit as st
 import pydeck as pdk
@@ -16,15 +17,15 @@ class AnalystAssistant(Assistant):
             "long_term_fire_history_records": long_term_fire_history_records,
             "recent_fire_incident_data": recent_fire_incident_data,
             "fire_weather_index": FWI_retrieval,
-            "literature_search": literature_search
+            "literature_search": literature_search,
+            "census": get_census_info
         }
 
     def initialize_instructions(self):
         return self.config["instructions"] + "\n" + self.checklist + "\nHere is your plan to assist your clinet:\n" + self.plan
     
     def get_follow_up(self, thread_id, addtional_message):
-        thread_messages = client.beta.threads.messages.list(thread_id)
-        thread_messages = thread_messages.data
+        thread_messages = client.beta.threads.messages.list(thread_id).data
         thread_messages = thread_messages[::-1]
         roles = [message.role for message in thread_messages]
         thread_messages = [message.content[0].text.value for message in thread_messages]
@@ -40,26 +41,30 @@ class AnalystAssistant(Assistant):
 
     def decision_point(self, thread_id, user_message = None, tools = []):
         follow_up = ""
+        thread_messages = client.beta.threads.messages.list(thread_id).data
+        if len(thread_messages) > 0 and thread_messages[0].role == "user":
+            user_message = thread_messages[0].content[0].text.value
         if user_message:
             addtional_message = [{"role": "system", "content": "If you can directly respond to the client's questions without the need to retrieve data or literature, you will simply write down: 'Respond to the client's questions.'\n\nIf the client doesn't seem to have a question in mind, it is instead a good idea to proceed with your plan, then you will simply write down: 'Proceed with the plan.'\n\n**Only output** either 'Respond to the client's questions.' or 'Proceed with the plan.'"}]
             follow_up = self.get_follow_up(thread_id, addtional_message)
             #if "Directly respond to the client's questions." in follow_up:
             #    return follow_up, []
         
-        addtional_message = [{"role": "system", "content": "First, decide what you would like to do for this step in less than 20 words. Next, identify at most one tool to use for this step: 'fire_weather_index', 'long_term_fire_history_records', 'recent_fire_incident_data', 'literature_search' or `no tool needed`.\n\nFor example, 'Analyze the Fire Weather Index dataset. `fire_weather_index`.' or 'Assess the impact of the rise in recent wildfire activity with some literature search. `literature_search`.' Search for relevant literature on the impact of wildfires on water resources and unpaved roads. `literature_search`.' or 'Develop recommendations to mitigate wildfire risks. `no tool needed`.' \n\n**Only output** the tool you would like to use."}]
+        addtional_message = [{"role": "system", "content": "First, decide what you would like to do for this step in less than 20 words. Next, identify at most one tool to use for this step: 'fire_weather_index', 'long_term_fire_history_records', 'recent_fire_incident_data', 'literature_search' or `no tool needed`.\n\nFor example, 'Analyze the Fire Weather Index dataset. `fire_weather_index`.' or 'Assess the impact of the rise in recent wildfire activity with some literature search. `literature_search`.' Search for relevant literature on the impact of wildfires on water resources and unpaved roads. `literature_search`.' or 'Develop recommendations to mitigate wildfire risks. `no tool needed`.' or 'Understand local population to see who will be impacted by the risk.' `census`. \n\n**Make sure to output** the tool you would like to use."}]
 
         available_tools = self.get_follow_up(thread_id, addtional_message)
 
         try:
-            for tool in ["fire_weather_index", "long_term_fire_history_records", "recent_fire_incident_data", "literature_search"]:
+            for tool in ["fire_weather_index", "long_term_fire_history_records", "recent_fire_incident_data", "literature_search", "census"]:
                 if tool in available_tools:
-                    chosen_tool = tool
-                    break
+                    tools.append(tool)
         except:
             tools = []
 
-        if len(tools) > 0:
-            follow_up += f"\nYou may find this tool useful: {chosen_tool}"
+        follow_up += available_tools
+
+        #if len(tools) > 0:
+        #    follow_up += f"\nYou may find this tool useful: {chosen_tool}"
         
         print(follow_up)
         return follow_up, tools
@@ -105,11 +110,7 @@ class AnalystAssistant(Assistant):
         return function_response
     
     def display_maps(self, maps):
-        circle_layer, icon_layer, view_state = maps
-        st.pydeck_chart(pdk.Deck(
-            layers=[circle_layer, icon_layer],
-            initial_view_state=view_state
-        ))
+        st.pydeck_chart(maps)
 
     def display_plots(self, figs):
         if len(figs) == 0:

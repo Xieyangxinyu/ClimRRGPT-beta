@@ -1,83 +1,69 @@
-import streamlit as st
+from pygris.geocode import geolookup
+from census import Census
 import geopandas as gpd
+import streamlit as st
 import pydeck as pdk
-from shapely.geometry import Point, mapping
-from shapely.ops import transform
-from geopandas import GeoDataFrame
 import pandas as pd
-from functools import partial
-import pyproj
 
-# Define the center of the circle (latitude, longitude)
-lat, lon = 40.7128, -74.0060  # Example: New York City
-center = Point(lon, lat)
+c = Census("93c3297165ad8b5b6c81e0ed9e2e44a38e56224f")
 
-# Function to create a circle with correct geographic proportions
-def create_geographic_circle(lat, lon, radius_in_km):
-    local_azimuthal_projection = f"+proj=aeqd +R=6371000 +units=m +lat_0={lat} +lon_0={lon}"
-    wgs84_to_aeqd = partial(
-        pyproj.transform,
-        pyproj.Proj('+proj=longlat +datum=WGS84 +no_defs'),
-        pyproj.Proj(local_azimuthal_projection),
-    )
-    aeqd_to_wgs84 = partial(
-        pyproj.transform,
-        pyproj.Proj(local_azimuthal_projection),
-        pyproj.Proj('+proj=longlat +datum=WGS84 +no_defs'),
-    )
-    point_transformed = transform(wgs84_to_aeqd, Point(lon, lat))
-    circle = point_transformed.buffer(radius_in_km * 1000)  # radius in meters
-    circle_wgs84 = transform(aeqd_to_wgs84, circle)
-    return circle_wgs84
 
-# Create a geographically accurate circle
-circle = create_geographic_circle(lat, lon, 36)  # Circle radius 36 km
+lon = -76.4946333
+lat = 39.0343178
 
-# Convert the circle into a GeoDataFrame
-gdf = GeoDataFrame(gpd.GeoSeries(circle), columns=['geometry'])
 
-# Define the pin data
-pins = [{
-    "position": [lon, lat],
-    "icon_data": {
-        "url": "https://cdn-icons-png.flaticon.com/512/684/684908.png",  # Replace with your icon URL
-        "width": 128,
-        "height": 128,
-        "anchorY": 128
-    }
-}]
 
-# Convert pin data to DataFrame
-df_pins = pd.DataFrame(pins)
+geocode = geolookup(longitude = lon, latitude= lat)['GEOID'][0]
+state_code = geocode[0:2]
+county_code = geocode[2:5]
+tract_code = geocode[5:11]
 
-# Set up Pydeck layers
-circle_layer = pdk.Layer(
-    "GeoJsonLayer",
-    gdf,
-    get_fill_color=[255, 0, 0, 140],  # RGBA color: Red with some transparency
-    get_line_color=[255, 0, 0],  # Red outline
-    line_width_min_pixels=1,
-)
+state_tract = gpd.read_file(f"./data/tl_2022_us_county/tl_2022_us_county.shp")
+state_tract = state_tract.to_crs(epsg=4326)
+state_tract["GEOID"] = state_tract["GEOID"].astype(str)
 
-icon_layer = pdk.Layer(
-    "IconLayer",
-    df_pins,
-    get_icon='icon_data',
-    get_position="position",
-    size_scale=15,
-    get_size=1,
+# C17002_001E: count of ratio of income to poverty in the past 12 months (total)
+# C17002_002E: count of ratio of income to poverty in the past 12 months (< 0.50)
+# C17002_003E: count of ratio of income to poverty in the past 12 months (0.50 - 0.99)
+# B01003_001E: total population
+
+tract = c.acs5.state_county(fields = ('NAME', 'C17002_001E', 'C17002_002E', 'C17002_003E', 'B01003_001E'),
+        state_fips = state_code,
+        county_fips = county_code,
+        year = 2022)
+
+tract_df = pd.DataFrame(tract)
+
+
+tract_df["GEOID"] = tract_df["state"] + tract_df["county"]
+tract_df["GEOID"] = tract_df["GEOID"].astype(str)
+print(tract_df)
+tract_df = state_tract.merge(tract_df, on = "GEOID")
+print(tract_df)
+
+
+print(tract_df.geometry.is_valid)
+
+layer = pdk.Layer(
+    'GeoJsonLayer',
+    tract_df,
+    opacity=0.8,
+    stroked=False,
+    filled=True,
+    extruded=True,
+    wireframe=True,
+    get_fill_color=[255, 0, 0, 140],
 )
 
 # Set the viewport location
 view_state = pdk.ViewState(
     latitude=lat,
     longitude=lon,
-    zoom=8,
-    pitch=0
+    zoom=11,
+    pitch=50
+
 )
 
-# Render Pydeck map in Streamlit
-st.pydeck_chart(pdk.Deck(
-    layers=[circle_layer, icon_layer],
-    initial_view_state=view_state
-))
+# Render the map
+r = pdk.Deck(layers=[layer], initial_view_state=view_state)
+st.pydeck_chart(r)

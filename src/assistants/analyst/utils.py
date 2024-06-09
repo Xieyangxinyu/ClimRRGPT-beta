@@ -71,5 +71,7 @@ def get_pinned_map(lat, lon, radius_in_km=36):
         zoom=8,
         pitch=0
     )
+
+    maps = pdk.Deck(layers=[circle_layer, icon_layer], initial_view_state=view_state)
     
-    return [circle_layer, icon_layer, view_state]
+    return maps

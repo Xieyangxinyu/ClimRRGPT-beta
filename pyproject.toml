@@ -25,6 +25,10 @@ rouge = "^1.0.1"
 kaleido = "0.2.1"
 pydeck = "^0.9.1"
 shapely = "^2.0.4"
+pygris = "^0.1.6"
+census = "^0.8.22"
+us = "^3.1.1"
+setuptools = "^70.0.0"
 
 
 [build-system]

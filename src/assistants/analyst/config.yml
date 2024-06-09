@@ -51,6 +51,18 @@ available_functions:
         type: string
     required: ["query"]
     appendix: literature.md
+  
+  census:
+    description: "Input a location to receive demographic information from the most recent census data."
+    parameters:
+      lat:
+        description: "The latitude of the location"
+        type: number
+      lon:
+        description: "The longitude of the location"
+        type: number
+    required: ["lat", "lon"]
+    appendix: census.md
 
 instructions: 'As an expert consultant specializing in wildfire risks, your role is to 
   assist your client with various aspects of wildfire and climate change understanding 

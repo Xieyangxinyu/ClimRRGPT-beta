@@ -79,12 +79,8 @@ def display_reponse(message, index=0):
         if type(response) != str:
             response, figs = response
             maps, figs = figs
-            if len(maps) > 0:
-                circle_layer, icon_layer, view_state = maps
-                st.pydeck_chart(pdk.Deck(
-                    layers=[circle_layer, icon_layer],
-                    initial_view_state=view_state
-                ))
+            if type(maps) == pdk.Deck:
+                st.pydeck_chart(maps)
             for fig in figs:
                 st.plotly_chart(fig, use_container_width=True)
         st.markdown(response)
