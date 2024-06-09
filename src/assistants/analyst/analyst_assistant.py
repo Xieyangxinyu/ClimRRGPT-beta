@@ -5,6 +5,7 @@ from src.assistants.analyst.incident import recent_fire_incident_data
 from src.assistants.analyst.literature import literature_search
 from src.config import client, model
 import streamlit as st
+import pydeck as pdk
 
 class AnalystAssistant(Assistant):
     def __init__(self, config_path, update_assistant, checklist, plan):
@@ -33,25 +34,34 @@ class AnalystAssistant(Assistant):
             model=model,
             messages = messages
             ).choices[0].message.content
+        
         return follow_up
         
 
     def decision_point(self, thread_id, user_message = None, tools = []):
+        follow_up = ""
         if user_message:
-            addtional_message = [{"role": "system", "content": "If you can directly respond to the client's questions, you will simply write down: 'Directly respond to the client's questions.'\n\nIf the client doesn't seem to have a question in mind, it is instead a good idea to proceed with your plan, then you will simply write down: 'Proceed with the plan.'\n\n**Only output** either 'Directly respond to the client's questions.' or 'Proceed with the plan.'"}]
+            addtional_message = [{"role": "system", "content": "If you can directly respond to the client's questions without the need to retrieve data or literature, you will simply write down: 'Respond to the client's questions.'\n\nIf the client doesn't seem to have a question in mind, it is instead a good idea to proceed with your plan, then you will simply write down: 'Proceed with the plan.'\n\n**Only output** either 'Respond to the client's questions.' or 'Proceed with the plan.'"}]
             follow_up = self.get_follow_up(thread_id, addtional_message)
-            print(follow_up)
-            if "Directly respond to the client's questions." in follow_up:
-                return follow_up, []
-        addtional_message = [{"role": "system", "content": "First, decide what you would like to do for this step in less than 20 words. Next, identify a single tool to use for this step: 'fire_weather_index', 'long_term_fire_history_records', 'recent_fire_incident_data', or 'literature_search'.\n\nFor example, 'Analyze the Fire Weather Index dataset. `fire_weather_index`.' or 'Assess the impact of the rise in recent wildfire activity with some literature search. `literature_search`.' or 'Develop recommendations to mitigate wildfire risks. `no tool needed`.' \n\n**Only output** the tool you would like to use."}]
-        follow_up = self.get_follow_up(thread_id, addtional_message)
+            #if "Directly respond to the client's questions." in follow_up:
+            #    return follow_up, []
+        
+        addtional_message = [{"role": "system", "content": "First, decide what you would like to do for this step in less than 20 words. Next, identify at most one tool to use for this step: 'fire_weather_index', 'long_term_fire_history_records', 'recent_fire_incident_data', 'literature_search' or `no tool needed`.\n\nFor example, 'Analyze the Fire Weather Index dataset. `fire_weather_index`.' or 'Assess the impact of the rise in recent wildfire activity with some literature search. `literature_search`.' Search for relevant literature on the impact of wildfires on water resources and unpaved roads. `literature_search`.' or 'Develop recommendations to mitigate wildfire risks. `no tool needed`.' \n\n**Only output** the tool you would like to use."}]
+
+        available_tools = self.get_follow_up(thread_id, addtional_message)
+
         try:
-            chosen_tool = follow_up.split("`")[1].split("`")[0]
-            tools = [tool for tool in tools if tool.function.name == chosen_tool]
+            for tool in ["fire_weather_index", "long_term_fire_history_records", "recent_fire_incident_data", "literature_search"]:
+                if tool in available_tools:
+                    chosen_tool = tool
+                    break
         except:
             tools = []
-        print(follow_up)
 
+        if len(tools) > 0:
+            follow_up += f"\nYou may find this tool useful: {chosen_tool}"
+        
+        print(follow_up)
         return follow_up, tools
     
     def get_assistant_response(self, user_message=None, thread_id = None):
@@ -59,7 +69,7 @@ class AnalystAssistant(Assistant):
         message_placeholder.markdown("Let me think about that for a moment...🧐▌")
 
         tools = self.assistant.tools
-        if user_message:
+        if user_message is not None:
             _ = client.beta.threads.messages.create(
                 thread_id=thread_id,
                 role="user",
@@ -94,16 +104,26 @@ class AnalystAssistant(Assistant):
             function_response += appendix
         return function_response
     
+    def display_maps(self, maps):
+        circle_layer, icon_layer, view_state = maps
+        st.pydeck_chart(pdk.Deck(
+            layers=[circle_layer, icon_layer],
+            initial_view_state=view_state
+        ))
+
     def display_plots(self, figs):
-        self.visualizations = figs
+        if len(figs) == 0:
+            return
         for fig in figs:
             st.plotly_chart(fig, use_container_width=True)
 
     def on_tool_call_created(self, tool):
         response = super().on_tool_call_created(tool)
         if type(response) != str:
-            response, figs = response
+            response, maps, figs = response
+            self.display_maps(maps)
             self.display_plots(figs)
+            self.visualizations = [maps, figs]
         response = self.add_appendix(response, tool.function.name)
         return response
 

@@ -2,6 +2,7 @@ import geopandas as gpd
 from shapely.geometry import Point
 import pandas as pd
 import plotly.graph_objects as go
+from src.assistants.analyst.utils import get_pinned_map
 
 def initialize_data():
     grid_cells_gdf = gpd.read_file('./data/GridCellsShapefile/GridCells.shp')
@@ -42,6 +43,10 @@ def retrieve_crossmodels_within_radius(lat, lon, grid_cells_gdf, grid_cells_crs)
     # Retrieve the Crossmodel indices from the intersecting cells
     crossmodel_indices = intersecting_cells['Crossmodel'].tolist()
 
+    with open('./chat_history/crossmodels.txt', 'w') as f:
+        for item in crossmodel_indices:
+            f.write("%s\n" % item)
+    
     return crossmodel_indices
 
 def get_wildfire_index(wildfire_df, cross_model):
@@ -140,6 +145,8 @@ def FWI_retrieval(lat, lon):
     '''
     grid_cells_gdf, grid_cells_crs, wildfire_df = initialize_data()
 
+    maps = get_pinned_map(lat, lon)
+
     
     # Assuming retrieve_crossmodels_within_radius is already defined
     cross_models = retrieve_crossmodels_within_radius(lat, lon, grid_cells_gdf, grid_cells_crs)
@@ -153,22 +160,42 @@ def FWI_retrieval(lat, lon):
 
     fwi_df = extract_fwi_values_to_dataframe(wildfire_indices)
     wildfire_index = fwi_df.iloc[:, 1:].mean()
+    wildfire_sd = fwi_df.iloc[:, 1:].std()
 
-    output = f"Historically (1995 - 2004), the Fire Weather Index (FWI) for location (lat: {lat}, lon: {lon}) is {wildfire_index['wildfire_spring_Hist']}({categorize_fwi(wildfire_index['wildfire_spring_Hist'])}) in spring, {wildfire_index['wildfire_summer_Hist']}({categorize_fwi(wildfire_index['wildfire_summer_Hist'])}) in summer, {wildfire_index['wildfire_autumn_Hist']}({categorize_fwi(wildfire_index['wildfire_autumn_Hist'])}) in autumn, and {wildfire_index['wildfire_winter_Hist']}({categorize_fwi(wildfire_index['wildfire_winter_Hist'])}) in winter. In the mid-century (2045 - 2054), the FWI is projected to be {wildfire_index['wildfire_spring_Midc']}({categorize_fwi(wildfire_index['wildfire_spring_Midc'])}) in spring, {wildfire_index['wildfire_summer_Midc']}({categorize_fwi(wildfire_index['wildfire_summer_Midc'])}) in summer, {wildfire_index['wildfire_autumn_Midc']}({categorize_fwi(wildfire_index['wildfire_autumn_Midc'])}) in autumn, and {wildfire_index['wildfire_winter_Midc']}({categorize_fwi(wildfire_index['wildfire_winter_Midc'])}) in winter. In the end-of-century (2085 - 2094), the FWI is projected to be {wildfire_index['wildfire_spring_Endc']}({categorize_fwi(wildfire_index['wildfire_spring_Endc'])}) in spring, {wildfire_index['wildfire_summer_Endc']}({categorize_fwi(wildfire_index['wildfire_summer_Endc'])}) in summer, {wildfire_index['wildfire_autumn_Endc']}({categorize_fwi(wildfire_index['wildfire_autumn_Endc'])}) in autumn and {wildfire_index['wildfire_winter_Endc']}({categorize_fwi(wildfire_index['wildfire_winter_Endc'])}) in winter."
+    # only keep the data in 2 decimal places
+    wildfire_index = {key: round(value, 2) for key, value in wildfire_index.items()}
+    wildfire_sd = {key: round(value, 2) for key, value in wildfire_sd.items()}
+
+    # write a for loop for the output
+    output = f"Historically (1995 - 2004), the Fire Weather Index (FWI) for location (lat: {lat}, lon: {lon}) is"
+    for key, value in wildfire_index.items():
+        if key.endswith("Hist"):
+            output += f"{key}: {value}({categorize_fwi(value)}, standard error: {wildfire_sd[key]}), "
+    output = output[:-2] + ". In the mid-century (2045 - 2054), the FWI is projected to be"
+    for key, value in wildfire_index.items():
+        if key.endswith("Midc"):
+            output += f"{key}: {value}({categorize_fwi(value)}), "
+    output = output[:-2] + ". In the end-of-century (2085 - 2094), the FWI is projected to be"
+    for key, value in wildfire_index.items():
+        if key.endswith("Endc"):
+            output += f"{key}: {value}({categorize_fwi(value)}), "
+    output = output[:-2] + "."
+
     
     ## Visualizations
     categories = ['Historical(1995 - 2004)', 'Mid-Century(2045 - 2054)', 'End-of-Century(2085 - 2094)']
-    fwi_values_all = [
-        [wildfire_index['wildfire_spring_Hist'], wildfire_index["wildfire_spring_Midc"], wildfire_index["wildfire_spring_Endc"]],
-        [wildfire_index['wildfire_summer_Hist'], wildfire_index["wildfire_summer_Midc"], wildfire_index["wildfire_summer_Endc"]],
-        [wildfire_index['wildfire_autumn_Hist'], wildfire_index["wildfire_autumn_Midc"], wildfire_index["wildfire_autumn_Endc"]],
-        [wildfire_index['wildfire_winter_Hist'], wildfire_index["wildfire_winter_Midc"], wildfire_index["wildfire_winter_Endc"]]
-    ]
-    fwi_values = [[round(value, 2) for value in sublist] for sublist in fwi_values_all]
 
-    # Combine each FWI value with its category
-    fwi_values_with_categories = [[(value, categorize_fwi(value)) for value in sublist] for sublist in fwi_values]
-
+    fwi_values_with_categories = [[] for _ in range(4)]
+    for key, value in wildfire_index.items():
+        if 'spring' in key:
+            fwi_values_with_categories[0].append(f"{value} (se: {wildfire_sd[key]}) {categorize_fwi(value)}")
+        elif 'summer' in key:
+            fwi_values_with_categories[1].append(f"{value} (se: {wildfire_sd[key]}) {categorize_fwi(value)}")
+        elif 'autumn' in key:
+            fwi_values_with_categories[2].append(f"{value} (se: {wildfire_sd[key]}) {categorize_fwi(value)}")
+        elif 'winter' in key:
+            fwi_values_with_categories[3].append(f"{value} (se: {wildfire_sd[key]}) {categorize_fwi(value)}")
+    
     data = {
     'FWI Class': ['Low', 'Medium', 'High', 'Very High', 'Extreme', 'Very Extreme'],
     'FWI Values in Class': ['0-9 FWI', '9-21 FWI', '21-34 FWI', '34-39 FWI', '39-53 FWI', 'Above 53 FWI']
@@ -191,7 +218,7 @@ def FWI_retrieval(lat, lon):
     )])     
     # Add title
     fig.update_layout(height=400)
-    fig.update_layout(title=f'Fire Weather Index (FWI) Data for Location (lat: {lat}, lon: {lon})')
+    fig.update_layout(title=f'Fire Weather Index (FWI) Data for Location (lat: {lat}, lon: {lon}) with standard error')
    
 
     fig2 = go.Figure(data=[go.Table(
@@ -204,7 +231,7 @@ def FWI_retrieval(lat, lon):
     ])
     fig2.update_layout(height=380)
 
-    return output, [fig, fig2]
+    return output, maps, [fig, fig2]
 
 if __name__ == "__main__":
     print(FWI_retrieval(37.8044, -122.2711))

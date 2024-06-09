@@ -1,5 +1,5 @@
 import pandas as pd
-import pickle
+from src.assistants.analyst.utils import get_pinned_map
 import plotly.subplots as sp
 import plotly.graph_objects as go
 
@@ -83,7 +83,8 @@ def recent_fire_incident_data(lat, lon, start_year=2015, end_year=2023):
     # Summary of incidents
     summary = f"Location: (lat: {lat}, lon: {lon}). \n\nIncidents per Year:\n{incidents_per_year}\n\nIncidents per Month:\n{incidents_per_month}\n"
 
-    return summary, [fig]
+    maps = get_pinned_map(lat, lon, 10 * 1.60934) # 50 miles in kilometers
+    return summary, maps, [fig]
     
 if __name__ == "__main__":
     #prune_data()

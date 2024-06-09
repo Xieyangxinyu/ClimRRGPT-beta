@@ -2,6 +2,7 @@ from geopy.distance import geodesic
 import numpy as np
 import pandas as pd
 import requests
+from src.assistants.analyst.utils import get_pinned_map
 
 def format_apa_citation(publication):
     """
@@ -168,12 +169,14 @@ def long_term_fire_history_records(lat, lon):
             url = url[0]
         record['publications'] = get_publications(url)
 
+    maps = get_pinned_map(lat, lon, max_distance_km)
+
     # if no records found, return a message
     if not combined_records:
         # throw an error message
         return "No fire history records found within 50 miles of the given location. This only means that we do not find research data from NOAA''s fire history and paleoclimate services. I will let the user know and try to search for other data sources such as FWI and recent fire incidents."
     else:
-        return f"Location: (lat: {lat}, lon: {lon}). \n\n" + str(combined_records)
+        return f"Location: (lat: {lat}, lon: {lon}). \n\n" + str(combined_records), maps, []
     
 
 if __name__ == '__main__':

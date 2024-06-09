@@ -2,6 +2,7 @@ from src.assistants.assistant_router import AssistantRouter
 import streamlit as st
 import clipboard
 import json
+import pydeck as pdk
 
 st.title("Wildfire GPT")
 
@@ -64,7 +65,7 @@ if "messages" not in st.session_state:
     #st.session_state.assistant = AssistantRouter("ChecklistAssistant")
     checklist = '- Profession: Risk Manager\n- Concern: High intensity fire near Las Vegas, NM; primary risk factors to be concerned about.\n- Location: Sangre de Cristo Mountains \n- Time: Immediate measures to mitigate risks\n- Scope: Water resources and unpaved roads\n'
     args = {"checklist": checklist}
-    st.session_state.assistant = AssistantRouter("ChecklistAssistant", thread_id='thread_mN7cRIaFBiTFQBo4oAW7t7MK', args=args)
+    st.session_state.assistant = AssistantRouter("PlanAssistant", thread_id='thread_jMbfylzr3eXZYSZNwPKspW7x', args=args)
 
     #with st.chat_message("assistant"):
     #    full_response = st.session_state.assistant.get_assistant_response()
@@ -77,6 +78,13 @@ def display_reponse(message, index=0):
         response = message["content"]
         if type(response) != str:
             response, figs = response
+            maps, figs = figs
+            if len(maps) > 0:
+                circle_layer, icon_layer, view_state = maps
+                st.pydeck_chart(pdk.Deck(
+                    layers=[circle_layer, icon_layer],
+                    initial_view_state=view_state
+                ))
             for fig in figs:
                 st.plotly_chart(fig, use_container_width=True)
         st.markdown(response)
@@ -91,10 +99,10 @@ with open("chat_history/interaction.jsonl", "w") as file:
 
 if user_prompt := st.chat_input("Ask me anything?"):
     if user_prompt.lower() == 'resume conversation':
-        print("RESUMING ...")
         st.session_state.assistant.resume_conversation()
-        print("UPDATED>>>")
         user_prompt = None
+        if len(st.session_state.messages) > 0 and st.session_state.messages[-1]['role'] == 'assistant':
+            st.session_state.messages.pop(-1)
     else:
         with st.chat_message("user"):
             st.markdown(user_prompt)

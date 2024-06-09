@@ -7,13 +7,14 @@ class AssistantRouter:
     def __init__(self, name, thread_id = None, args={}):
         if thread_id:
             self.current_thread = client.beta.threads.retrieve(thread_id)
+            self.new_thread = False
         else:
             self.current_thread = client.beta.threads.create()
+            self.new_thread = True
         # append the thread id in `chat_history/threads.txt`
         with open("chat_history/threads.txt", "a") as f:
             f.write(f"{self.current_thread.id}\n")
         
-        self.new_thread = True
         self.assistant_dict = {
             "ChecklistAssistant": [ChecklistAssistant, "src/assistants/profile/config.yml"],
             "PlanAssistant": [PlanAssistant, "src/assistants/plan/config.yml"],
@@ -56,7 +57,7 @@ class AssistantRouter:
         current_thread = self.current_thread
         thread_messages = client.beta.threads.messages.list(current_thread.id).data
 
-        while thread_messages[0].role != 'user' and len(thread_messages) > 1:
+        while len(thread_messages) > 1 and thread_messages[0].role != 'user':
             thread_messages = thread_messages[1:]
         thread = client.beta.threads.create()
         for message in thread_messages[::-1]:
@@ -67,8 +68,10 @@ class AssistantRouter:
                 role=role,
                 content=content,
             )
-
-        client.beta.threads.delete(current_thread.id)
         self.current_thread = thread
+        self.new_thread = False
+        #client.beta.threads.delete(current_thread.id)
+        with open("chat_history/threads.txt", "a") as f:
+            f.write(f"{self.current_thread.id}\n")
 
             
