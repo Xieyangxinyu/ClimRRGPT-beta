@@ -36,6 +36,7 @@ def retrieve_crossmodels_within_radius(lat, lon, grid_cells_gdf, grid_cells_crs)
 
     # Create a buffer around the point in the correct CRS
     buffer = point_transformed.buffer(radius_meters)
+    buffer = buffer.to_crs(grid_cells_crs)
 
     # Find grid cells that intersect the buffer area
     intersecting_cells = grid_cells_gdf[grid_cells_gdf.intersects(buffer.geometry[0])]
@@ -167,7 +168,7 @@ def FWI_retrieval(lat, lon):
     wildfire_sd = {key: round(value, 2) for key, value in wildfire_sd.items()}
 
     # write a for loop for the output
-    output = f"Historically (1995 - 2004), the Fire Weather Index (FWI) for location (lat: {lat}, lon: {lon}) is"
+    output = f"The Fire Weather Index (FWI) for location (lat: {lat}, lon: {lon}) is, reported within a 36 km radius. Historically (1995 - 2004), the FWI is"
     for key, value in wildfire_index.items():
         if key.endswith("Hist"):
             output += f"{key}: {value}({categorize_fwi(value)}, standard error: {wildfire_sd[key]}), "

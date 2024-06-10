@@ -22,7 +22,7 @@ from geopy.distance import geodesic
 
 def extract_historical_fire_data(lat, lon, start_year=2015, end_year=2023, source_file="./data/Wildland_Fire_Incident_Locations_pruned.csv"):
     '''
-    Finds all fire incidents within 50 miles (approximately 80.4672 kilometers) of the given latitude and longitude, and within the given time range.
+    Finds all fire incidents within 36 km of the given latitude and longitude, and within the given time range.
     input:
         lat: latitude of the location
         lon: longitude of the location
@@ -42,8 +42,7 @@ def extract_historical_fire_data(lat, lon, start_year=2015, end_year=2023, sourc
     # Filter data by year
     data = data[(data["year"] >= start_year) & (data["year"] <= end_year)]
 
-    # Convert 50 miles to kilometers
-    max_distance_km = 50 * 1.60934  # 50 miles in kilometers
+    max_distance_km = 36
 
     # Calculate distances
     distances = data.apply(lambda row: geodesic((lat, lon), (row['lat'], row['lon'])).kilometers, axis=1)
@@ -76,14 +75,14 @@ def recent_fire_incident_data(lat, lon, start_year=2015, end_year=2023):
     fig.add_trace(go.Scatter(x=incidents_per_month.index, y=incidents_per_month, mode='lines', name='Monthly Incidents'), row=2, col=1)
 
     # Update subplot titles and labels
-    fig.update_layout(title_text="Wildfire Incidents")
+    fig.update_layout(title_text=f"Wildfire Incidents within 36 km of the Location (lat: {lat}, lon: {lon}) ")
     fig.update_xaxes(title_text="Year", row=1, col=1)
     fig.update_xaxes(title_text="Month", row=2, col=1)
 
     # Summary of incidents
-    summary = f"Location: (lat: {lat}, lon: {lon}). \n\nIncidents per Year:\n{incidents_per_year}\n\nIncidents per Month:\n{incidents_per_month}\n"
+    summary = f"The number of wildfire incidents within 36 km of the location (lat: {lat}, lon: {lon}) from {start_year} to {end_year} are as follows:\n\nIncidents per Year:\n{incidents_per_year}\n\nIncidents per Month:\n{incidents_per_month}\n"
 
-    maps = get_pinned_map(lat, lon, 50 * 1.60934) # 50 miles in kilometers
+    maps = get_pinned_map(lat, lon, 36)
     return summary, maps, [fig]
     
 if __name__ == "__main__":

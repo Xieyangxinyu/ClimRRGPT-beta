@@ -54,17 +54,7 @@ class AnalystAssistant(Assistant):
 
         available_tools = self.get_follow_up(thread_id, addtional_message)
 
-        try:
-            for tool in ["fire_weather_index", "long_term_fire_history_records", "recent_fire_incident_data", "literature_search", "census"]:
-                if tool in available_tools:
-                    tools.append(tool)
-        except:
-            tools = []
-
         follow_up += available_tools
-
-        #if len(tools) > 0:
-        #    follow_up += f"\nYou may find this tool useful: {chosen_tool}"
         
         print(follow_up)
         return follow_up, tools
