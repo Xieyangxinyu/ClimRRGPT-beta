@@ -36,3 +36,14 @@ We use [Streamlit](https://streamlit.io) to create a web app. To run the web app
 ```
 streamlit run src/wildfireChat.py
 ```
+
+
+## Plans
+
+### Evaluation
+- @Xinyu: Leetcode Style Verification of Retrieval Functions
+- @Lauren: LLM Eval
+
+### Future Work
+- How to integrate FWI time series data
+- Drought Data
