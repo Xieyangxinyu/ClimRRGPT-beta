@@ -189,13 +189,13 @@ def FWI_retrieval(lat, lon):
     fwi_values_with_categories = [[] for _ in range(4)]
     for key, value in wildfire_index.items():
         if 'spring' in key:
-            fwi_values_with_categories[0].append(f"{value} (se: {wildfire_sd[key]}) {categorize_fwi(value)}")
+            fwi_values_with_categories[0].append(f"{value} (se: ± {wildfire_sd[key]}) {categorize_fwi(value)}")
         elif 'summer' in key:
-            fwi_values_with_categories[1].append(f"{value} (se: {wildfire_sd[key]}) {categorize_fwi(value)}")
+            fwi_values_with_categories[1].append(f"{value} (se: ± {wildfire_sd[key]}) {categorize_fwi(value)}")
         elif 'autumn' in key:
-            fwi_values_with_categories[2].append(f"{value} (se: {wildfire_sd[key]}) {categorize_fwi(value)}")
+            fwi_values_with_categories[2].append(f"{value} (se: ± {wildfire_sd[key]}) {categorize_fwi(value)}")
         elif 'winter' in key:
-            fwi_values_with_categories[3].append(f"{value} (se: {wildfire_sd[key]}) {categorize_fwi(value)}")
+            fwi_values_with_categories[3].append(f"{value} (se: ± {wildfire_sd[key]}) {categorize_fwi(value)}")
     
     data = {
     'FWI Class': ['Low', 'Medium', 'High', 'Very High', 'Extreme', 'Very Extreme'],

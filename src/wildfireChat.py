@@ -62,14 +62,14 @@ if "copied" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
     st.session_state.thread_id = None
-    st.session_state.assistant = AssistantRouter("ChecklistAssistant")
-    with st.chat_message("assistant"):
-        full_response = st.session_state.assistant.get_assistant_response()
-    st.session_state.messages.append({"role": "assistant", "content": full_response})
+    #st.session_state.assistant = AssistantRouter("ChecklistAssistant")
+    #with st.chat_message("assistant"):
+    #    full_response = st.session_state.assistant.get_assistant_response()
+    #st.session_state.messages.append({"role": "assistant", "content": full_response})
 
-    #checklist = '- Profession: Risk Manager\n- Concern: High intensity fire near Las Vegas, NM; primary risk factors to be concerned about.\n- Location: Sangre de Cristo Mountains \n- Time: Immediate measures to mitigate risks\n- Scope: Water resources and unpaved roads\n'
-    #args = {"checklist": checklist}
-    #st.session_state.assistant = AssistantRouter("PlanAssistant", thread_id='thread_jMbfylzr3eXZYSZNwPKspW7x', args=args)
+    checklist = '- Profession: Risk Manager\n- Concern: High intensity fire near Las Vegas, NM; primary risk factors to be concerned about.\n- Location: Sangre de Cristo Mountains \n- Time: Immediate measures to mitigate risks\n- Scope: Water resources and unpaved roads\n'
+    args = {"checklist": checklist}
+    st.session_state.assistant = AssistantRouter("PlanAssistant", thread_id='thread_jMbfylzr3eXZYSZNwPKspW7x', args=args)
 
 
     st.rerun()
