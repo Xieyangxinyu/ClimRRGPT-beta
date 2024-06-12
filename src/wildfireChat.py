@@ -15,7 +15,12 @@ def display_feedback(message, index):
     if message["role"] == "assistant":
         like_key = f"like_{index}"
         dislike_key = f"dislike_{index}"
-        feedback_key = f"feedback_{index}"
+
+        for feedback in ["Correctness", "Relevance", "Entailment", "Accessibility"]:
+            feedback_key = f"{feedback}_{index}"
+            if feedback_key not in st.session_state:
+                st.session_state[feedback_key] = ""
+        
         col1, col2, col3 = st.columns([1, 1, 2])
         # Render like button or indicate it's been pressed
         if st.session_state.get(like_key) or message.get("liked"):
@@ -40,13 +45,13 @@ def display_feedback(message, index):
                 message["disliked"] = True
         col3.button("📋", on_click=on_copy_click, args=(message["content"],), key=index)
 
-        if feedback_key not in st.session_state:
-            st.session_state[feedback_key] = ""
+        feedback_dict = {}
 
-        feedback = st.text_input("Feedback", key=feedback_key)
-        
-        if feedback:
-            message["feedback"] = feedback
+        for feedback in ["Correctness", "Relevance", "Entailment", "Accessibility"]:
+            feedback_key = f"{feedback}_{index}"
+            feedback_dict[feedback] = st.text_input(f"Feedback: {feedback}", key=feedback_key)
+            if feedback_dict[feedback]:
+                message[feedback.lower() + "_feedback"] = feedback_dict[feedback]
 
         increment = 1
 
@@ -79,12 +84,13 @@ def display_reponse(message, index=0):
     with st.chat_message(message["role"]):
         response = message["content"]
         if type(response) != str:
-            response, figs = response
-            maps, figs = figs
-            if type(maps) == pdk.Deck:
-                st.pydeck_chart(maps)
-            for fig in figs:
-                st.plotly_chart(fig, use_container_width=True)
+            response, visualizations = response
+            for visualization in visualizations:
+                maps, figs = visualization
+                if type(maps) == pdk.Deck:
+                    st.pydeck_chart(maps)
+                for fig in figs:
+                    st.plotly_chart(fig, use_container_width=True)
         st.markdown(response)
         return display_feedback(message, index)
 

@@ -92,7 +92,7 @@ def get_pin_layer(lat, lon):
         df_pins,
         get_icon='icon_data',
         get_position="position",
-        size_scale=15,
+        size_scale=30,
         get_size=1,
     )
     return icon_layer

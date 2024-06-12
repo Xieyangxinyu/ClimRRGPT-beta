@@ -69,6 +69,7 @@ class AnalystAssistant(Assistant):
                 role="user",
                 content=user_message
             )
+            self.visualizations = []
 
         message, tools = self.decision_point(thread_id, user_message, tools)
 
@@ -113,7 +114,7 @@ class AnalystAssistant(Assistant):
             response, maps, figs = response
             self.display_maps(maps)
             self.display_plots(figs)
-            self.visualizations = [maps, figs]
+            self.visualizations.append([maps, figs])
         response = self.add_appendix(response, tool.function.name)
         return response
 

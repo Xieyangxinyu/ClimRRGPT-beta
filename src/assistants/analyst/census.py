@@ -59,6 +59,9 @@ def get_census_info(lon: float, lat: float) -> str:
 
     output = f"In 2022, the total population within roughly 36km of location (lat: {lat}, lon: {lon}) is {bg_df_sum['B01003_001E'][0]}. The number of individual under the poverty line is {bg_df_sum['C17002_001E'][0]}. In particular, {bg_df_sum['C17002_002E'][0]} individuals hold income less than half of what is considered the minimum required to meet basic living expenses. There are {bg_df_sum['B25001_001E'][0]} housing units in the area. The number of individuals with health insurance coverage is {bg_df_sum['B27001_001E'][0]}."
 
+
+    bg_df = bg_df[['GEOID', 'C17002_001E', 'C17002_002E', 'C17002_003E', 'B01003_001E', 'B25001_001E', 'B27001_001E', 'geometry']]
+    bg_df = bg_df.to_crs(epsg=4326)
     layer = pdk.Layer(
         'GeoJsonLayer',
         bg_df,
@@ -76,6 +79,7 @@ def get_census_info(lon: float, lat: float) -> str:
         zoom=8,
         pitch=50
         )
+    
     maps = pdk.Deck(layers=[layer, icon_layer], 
                     initial_view_state=view_state, 
                     tooltip={"text": "GEOID: {GEOID} \n Population: {B01003_001E} \n Below Poverty: {C17002_001E} \n Below Half Poverty: {C17002_002E} \n Health Insurance Coverage: {B27001_001E} \n Housing Units: {B25001_001E}"},

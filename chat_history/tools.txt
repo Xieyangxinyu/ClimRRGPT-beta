@@ -2071,3 +2071,189 @@ Both locations will require targeted adjustments in wildfire preparedness and re
 For further details or to deep dive into specific fire management tactics relevant to each location, you can access the data from the [Climate Risk & Resilience Portal](https://disgeoportal.egs.anl.gov/ClimRR/).
 
 Do you have any specific concerns about these locations that you'd like to explore further, or shall we proceed to discussing mitigation strategies based on these projections?
+
+
+
+
+**Tool Outputs**
+The number of wildfire incidents within 36 km of the location (lat: 35.8883, lon: -105.3201) from 2015 to 2023 are as follows:
+
+Incidents per Year:
+year
+2015     6
+2016     6
+2017    16
+2018    22
+2019    18
+2020    24
+2021    14
+2022    12
+2023    38
+Name: count, dtype: int64
+
+Incidents per Month:
+month
+1      5
+2      5
+3      9
+4     17
+5     31
+6     30
+7     29
+8     16
+9      9
+10     2
+11     2
+12     1
+Name: count, dtype: int64
+This summary statistics is extracted from Point Locations for all wildfires within 36 km of the given location reported to the IRWIN system, https://data-nifc.opendata.arcgis.com/datasets/nifc::wildland-fire-incident-locations/about. This data source contains all wildfire incidents from the IRWIN (Integrated Reporting of Wildland Fire Information) incident service from 2015 to 2023. 
+
+----------
+
+# Instructions: 
+
+Please analyze and interpret fire incident numbers in [specified region] in the style of a research scientist in 100 words or less:
+- Explain what these fire incident numbers indicate about current fire risks.
+- Contextualize your data. How do these values relate to [your client's specific query or concern]? For example, how does the trend impact the user's community or industry? What's the broader impact on the people and the economy?
+- Offer insights based on these trends. 
+- Provide the link to the data source.
+- Ask if your client has any questions, or you can proceed to the next step.
+**LLM Response**
+The wildfire incident data from 2015 to 2023 in the area near Las Vegas, NM shows an increasing trend in fire occurrences, peaking in 2023 with the highest yearly count at 38 incidents. Fire activity is notably higher during the spring and early summer months, with May and June experiencing the highest number of incidents. This pattern suggests a significant annual fire risk during these months, emphasizing the need for preparedness and strategic planning in water resource management and road infrastructure. These findings underscore the necessity to enhance fire response capabilities and community readiness to mitigate the impact on the local ecosystem and economy.
+
+For further details, you may visit the data source: [IRWIN Wildland Fire Incident Locations](https://data-nifc.opendata.arcgis.com/datasets/nifc::wildland-fire-incident-locations/about).
+
+Would you like to discuss these insights further, or should I proceed with the next steps in our plan, such as the literature search on effective wildfire management strategies?
+
+
+
+
+**Tool Outputs**
+The number of wildfire incidents within 36 km of the location (lat: 35.8881, lon: -105.3222) from 2015 to 2022 are as follows:
+
+Incidents per Year:
+year
+2015     6
+2016     6
+2017    16
+2018    22
+2019    18
+2020    24
+2021    14
+2022    12
+Name: count, dtype: int64
+
+Incidents per Month:
+month
+1      2
+2      3
+3      7
+4     12
+5     27
+6     25
+7     22
+8     11
+9      8
+12     1
+Name: count, dtype: int64
+This summary statistics is extracted from Point Locations for all wildfires within 36 km of the given location reported to the IRWIN system, https://data-nifc.opendata.arcgis.com/datasets/nifc::wildland-fire-incident-locations/about. This data source contains all wildfire incidents from the IRWIN (Integrated Reporting of Wildland Fire Information) incident service from 2015 to 2023. 
+
+----------
+
+# Instructions: 
+
+Please analyze and interpret fire incident numbers in [specified region] in the style of a research scientist in 100 words or less:
+- Explain what these fire incident numbers indicate about current fire risks.
+- Contextualize your data. How do these values relate to [your client's specific query or concern]? For example, how does the trend impact the user's community or industry? What's the broader impact on the people and the economy?
+- Offer insights based on these trends. 
+- Provide the link to the data source.
+- Ask if your client has any questions, or you can proceed to the next step.
+**LLM Response**
+The analysis of wildfire incidents from 2015 to 2022 around the area near Las Vegas, NM, reveals a notable increasing trend, especially prominent from 2017 onward. Peak activities are observed during the months of May and June, aligning with the dry season when the vegetation is most susceptible to ignition.
+
+This pattern underscores the escalating fire risks in the region, emphasizing the need for enhanced risk management strategies around water resources and unpaved roads, which are crucial for effective firefighting and containment strategies. These findings could help prioritize the development and maintenance of infrastructure critical to managing and mitigating wildfire risks effectively.
+
+For more details on the dataset, you can visit: [IRWIN Wildfire Data](https://data-nifc.opendata.arcgis.com/datasets/nifc::wildland-fire-incident-locations/about).
+
+Would you like to explore specific years or months further, or shall we proceed with the subsequent steps of the mitigation plan?
+
+
+
+
+
+**Tool Outputs**
+The Fire Weather Index (FWI) for location (lat: 35.8881, lon: -105.3222) is, reported within a 36 km radius. Historically (1995 - 2004), the FWI iswildfire_spring_Hist: 8.14(Low, standard error: 4.26), wildfire_summer_Hist: 11.35(Medium, standard error: 4.23), wildfire_autumn_Hist: 13.41(Medium, standard error: 5.0), wildfire_winter_Hist: 4.31(Low, standard error: 2.44). In the mid-century (2045 - 2054), the FWI is projected to bewildfire_spring_Midc: 11.18(Medium), wildfire_summer_Midc: 12.92(Medium), wildfire_autumn_Midc: 12.0(Medium), wildfire_winter_Midc: 5.58(Low). In the end-of-century (2085 - 2094), the FWI is projected to bewildfire_spring_Endc: 16.46(Medium), wildfire_summer_Endc: 14.64(Medium), wildfire_autumn_Endc: 15.46(Medium), wildfire_winter_Endc: 8.13(Low).
+This data is extracted from the Climate Risk & Resilience Portal (ClimRR), developed by the Center for Climate Resilience and Decision Science (CCRDS) at Argonne National Laboratory. You can access the website:https://disgeoportal.egs.anl.gov/ClimRR/
+The Fire Weather Index (FWI) estimates wildfire danger using weather conditions that influence the spread of wildfires. The FWI is comprised of multiple components that are developed using daily readings of temperature, relative humidity, wind speed, and 24-hour precipitation. This weather information is used to estimate the total fuel available for combustion (dry organic material) and the rate of fire spread. The FWI is useful for evaluating weather-based conditions that heighten the danger of wildfire spread once ignition has occurred; it does not account for sources of ignition, which can have both natural and human causes. Areas in the U.S. Southwest, which are often exceptionally dry, will have higher average daily FWI values than areas in the Northeast. **Values above 25 typically represent a high level of danger in the northern regions, whereas values above 40-45 often represent a high level of danger in the Southwest.**
+
+----------
+
+**Instructions**: 
+
+Please analyze and interpret FWI numbers in [specified region] in the style of a research scientist in 100 words or less:
+- Explain what these FWI numbers indicate about future fire risks and how they compare to historical trends.
+- Contextualize your data. How do these values relate to [your client's specific query or concern]? For example, how does the trend impact the user's community or industry? What's the broader impact on the people and the economy?
+- Offer insights based on these trends. 
+- Provide the link to the data source for these FWI values. 
+- Ask if your client has any questions, or you can proceed to the next step.
+**LLM Response**
+The Fire Weather Index (FWI) analysis for the Sangre de Cristo Mountains region depicts an increasing trend in wildfire danger over the past decades, moving through historical (1995-2004), mid-century (2045-2054), and projections towards the end of the century (2085-2094). Historically, the FWI during high-risk seasons (spring through autumn) hovered in the low to medium range, but forecasts indicate a significant rise, especially notable in the spring and autumn months by the end of the century.
+
+This elevating trend suggests increasing fire risks, necessitating heightened preparedness and mitigation strategies. As the FWI is a critical measure used to determine wildfire potential based on weather conditions, these projections are vital for long-term planning, particularly around water resources and unpaved roads. Enhancing these infrastructures will be crucial to mitigating fire spread and ensuring quicker response times during wildfire incidents.
+
+For more detailed data and insights, refer to: [ClimRR](https://disgeoportal.egs.anl.gov/ClimRR/).
+
+Would you like to discuss how these findings can be integrated into your risk mitigation plans or shall we proceed to the next phase of our analysis?
+
+
+
+
+**Tool Outputs**
+In 2022, the total population within roughly 36km of location (lat: 35.8881, lon: -105.3222) is 14844.0. The number of individual under the poverty line is 14647.0. In particular, 1214.0 individuals hold income less than half of what is considered the minimum required to meet basic living expenses. There are 9038.0 housing units in the area. The number of individuals with health insurance coverage is 0.The census data is retrieved from the U.S. Census Bureau's API, which provides a comprehensive overview of the population in the specified region. You can access the data source at https://www.census.gov/data/developers/data-sets.html. Please remember to provide the link to the data source when presenting your analysis to the client.
+**LLM Response**
+The population within the vicinity of the Las Vegas, NM area consists of approximately 14,844 individuals. Notably, a significant percentage of this population, about 98.7%, is below the poverty line, which includes 1,214 individuals who earn less than half of the minimum subsistence level income. This demographic is particularly vulnerable in the event of wildfires due to limited resources for evacuation, rebuilding, and recovery. Additionally, the lack of health insurance among the population could complicate medical treatments for injuries or health issues caused by fires.
+
+There are 9,038 housing units in the area, increasing the necessity for fire-resilient community planning and infrastructure improvements, particularly in managing water resources and maintaining unpaved roads for accessibility during emergencies.
+
+Given these demographics, effective communication and community-based planning are crucial. Tailored education and preparedness programs are essential to mitigate risks and enhance the community’s resilience against wildfire threats.
+
+For more in-depth demographic details and planning resources, you can visit the U.S. Census Bureau's site: [U.S. Census Data](https://www.census.gov/data/developers/data-sets.html).
+
+Would you like to discuss how targeted interventions can be created for these high-risk groups, or should we move on to the next step of our strategy planning?
+
+
+
+
+**Tool Outputs**
+The Fire Weather Index (FWI) for location (lat: 35.686975, lon: -105.937799) is, reported within a 36 km radius. Historically (1995 - 2004), the FWI iswildfire_spring_Hist: 10.0(Medium, standard error: 4.23), wildfire_summer_Hist: 19.04(Medium, standard error: 6.73), wildfire_autumn_Hist: 16.23(Medium, standard error: 5.58), wildfire_winter_Hist: 3.45(Low, standard error: 1.6). In the mid-century (2045 - 2054), the FWI is projected to bewildfire_spring_Midc: 13.5(Medium), wildfire_summer_Midc: 20.24(Medium), wildfire_autumn_Midc: 13.67(Medium), wildfire_winter_Midc: 4.58(Low). In the end-of-century (2085 - 2094), the FWI is projected to bewildfire_spring_Endc: 18.46(Medium), wildfire_summer_Endc: 21.41(High), wildfire_autumn_Endc: 17.08(Medium), wildfire_winter_Endc: 6.7(Low).
+This data is extracted from the Climate Risk & Resilience Portal (ClimRR), developed by the Center for Climate Resilience and Decision Science (CCRDS) at Argonne National Laboratory. You can access the website:https://disgeoportal.egs.anl.gov/ClimRR/
+The Fire Weather Index (FWI) estimates wildfire danger using weather conditions that influence the spread of wildfires. The FWI is comprised of multiple components that are developed using daily readings of temperature, relative humidity, wind speed, and 24-hour precipitation. This weather information is used to estimate the total fuel available for combustion (dry organic material) and the rate of fire spread. The FWI is useful for evaluating weather-based conditions that heighten the danger of wildfire spread once ignition has occurred; it does not account for sources of ignition, which can have both natural and human causes. Areas in the U.S. Southwest, which are often exceptionally dry, will have higher average daily FWI values than areas in the Northeast. **Values above 25 typically represent a high level of danger in the northern regions, whereas values above 40-45 often represent a high level of danger in the Southwest.**
+
+----------
+
+**Instructions**: 
+
+Please analyze and interpret FWI numbers in [specified region] in the style of a research scientist in 100 words or less:
+- Explain what these FWI numbers indicate about future fire risks and how they compare to historical trends.
+- Contextualize your data. How do these values relate to [your client's specific query or concern]? For example, how does the trend impact the user's community or industry? What's the broader impact on the people and the economy?
+- Offer insights based on these trends. 
+- Provide the link to the data source for these FWI values. 
+- Ask if your client has any questions, or you can proceed to the next step.
+**LLM Response**
+The comparison between the Fire Weather Index (FWI) data for Las Vegas, NM, and Santa Fe, NM, reveals some distinct differences in wildfire danger:
+
+1. **Historical FWI Comparisons (1995-2004):**
+   - **Santa Fe:** Exhibits moderately higher FWI in the summer (19.04) and autumn (16.23) compared to Las Vegas, NM, indicating a historically greater wildfire risk during these seasons.
+   - **Las Vegas, NM:** Shows lower FWI values across all seasons with the highest in autumn (13.41).
+
+2. **Projected FWI (2045-2054 and 2085-2094):**
+   - **Santa Fe:** The FWI remains consistently higher during summer in future projections, indicating a persistent and growing fire risk. Notably, the summer FWI moves towards a high danger level by the end of the century (21.41).
+   - **Las Vegas, NM:** While the FWI also increases over time, the highest projected values are in spring by the end of the century (16.46), which are still within the medium danger range.
+
+These data suggest that Santa Fe might face a slightly higher and more immediate risk of wildfires in summertime compared to Las Vegas, NM, particularly as climate conditions continue to evolve. Both areas share an upward trend in FWI, reflecting higher potential wildfire activities due to changing weather patterns.
+
+Mitigation policies for both areas must take into consideration these projections for enhanced preparedness, with a particular focus on the peak risk seasons identified by the FWI data. Prioritizing the bolstering of water resources and the improvement of unpaved roads could markedly improve emergency response capabilities and resilience against future wildfire risks.
+
+For a deeper dive into this data and future forecasting, refer to the Climate Risk & Resilience Portal (ClimRR) [here](https://disgeoportal.egs.anl.gov/ClimRR/).
+
+Do you have any specific aspects you would like to explore further in these findings, or should we move forward with more detailed planning based on these insights?

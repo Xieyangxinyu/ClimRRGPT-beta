@@ -99,7 +99,7 @@ def recent_fire_incident_data(lat, lon, start_year=2015, end_year=2023):
         'ScatterplotLayer',
         data,
         get_position='[lon, lat]',
-        get_radius=100,
+        get_radius=500,
         get_color=[255, 0, 0, 160],
         pickable=True
     )

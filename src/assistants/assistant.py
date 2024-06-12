@@ -12,7 +12,7 @@ class Assistant(ABC):
         self.update_assistant = update_assistant
         self.assistant = get_assistant(self.config, self.initialize_instructions)
         self.assistant.id = self.assistant.id
-        self.visualizations = None
+        self.visualizations = []
     
     @abstractmethod
     def initialize_instructions(self):

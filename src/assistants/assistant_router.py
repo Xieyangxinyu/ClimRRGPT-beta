@@ -48,9 +48,9 @@ class AssistantRouter:
             full_response += self.current_assistant.respond_to_tool_output(self.current_thread.id, run_id, tool_outputs)
         elif self.new_thread:
             return self.get_assistant_response()
-        if self.current_assistant.visualizations:
+        if len(self.current_assistant.visualizations) > 0:
             full_response = [full_response, self.current_assistant.visualizations]
-            self.current_assistant.visualizations = None
+            self.current_assistant.visualizations = []
         return full_response
     
     def resume_conversation(self):

@@ -64,4 +64,6 @@ class ChecklistAssistant(Assistant):
         
         args = {"checklist": checklist}
         self.update_assistant("PlanAssistant", args)
+        with open("chat_history/checklist.txt", "w") as file:
+            file.write(checklist)
         return "Plan"

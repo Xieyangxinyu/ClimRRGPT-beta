@@ -24,6 +24,8 @@ class PlanAssistant(Assistant):
         args = {"checklist": self.checklist,
                 "plan": plan}
         self.update_assistant("AnalystAssistant", args, new_thread = True)
+        with open("chat_history/plan.txt", "w") as file:
+            file.write(plan)
         return "Change Thread"
     
     
