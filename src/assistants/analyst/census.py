@@ -5,6 +5,7 @@ import pydeck as pdk
 import plotly.graph_objects as go
 import pandas as pd
 from shapely.geometry import Point
+from src.assistants.analyst.utils import get_pin_layer
 c = Census("93c3297165ad8b5b6c81e0ed9e2e44a38e56224f")
 
 def get_census_info(lon: float, lat: float) -> str:
@@ -66,34 +67,19 @@ def get_census_info(lon: float, lat: float) -> str:
         get_line_color=[255, 0, 0],  # Red outline
         line_width_min_pixels=1,
     )
-    pins = [{
-        "position": [lon, lat],
-        "icon_data": {
-            "url": "https://cdn-icons-png.flaticon.com/512/684/684908.png",  # Replace with your icon URL
-            "width": 128,
-            "height": 128,
-            "anchorY": 128
-        }
-    }]
 
-    # Convert pin data to DataFrame
-    df_pins = pd.DataFrame(pins)
+    icon_layer = get_pin_layer(lat, lon)
 
-    icon_layer = pdk.Layer(
-            "IconLayer",
-            df_pins,
-            get_icon='icon_data',
-            get_position="position",
-            size_scale=15,
-            get_size=1,
-        )
     view_state = pdk.ViewState(
         latitude=lat,
         longitude=lon,
         zoom=8,
         pitch=50
         )
-    maps = pdk.Deck(layers=[layer, icon_layer], initial_view_state=view_state)
+    maps = pdk.Deck(layers=[layer, icon_layer], 
+                    initial_view_state=view_state, 
+                    tooltip={"text": "GEOID: {GEOID} \n Population: {B01003_001E} \n Below Poverty: {C17002_001E} \n Below Half Poverty: {C17002_002E} \n Health Insurance Coverage: {B27001_001E} \n Housing Units: {B25001_001E}"},
+                    map_style = 'mapbox://styles/mapbox/light-v10')
 
     # draw a table with the data
 

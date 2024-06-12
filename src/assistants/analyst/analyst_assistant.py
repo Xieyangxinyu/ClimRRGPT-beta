@@ -6,7 +6,6 @@ from src.assistants.analyst.literature import literature_search
 from src.assistants.analyst.census import get_census_info
 from src.config import client, model
 import streamlit as st
-import pydeck as pdk
 
 class AnalystAssistant(Assistant):
     def __init__(self, config_path, update_assistant, checklist, plan):

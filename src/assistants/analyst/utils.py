@@ -72,6 +72,27 @@ def get_pinned_map(lat, lon, radius_in_km=36):
         pitch=0
     )
 
-    maps = pdk.Deck(layers=[circle_layer, icon_layer], initial_view_state=view_state)
+    maps = pdk.Deck(layers=[circle_layer, icon_layer], initial_view_state=view_state, map_style = 'mapbox://styles/mapbox/light-v10')
     
     return maps
+
+def get_pin_layer(lat, lon):
+    pins = [{
+        "position": [lon, lat],
+        "icon_data": {
+            "url": "https://cdn-icons-png.flaticon.com/512/684/684908.png",  # Replace with your icon URL
+            "width": 128,
+            "height": 128,
+            "anchorY": 128
+        }
+    }]
+    df_pins = pd.DataFrame(pins)
+    icon_layer = pdk.Layer(
+        "IconLayer",
+        df_pins,
+        get_icon='icon_data',
+        get_position="position",
+        size_scale=15,
+        get_size=1,
+    )
+    return icon_layer

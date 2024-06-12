@@ -2,7 +2,9 @@ import geopandas as gpd
 from shapely.geometry import Point
 import pandas as pd
 import plotly.graph_objects as go
-from src.assistants.analyst.utils import get_pinned_map
+import streamlit as st
+import pydeck as pdk
+from src.assistants.analyst.utils import get_pin_layer
 
 def initialize_data():
     grid_cells_gdf = gpd.read_file('./data/GridCellsShapefile/GridCells.shp')
@@ -48,7 +50,7 @@ def retrieve_crossmodels_within_radius(lat, lon, grid_cells_gdf, grid_cells_crs)
         for item in crossmodel_indices:
             f.write("%s\n" % item)
     
-    return crossmodel_indices
+    return intersecting_cells
 
 def get_wildfire_index(wildfire_df, cross_model):
     wildfire_index = wildfire_df[wildfire_df['Crossmodel'] == cross_model].iloc[0]
@@ -145,9 +147,6 @@ def FWI_retrieval(lat, lon):
     - A dictionary containing the FWI for each Crossmodel within the specified radius.
     '''
     grid_cells_gdf, grid_cells_crs, wildfire_df = initialize_data()
-
-    maps = get_pinned_map(lat, lon)
-
     
     # Assuming retrieve_crossmodels_within_radius is already defined
     cross_models = retrieve_crossmodels_within_radius(lat, lon, grid_cells_gdf, grid_cells_crs)
@@ -155,13 +154,17 @@ def FWI_retrieval(lat, lon):
     # Dictionary to hold the wildfire index for each cross model
     wildfire_indices = {}
     
-    for cross_model in cross_models:
+    for cross_model in cross_models['Crossmodel']:
         wildfire_index = get_wildfire_index(wildfire_df, cross_model)
         wildfire_indices[cross_model] = wildfire_index
 
     fwi_df = extract_fwi_values_to_dataframe(wildfire_indices)
+
     wildfire_index = fwi_df.iloc[:, 1:].mean()
     wildfire_sd = fwi_df.iloc[:, 1:].std()
+
+    # concatenate the two dataframes
+    fwi_df_geo = gpd.GeoDataFrame(cross_models.merge(fwi_df, left_on = 'Crossmodel', right_on = 'Crossmodel'))
 
     # only keep the data in 2 decimal places
     wildfire_index = {key: round(value, 2) for key, value in wildfire_index.items()}
@@ -231,6 +234,37 @@ def FWI_retrieval(lat, lon):
                align='left',font=dict(color='black', size=14)))
     ])
     fig2.update_layout(height=380)
+
+    fwi_df_geo = fwi_df_geo.to_crs(epsg=4326)
+    fwi_df_geo = fwi_df_geo[['geometry', 'Crossmodel', 'wildfire_spring_Hist', 'wildfire_spring_Midc', 'wildfire_spring_Endc', 'wildfire_summer_Hist', 'wildfire_summer_Midc', 'wildfire_summer_Endc', 'wildfire_autumn_Hist', 'wildfire_autumn_Midc', 'wildfire_autumn_Endc', 'wildfire_winter_Hist', 'wildfire_winter_Midc', 'wildfire_winter_Endc']]
+
+    # round the values to 2 decimal places
+    fwi_df_geo = fwi_df_geo.round(2)
+
+    layer = pdk.Layer(
+        'GeoJsonLayer',
+        fwi_df_geo,
+        opacity=0.8,
+        get_fill_color=[255, 0, 0, 140],  # RGBA color: Red with some transparency
+        get_line_color=[255, 0, 0],  # Red outline
+        line_width_min_pixels=1,
+        pickable=True
+    )
+
+    view_state = pdk.ViewState(
+        latitude=lat,
+        longitude=lon,
+        zoom=8,
+        pitch=50
+        )
+    
+    icon_layer = get_pin_layer(lat, lon)
+    
+    maps = pdk.Deck(
+        layers=[layer, icon_layer], 
+        initial_view_state=view_state, 
+        tooltip={"text": "Crossmodel: {Crossmodel}. Historically (1995 - 2004), the FWI is {wildfire_spring_Hist} in the spring, {wildfire_summer_Hist} in the summer, {wildfire_autumn_Hist} in the autumn, and {wildfire_winter_Hist} in the winter. In the mid-century (2045 - 2054), the FWI is {wildfire_spring_Midc} in the spring, {wildfire_summer_Midc} in the summer, {wildfire_autumn_Midc} in the autumn, and {wildfire_winter_Midc} in the winter. In the end-of-century (2085 - 2094), the FWI is {wildfire_spring_Endc} in the spring, {wildfire_summer_Endc} in the summer, {wildfire_autumn_Endc} in the autumn, and {wildfire_winter_Endc} in the winter."},
+        map_style = 'mapbox://styles/mapbox/light-v10')
 
     return output, maps, [fig, fig2]
 

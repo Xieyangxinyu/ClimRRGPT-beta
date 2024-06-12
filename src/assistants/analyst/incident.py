@@ -2,6 +2,9 @@ import pandas as pd
 from src.assistants.analyst.utils import get_pinned_map
 import plotly.subplots as sp
 import plotly.graph_objects as go
+import pydeck as pdk
+from src.assistants.analyst.utils import get_pin_layer
+
 
 def prune_data(source_file = "./data/Wildland_Fire_Incident_Locations.csv"):
     data = pd.read_csv(source_file)
@@ -58,6 +61,7 @@ def recent_fire_incident_data(lat, lon, start_year=2015, end_year=2023):
     data = extract_historical_fire_data(lat, lon, start_year, end_year)
     if type(data) == str:
         return data  + " Please try again."
+    
     # Count of incidents per year, sorted by year
     incidents_per_year = data['year'].value_counts().sort_index()
 
@@ -82,10 +86,34 @@ def recent_fire_incident_data(lat, lon, start_year=2015, end_year=2023):
     # Summary of incidents
     summary = f"The number of wildfire incidents within 36 km of the location (lat: {lat}, lon: {lon}) from {start_year} to {end_year} are as follows:\n\nIncidents per Year:\n{incidents_per_year}\n\nIncidents per Month:\n{incidents_per_month}\n"
 
-    maps = get_pinned_map(lat, lon, 36)
+    view_state = pdk.ViewState(
+        latitude=lat,
+        longitude=lon,
+        zoom=8,
+        pitch=0
+    )
+
+    icon_layer = get_pin_layer(lat, lon)
+
+    layer = pdk.Layer(
+        'ScatterplotLayer',
+        data,
+        get_position='[lon, lat]',
+        get_radius=100,
+        get_color=[255, 0, 0, 160],
+        pickable=True
+    )
+
+    # Render the map
+    maps = pdk.Deck(
+        initial_view_state=view_state,
+        layers=[layer, icon_layer],
+        tooltip={"text": "{year}-{month}"},
+        map_style = 'mapbox://styles/mapbox/light-v10'
+    )
+
     return summary, maps, [fig]
     
 if __name__ == "__main__":
     #prune_data()
-    incidents_nearby = recent_fire_incident_data(33.9534, -117.3962, 2016, 2022)
-    print(incidents_nearby)
+    summary, maps, [fig] = recent_fire_incident_data(33.9534, -117.3962, 2016, 2022)
