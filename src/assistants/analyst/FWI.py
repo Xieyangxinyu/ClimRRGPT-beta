@@ -46,7 +46,8 @@ def retrieve_crossmodels_within_radius(lat, lon, grid_cells_gdf, grid_cells_crs)
     # Retrieve the Crossmodel indices from the intersecting cells
     crossmodel_indices = intersecting_cells['Crossmodel'].tolist()
 
-    with open('./chat_history/crossmodels.txt', 'w') as f:
+    with open('./chat_history/crossmodels.txt', 'a') as f:
+        f.write(f"Crossmodels within a 36 km radius of location (lat: {lat}, lon: {lon}):\n")
         for item in crossmodel_indices:
             f.write("%s\n" % item)
     
