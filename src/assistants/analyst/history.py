@@ -2,7 +2,9 @@ from geopy.distance import geodesic
 import numpy as np
 import pandas as pd
 import requests
-from src.assistants.analyst.utils import get_pinned_map
+from src.assistants.analyst.utils import get_pin_layer
+import json
+import pydeck as pdk
 
 def format_apa_citation(publication):
     """
@@ -133,8 +135,11 @@ def get_publications(url):
     except Exception as e:
         publications = f"An error occurred: {e}"
 
-    # remove duplicates
-    publications = np.unique(publications)
+    publications_json = [json.dumps(pub, sort_keys=True) for pub in publications]
+
+    # Use np.unique to get unique JSON strings
+    unique_publications_json = np.unique(publications_json)
+    publications = [json.loads(pub) for pub in unique_publications_json]
     
     publication_details = extract_abstract_and_citation(publications)
     return publication_details
@@ -153,6 +158,30 @@ def long_term_fire_history_records(lat, lon):
     fire_data['distance'] = distances
     nearby_records = fire_data[fire_data['distance'] <= max_distance_km].sort_values(by='distance')[:3]
 
+    layer = pdk.Layer(
+        'ScatterplotLayer',
+        nearby_records,
+        get_position='[longitude, latitude]',
+        get_radius=1000,
+        get_color=[255, 0, 0, 160],
+        pickable=True
+    )
+    view_state = pdk.ViewState(
+        latitude=lat,
+        longitude=lon,
+        zoom=8,
+        pitch=0
+    )
+
+    icon_layer = get_pin_layer(lat, lon)
+
+    maps = pdk.Deck(
+        initial_view_state=view_state,
+        layers=[layer, icon_layer],
+        tooltip={"text": "Latitude: {latitude}\nLongitude: {longitude}\nSite Name: {siteName}"},
+        map_style = 'mapbox://styles/mapbox/light-v10'
+    )
+
     aggregation_functions = {
         'siteName': list,
         'latitude': list,
@@ -169,15 +198,15 @@ def long_term_fire_history_records(lat, lon):
             url = url[0]
         record['publications'] = get_publications(url)
 
-    maps = [f"The area of interest is 36 km of the location (lat: {lat}, lon: {lon})" , get_pinned_map(lat, lon, max_distance_km)]
+
+    maps = [f"The three closest fire history records found within 36 km of the location (lat: {lat}, lon: {lon})" , maps]
 
     # if no records found, return a message
     if not combined_records:
         # throw an error message
         return "No fire history records found within 36 km of the given location. This only means that we do not find research data from NOAA''s fire history and paleoclimate services. I will let the user know and try to search for other data sources such as FWI and recent fire incidents."
     else:
-        return f"The fire history records found within 36 km of the location (lat: {lat}, lon: {lon})\n\n" + str(combined_records), maps, []
-    
+        return f"The three closest fire history records found within 36 km of the location (lat: {lat}, lon: {lon})\n\n" + str(combined_records), maps, []
 
 if __name__ == '__main__':
     # Testing the function
