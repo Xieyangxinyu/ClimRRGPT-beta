@@ -69,6 +69,7 @@ def get_census_info(lon: float, lat: float) -> str:
         get_fill_color=[255, 0, 0, 140],  # RGBA color: Red with some transparency
         get_line_color=[255, 0, 0],  # Red outline
         line_width_min_pixels=1,
+        pickable=True
     )
 
     icon_layer = get_pin_layer(lat, lon)

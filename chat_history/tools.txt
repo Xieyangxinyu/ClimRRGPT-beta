@@ -2257,3 +2257,133 @@ Mitigation policies for both areas must take into consideration these projection
 For a deeper dive into this data and future forecasting, refer to the Climate Risk & Resilience Portal (ClimRR) [here](https://disgeoportal.egs.anl.gov/ClimRR/).
 
 Do you have any specific aspects you would like to explore further in these findings, or should we move forward with more detailed planning based on these insights?
+
+
+
+
+**Tool Outputs**
+ask the client to confirm the location by clicking the 'Confirm Location' button.
+**LLM Response**
+I have suggested the coordinates for the Sangre de Cristo Mountains in New Mexico as Latitude: 36.5548 and Longitude: -105.2728. Could you please confirm this location by clicking the 'Confirm Location' button?
+
+
+
+
+**Tool Outputs**
+ask the client to confirm the location by clicking the 'Confirm Location' button.
+**LLM Response**
+Please confirm the location by clicking the 'Confirm Location' button to proceed with your consultation on wildfire risks in the Sangre de Cristo Mountains. Once you confirm, we can move on to the next questions.
+
+
+
+
+**Tool Outputs**
+ask the client to confirm the location by clicking the 'Confirm Location' button.
+**LLM Response**
+The coordinates provided for Las Vegas, New Mexico are approximately 35.5942°N latitude and -105.2239°W longitude. If these are accurate for your area of concern, please confirm. If not, you can provide a more specific area or correct the details.
+
+
+
+
+**Tool Outputs**
+ask the client to confirm the location by clicking the 'Confirm Location' button.
+**LLM Response**
+Please confirm the location by clicking the 'Confirm Location' button below. We are checking for Las Vegas, NM with the coordinates 35.5939 latitude and -105.2239 longitude.
+
+
+
+
+**Tool Outputs**
+ask the client to confirm the location by clicking the 'Confirm Location' button.
+**LLM Response**
+I've pinpointed the location to the Sangre de Cristo Mountains area with the coordinates Latitude: 36.556 and Longitude: -105.462. Please confirm this is the correct location by clicking the 'Confirm Location' button. If this isn't right, just let me know!
+
+
+
+
+**Tool Outputs**
+Please tell your client that you will ask a few more follow-up questions to ask them for more details.
+**LLM Response**
+Thank you for all the information! I'll ask a few more follow-up questions to gather more details and provide you with the most accurate and helpful advice. Let's proceed.
+
+
+
+
+**Tool Outputs**
+The number of wildfire incidents within 36 km of the location (lat: 35.86456960744962, lon: -105.35888671875) from 2015 to 2022 are as follows:
+
+Incidents per Year:
+year
+2015     8
+2016     9
+2017    19
+2018    31
+2019    23
+2020    30
+2021    15
+2022    13
+Name: count, dtype: int64
+
+Incidents per Month:
+month
+1      2
+2      3
+3      7
+4     13
+5     35
+6     32
+7     30
+8     15
+9      9
+12     2
+Name: count, dtype: int64
+This summary statistics is extracted from Point Locations for all wildfires within 36 km of the given location reported to the IRWIN system, https://data-nifc.opendata.arcgis.com/datasets/nifc::wildland-fire-incident-locations/about. This data source contains all wildfire incidents from the IRWIN (Integrated Reporting of Wildland Fire Information) incident service from 2015 to 2023. 
+
+----------
+
+# Instructions: 
+
+Please analyze and interpret fire incident numbers in [specified region] in the style of a research scientist in 100 words or less:
+- Explain what these fire incident numbers indicate about current fire risks.
+- Contextualize your data. How do these values relate to [your client's specific query or concern]? For example, how does the trend impact the user's community or industry? What's the broader impact on the people and the economy?
+- Offer insights based on these trends. 
+- Provide the link to the data source.
+- Ask if your client has any questions, or you can proceed to the next step.
+**LLM Response**
+The wildfire incident data for the area near latitude 35.86456960744962 and longitude -105.35888671875 from 2015 to 2022 highlights a notable increase in frequency and potentially severity, peaking in 2018 with 31 incidents. Here are the key insights:
+
+1. **Fire Frequency and Seasonality:** The data shows a sharp rise in incidents from 2015, stabilizing somewhat after 2018 but remaining significant. The peak months for wildfires are May to July, suggesting heightened risk factors during these periods likely due to climatic conditions.
+
+2. **Implications for Water Resources:** Frequent wildfires pose a direct threat to water resources through contamination from ash runoff, increased sedimentation rates, and altered watershed hydrology which can significantly impact water quality and availability in the region.
+
+3. **Broader Community Impact:** For your role as a risk manager, these trends underscore the importance of developing robust fire management and mitigation strategies to protect both natural resources and community safety. Enhanced surveillance during peak fire months and community awareness programs could be pivotal.
+
+Explore the data and more details at [IRWIN Incident Service Data](https://data-nifc.opendata.arcgis.com/datasets/nifc::wildland-fire-incident-locations/about).
+
+Would you like to proceed with the literature search on wildfire impacts on water resources or discuss more on the current findings?
+
+
+
+
+**Tool Outputs**
+In 2022, the total population within roughly 36km of location (lat: 35.86456960744962, lon: -105.35888671875) is 15940.0. The number of individual under the poverty line is 15616.0. In particular, 1214.0 individuals hold income less than half of what is considered the minimum required to meet basic living expenses. There are 9552.0 housing units in the area. The number of individuals with health insurance coverage is 0.The census data is retrieved from the U.S. Census Bureau's API, which provides a comprehensive overview of the population in the specified region. You can access the data source at https://www.census.gov/data/developers/data-sets.html. Please remember to provide the link to the data source when presenting your analysis to the client.
+**LLM Response**
+The area near latitude 35.86456960744962 and longitude -105.35888671875 has a population of approximately 15,940 people. This population includes a significant number of individuals living below the poverty line, totaling 15,616, with 1,214 of these individuals earning less than half of the minimum required for basic living expenses. Notably, there appears to be complete absence of health insurance coverage across the population.
+
+Here is the impact breakdown on different groups:
+
+1. **Community at a Glance:**
+   - **General Population:** The entire local population faces risks due to potential water resource contamination and scarcity following wildfires. This can affect drinking water supplies, agriculture, and local ecosystems crucial for livelihood.
+   
+2. **Vulnerable Groups:**
+   - **Impoverished Individuals:** Those below the poverty line are particularly vulnerable as they might lack the resources to cope with disruptions in water supply or quality, and might not have alternatives to turn to.
+   - **Health and Safety:** With no health insurance coverage reported across the community, increased health risks associated with wildfire pollutants in water and air can pose serious challenges. Lack of insurance complicates access to healthcare, exacerbating the potential for untreated health issues arising from the environmental impact of wildfires.
+
+3. **Infrastructure:**
+   - **Housing Units:** The presence of 9,552 housing units indicates a substantial number of residents who could face direct threats to their property from wildfires. Additionally, damages to infrastructure can have long-lasting economic impacts.
+
+Given these vulnerabilities, it's critical to develop targeted support and intervention strategies that consider these demographics and ensure that all community members, especially the most vulnerable, are protected from the effects of wildfires on the region's water resources.
+
+View more census details at the [U.S. Census Bureau](https://www.census.gov/data/developers/data-sets.html).
+
+Would you like to explore specific mitigation strategies to address these challenges, or any other aspect of the issue?

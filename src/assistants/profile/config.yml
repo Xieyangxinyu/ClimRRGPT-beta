@@ -9,6 +9,18 @@ available_functions:
         - **[Title]:** [Summary of the answer to the question]\n'
         type: string
     required: []
+  verify_location:
+    add_to_message: false
+    appendix: null
+    description: Call this function to verify the location provided by the client.
+    parameters:
+      lat:
+        description: 'The latitude of the location.'
+        type: number
+      lon:
+        description: 'The longitude of the location.'
+        type: number
+    required: ["lat", "lon"]
 follow_up_instructions: 'As an expert consultant specializing in wildfire risk management,
   your role is to assist users with various aspects of wildfire understanding and
   mitigation. Your skills include:
@@ -46,7 +58,7 @@ initial_checklist: '- **Profession:** [Describe the client''s professional backg
 
   - **Concern:** [Identify the client''s primary concerns or questions about wildfires.]
 
-  - **Location:** [Identify the area of concern for assessing wildfire risks.]
+  - **Location:** [Identify the area of concern for assessing wildfire risks. Must specify the Latitude and Longitude. If the client does not provide this information, provide the Latitude and Longitude and ask the client to confirm by calling the function `verify_location(lat, lon)`.]
 
   - **Time:** [Specify the urgency or timeline for addressing the client''s concerns.]
 

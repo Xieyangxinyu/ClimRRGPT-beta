@@ -1,5 +1,14 @@
 from src.assistants.assistant import Assistant
 from src.config import client, model
+import streamlit as st
+
+
+def verify_location(lat, lon):
+    st.session_state.lat = lat
+    st.session_state.lon = lon
+    st.session_state.location_confirmed = False
+    print(f"Confirming location: {st.session_state.location_confirmed}")
+    return "ask the client to confirm the location by clicking the 'Confirm Location' button."
 
 class ChecklistAssistant(Assistant):
     def __init__(self, config_path, update_assistant, checklist="initial_checklist"):
@@ -7,6 +16,7 @@ class ChecklistAssistant(Assistant):
         super().__init__(config_path, update_assistant)
         self.function_dict = {
             "checklist_complete": self.checklist_complete,
+            "verify_location": verify_location
         }
 
     def initialize_instructions(self):
@@ -59,7 +69,7 @@ class ChecklistAssistant(Assistant):
             }
             
             self.update_assistant("ChecklistAssistant", args)
-            return "Please tell your client that you will ask a few more follow-up questions to ask them for more details."
+            return "Please tell your client that you will ask a few more follow-up questions to ask them for more details. When you are done with the follow-up questions, call the function `checklist_complete()` with the updated checklist."
         
         
         args = {"checklist": checklist}

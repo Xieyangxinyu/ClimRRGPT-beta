@@ -3,6 +3,8 @@ import streamlit as st
 import clipboard
 import json
 import pydeck as pdk
+import folium
+from streamlit_folium import st_folium
 
 st.title("Wildfire GPT")
 
@@ -67,14 +69,15 @@ if "copied" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
     st.session_state.thread_id = None
-    #st.session_state.assistant = AssistantRouter("ChecklistAssistant")
-    #with st.chat_message("assistant"):
-    #    full_response = st.session_state.assistant.get_assistant_response()
-    #st.session_state.messages.append({"role": "assistant", "content": full_response})
+    st.session_state.assistant = AssistantRouter("ChecklistAssistant")
+    with st.chat_message("assistant"):
+        full_response = st.session_state.assistant.get_assistant_response()
+    st.session_state.messages.append({"role": "assistant", "content": full_response})
+    st.session_state.location_confirmed = True
 
-    checklist = '- Profession: Risk Manager\n- Concern: High intensity fire near Las Vegas, NM; primary risk factors to be concerned about.\n- Location: Sangre de Cristo Mountains \n- Time: Immediate measures to mitigate risks\n- Scope: Water resources and unpaved roads\n'
-    args = {"checklist": checklist}
-    st.session_state.assistant = AssistantRouter("PlanAssistant", thread_id='thread_jMbfylzr3eXZYSZNwPKspW7x', args=args)
+    #checklist = '- Profession: Risk Manager\n- Concern: High intensity fire near Las Vegas, NM; primary risk factors to be concerned about.\n- Location: Sangre de Cristo Mountains \n- Time: Immediate measures to mitigate risks\n- Scope: Water resources and unpaved roads\n'
+    #args = {"checklist": checklist}
+    #st.session_state.assistant = AssistantRouter("PlanAssistant", thread_id='thread_jMbfylzr3eXZYSZNwPKspW7x', args=args)
 
 
     st.rerun()
@@ -100,6 +103,60 @@ with open("chat_history/interaction.jsonl", "w") as file:
         like_key = f"like_{index}"
         dislike_key = f"dislike_{index}"
         index += display_reponse(message, index)
+
+if st.session_state.location_confirmed == False:
+    lat = st.session_state.lat
+    lon = st.session_state.lon
+    st.write("The map below shows the initial location with 36km radius. Click on the map to select a location.")
+    # Create a Folium map object
+    m = folium.Map(location=[lat, lon], zoom_start=8)
+    folium.Circle(
+        location=[lat, lon],
+        radius=36000,  # 36km in meters
+        color='red',
+        fill=True,
+        fill_color='red',
+        fill_opacity=0.2
+    ).add_to(m)
+
+    folium.Marker(location=[lat, lon], popup='Initial Location').add_to(m)
+    # Add a click listener to the map
+    m.add_child(folium.ClickForMarker(popup='Clicked Location'))
+    m.add_child(folium.LatLngPopup())
+    map = st_folium(m, height=350, width=700)
+
+    try:
+        data = (map['last_clicked']['lat'],map['last_clicked']['lng'])
+        m2 = folium.Map(location=[lat, lon], zoom_start=8)
+        folium.Marker(location=[lat, lon], popup='Initial Location').add_to(m2)
+        folium.Circle(
+            location=data,
+            radius=36000,  # 36km in meters
+            color='red',
+            fill=True,
+            fill_color='red',
+            fill_opacity=0.2
+        ).add_to(m2)
+        st.write(f"Clicked Coordinates:{data}. The location, with radius 36km, has been shown on the map below. Please confirm the location by clicking the 'Confirm Location' button.")
+        folium.Marker(location=[data[0], data[1]], popup='Initial Location').add_to(m2)
+        st_folium(m2, height=350, width=700)
+    except:
+        data = [lat, lon]
+        
+
+    # Initialize a session state variable if not already set
+    if 'location_confirmed' not in st.session_state:
+        st.session_state.location_confirmed = False
+
+    # Button to confirm the location
+    if st.button("Confirm Location"):
+        st.session_state.location_confirmed = True
+        user_prompt = f"The location has been confirmed: latitude {data[0]}, longitude {data[1]}."
+        with st.chat_message("user"):
+            st.markdown(user_prompt)
+        full_response = st.session_state.assistant.get_assistant_response(user_prompt)
+        st.session_state.messages.append({"role": "assistant", "content": full_response})
+        st.rerun()
 
 if user_prompt := st.chat_input("Ask me anything?"):
     if user_prompt.lower() == 'resume conversation':
