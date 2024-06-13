@@ -29,7 +29,6 @@ pygris = "^0.1.6"
 census = "^0.8.22"
 us = "^3.1.1"
 setuptools = "^70.0.0"
-googlemaps = "^4.10.0"
 
 
 [build-system]
