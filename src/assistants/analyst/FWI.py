@@ -267,7 +267,7 @@ def FWI_retrieval(lat, lon):
         tooltip={"text": "Crossmodel: {Crossmodel}. Historically (1995 - 2004), the FWI is {wildfire_spring_Hist} in the spring, {wildfire_summer_Hist} in the summer, {wildfire_autumn_Hist} in the autumn, and {wildfire_winter_Hist} in the winter. In the mid-century (2045 - 2054), the FWI is {wildfire_spring_Midc} in the spring, {wildfire_summer_Midc} in the summer, {wildfire_autumn_Midc} in the autumn, and {wildfire_winter_Midc} in the winter. In the end-of-century (2085 - 2094), the FWI is {wildfire_spring_Endc} in the spring, {wildfire_summer_Endc} in the summer, {wildfire_autumn_Endc} in the autumn, and {wildfire_winter_Endc} in the winter."},
         map_style = 'mapbox://styles/mapbox/light-v10')
 
-    return output, maps, [fig, fig2]
+    return output, [f"Fire Weather Index (FWI) Data for Location (lat: {lat}, lon: {lon}) within a 36 km radius, shown at a grid cell level.", maps], [fig, fig2]
 
 if __name__ == "__main__":
     print(FWI_retrieval(37.8044, -122.2711))

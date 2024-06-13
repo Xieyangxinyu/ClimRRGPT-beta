@@ -3,12 +3,11 @@ from src.config import client, model
 import streamlit as st
 
 
-def verify_location(lat, lon):
+def verify_location_on_map(lat, lon):
     st.session_state.lat = lat
     st.session_state.lon = lon
     st.session_state.location_confirmed = False
-    print(f"Confirming location: {st.session_state.location_confirmed}")
-    return "ask the client to confirm the location by clicking the 'Confirm Location' button."
+    return "Ask the client to confirm the location by clicking the 'Confirm Location' button."
 
 class ChecklistAssistant(Assistant):
     def __init__(self, config_path, update_assistant, checklist="initial_checklist"):
@@ -16,7 +15,7 @@ class ChecklistAssistant(Assistant):
         super().__init__(config_path, update_assistant)
         self.function_dict = {
             "checklist_complete": self.checklist_complete,
-            "verify_location": verify_location
+            "verify_location_on_map": verify_location_on_map
         }
 
     def initialize_instructions(self):

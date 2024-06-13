@@ -5,6 +5,7 @@ import json
 import pydeck as pdk
 import folium
 from streamlit_folium import st_folium
+import pickle
 
 st.title("Wildfire GPT")
 
@@ -48,12 +49,61 @@ def display_feedback(message, index):
         col3.button("📋", on_click=on_copy_click, args=(message["content"],), key=index)
 
         feedback_dict = {}
+        with st.expander("Click to provide feedback"):
+            for feedback in ["Correctness", "Relevance", "Entailment", "Accessibility"]:
+                if feedback == "Relevance":
+                    with st.form(f"Relevance Feedback {index}"):
+                        st.write("Relevance Feedback")
+                        # Multiple choice question under Relevance
+                        q1 = st.radio("Does my response answer your last question?", ["Yes", "No", "Could be better"])
+                        q2 = st.radio("Is my response relevant to your profession?", ["Yes", "No", "Could be better"])
+                        q3 = st.radio("Is my response relevant to your concern?", ["Yes", "No", "Could be better"])
+                        q4 = st.radio("Is my response relevant to the location?", ["Yes", "No", "Could be better"])
+                        q5 = st.radio("Is my response relevant to the timeline?", ["Yes", "No", "Could be better"])
+                        q6 = st.radio("Is my response relevant to the scope?", ["Yes", "No", "Could be better"])
 
-        for feedback in ["Correctness", "Relevance", "Entailment", "Accessibility"]:
-            feedback_key = f"{feedback}_{index}"
-            feedback_dict[feedback] = st.text_input(f"Feedback: {feedback}", key=feedback_key)
-            if feedback_dict[feedback]:
-                message[feedback.lower() + "_feedback"] = feedback_dict[feedback]
+                        # Form submit button
+                        submitted = st.form_submit_button("Submit")
+                        if submitted:
+                            st.write("Feedback submitted!")
+                            message["relevance_feedback_q1"] = q1
+                            message["relevance_feedback_q2"] = q2
+                            message["relevance_feedback_q3"] = q3
+                            message["relevance_feedback_q4"] = q4
+                            message["relevance_feedback_q5"] = q5
+                            message["relevance_feedback_q6"] = q6
+
+                if feedback == "Entailment":
+                    with st.form(f"Entailment Feedback {index}"):
+                        st.write("Entailment Feedback")
+                        # Multiple choice question under Entailment
+                        q1 = st.radio("Are my recommendations logically following from the information (data, literature) provided?", ["Yes", "No", "Could be better"])
+
+                        # Form submit button
+                        submitted = st.form_submit_button("Submit")
+                        if submitted:
+                            st.write("Feedback submitted!")
+                            message["entailment_feedback_q1"] = q1
+
+                if feedback == "Accessibility":
+                    with st.form(f"Accessibility Feedback {index}"):
+                        st.write("Accessibility Feedback")
+                        # Multiple choice question under Accessibility
+                        q1 = st.radio("Does my response contain too much jargon?", ["Yes", "No", "Could be better"])
+                        q2 = st.radio("Does my response provide enough explanation?", ["Yes", "No", "Could be better"])
+                        q3 = st.radio("Does my response contain redundant or useless information?", ["Yes", "No", "Could be better"])
+
+                        # Form submit button
+                        submitted = st.form_submit_button("Submit")
+                        if submitted:
+                            st.write("Feedback submitted!")
+                            message["accessibility_feedback_q1"] = q1
+                            message["accessibility_feedback_q2"] = q2
+                            message["accessibility_feedback_q3"] = q3
+                feedback_key = f"{feedback}_{index}"
+                feedback_dict[feedback] = st.text_input(f"{feedback} Feedback", key=feedback_key)
+                if feedback_dict[feedback]:
+                    message[feedback.lower() + "_feedback"] = feedback_dict[feedback]
 
         increment = 1
 
@@ -62,26 +112,34 @@ def display_feedback(message, index):
     json.dump(message_save, file, indent=4, )
     return increment
 
-if "copied" not in st.session_state: 
-    st.session_state.copied = []
-            
-
 if "messages" not in st.session_state:
-    st.session_state.messages = []
-    st.session_state.thread_id = None
-    st.session_state.assistant = AssistantRouter("ChecklistAssistant")
-    with st.chat_message("assistant"):
-        full_response = st.session_state.assistant.get_assistant_response()
-    st.session_state.messages.append({"role": "assistant", "content": full_response})
-    st.session_state.location_confirmed = True
+    # check if the session state variable can be loaded
+    try:
+        with open("chat_history/session_state.pkl", "rb") as file:
+            data = pickle.load(file)
+            for key in ["messages", "assistant", "location_confirmed", "copied", "lat", "lon"]:
+                if key in data.keys():
+                    st.session_state[key] = data[key]
+    except:
+        st.session_state.messages = []
+        st.session_state.assistant = AssistantRouter("ChecklistAssistant")
+        with st.chat_message("assistant"):
+            full_response = st.session_state.assistant.get_assistant_response()
+        st.session_state.messages.append({"role": "assistant", "content": full_response})
+        st.session_state.location_confirmed = True
+        st.session_state.copied = []
 
-    #checklist = '- Profession: Risk Manager\n- Concern: High intensity fire near Las Vegas, NM; primary risk factors to be concerned about.\n- Location: Sangre de Cristo Mountains \n- Time: Immediate measures to mitigate risks\n- Scope: Water resources and unpaved roads\n'
-    #args = {"checklist": checklist}
-    #st.session_state.assistant = AssistantRouter("PlanAssistant", thread_id='thread_jMbfylzr3eXZYSZNwPKspW7x', args=args)
-
-
+        #checklist = '- Profession: Risk Manager\n- Concern: High intensity fire near Las Vegas, NM; primary risk factors to be concerned about.\n- Location: Sangre de Cristo Mountains \n- Time: Immediate measures to mitigate risks\n- Scope: Water resources and unpaved roads\n'
+        #args = {"checklist": checklist}
+        #st.session_state.assistant = AssistantRouter("PlanAssistant", thread_id='thread_jMbfylzr3eXZYSZNwPKspW7x', args=args)
     st.rerun()
-
+elif "messages" in st.session_state:
+    with open("chat_history/session_state.pkl", "wb") as file:
+        states = {}
+        for key in ["messages", "assistant", "location_confirmed", "copied", "lat", "lon"]:
+            if key in st.session_state.keys():
+                states[key] = st.session_state[key]
+        pickle.dump(states, file)
 
 def display_reponse(message, index=0):
     with st.chat_message(message["role"]):
@@ -90,7 +148,9 @@ def display_reponse(message, index=0):
             response, visualizations = response
             for visualization in visualizations:
                 maps, figs = visualization
-                if type(maps) == pdk.Deck:
+                if type(maps) == list and type(maps[1]) == pdk.Deck:
+                    caption, maps = maps
+                    st.write(caption)
                     st.pydeck_chart(maps)
                 for fig in figs:
                     st.plotly_chart(fig, use_container_width=True)
@@ -109,7 +169,7 @@ if st.session_state.location_confirmed == False:
     lon = st.session_state.lon
     st.write("The map below shows the initial location with 36km radius. Click on the map to select a location.")
     # Create a Folium map object
-    m = folium.Map(location=[lat, lon], zoom_start=8)
+    m = folium.Map(location=[lat, lon], zoom_start=9)
     folium.Circle(
         location=[lat, lon],
         radius=36000,  # 36km in meters
@@ -127,7 +187,7 @@ if st.session_state.location_confirmed == False:
 
     try:
         data = (map['last_clicked']['lat'],map['last_clicked']['lng'])
-        m2 = folium.Map(location=[lat, lon], zoom_start=8)
+        m2 = folium.Map(location=[lat, lon], zoom_start=9)
         folium.Marker(location=[lat, lon], popup='Initial Location').add_to(m2)
         folium.Circle(
             location=data,
@@ -154,7 +214,9 @@ if st.session_state.location_confirmed == False:
         user_prompt = f"The location has been confirmed: latitude {data[0]}, longitude {data[1]}."
         with st.chat_message("user"):
             st.markdown(user_prompt)
-        full_response = st.session_state.assistant.get_assistant_response(user_prompt)
+        st.session_state.messages.append({"role": "user", "content": user_prompt})
+        with st.chat_message("assistant"):
+            full_response = st.session_state.assistant.get_assistant_response(user_prompt)
         st.session_state.messages.append({"role": "assistant", "content": full_response})
         st.rerun()
 

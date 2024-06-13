@@ -100,6 +100,8 @@ class AnalystAssistant(Assistant):
         return function_response
     
     def display_maps(self, maps):
+        caption, maps = maps
+        st.write(caption)
         st.pydeck_chart(maps)
 
     def display_plots(self, figs):

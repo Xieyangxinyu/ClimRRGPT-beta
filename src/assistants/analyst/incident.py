@@ -112,6 +112,8 @@ def recent_fire_incident_data(lat, lon, start_year=2015, end_year=2023):
         map_style = 'mapbox://styles/mapbox/light-v10'
     )
 
+    maps = [f"The Fire Incident Records (shown in red dots) within 36 km of the location (lat: {lat}, lon: {lon})" , maps]
+
     return summary, maps, [fig]
     
 if __name__ == "__main__":

@@ -169,7 +169,7 @@ def long_term_fire_history_records(lat, lon):
             url = url[0]
         record['publications'] = get_publications(url)
 
-    maps = get_pinned_map(lat, lon, max_distance_km)
+    maps = [f"The area of interest is 36 km of the location (lat: {lat}, lon: {lon})" , get_pinned_map(lat, lon, max_distance_km)]
 
     # if no records found, return a message
     if not combined_records:

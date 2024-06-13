@@ -86,6 +86,7 @@ def get_census_info(lon: float, lat: float) -> str:
                     tooltip={"text": "GEOID: {GEOID} \n Population: {B01003_001E} \n Below Poverty: {C17002_001E} \n Below Half Poverty: {C17002_002E} \n Health Insurance Coverage: {B27001_001E} \n Housing Units: {B25001_001E}"},
                     map_style = 'mapbox://styles/mapbox/light-v10')
 
+    maps = [f"The census block groups overlapping with the area within 36 km of the location (lat: {lat}, lon: {lon})" , maps]
     # draw a table with the data
 
     fig = go.Figure(data=[go.Table(
