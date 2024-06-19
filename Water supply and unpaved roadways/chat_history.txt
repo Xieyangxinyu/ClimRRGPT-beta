@@ -48,7 +48,7 @@ Assistant: Understood. In that case, I will proceed with the next step in the pl
 
 User: Sounds good
 
-Assistant: It seems that there are no specific fire history records available within 50 miles of the Sangre De Cristo Mountains region from the NOAA’s fire history and paleoclimate services. However, I will continue to search for other data sources such as the Fire Weather Index (FWI) and recent fire incident data to assess the wildfire risks in the area. I will keep you updated as I gather more information. Thank you for your patience.
+Assistant: It seems that there are no specific fire history records available within 36 km of the Sangre De Cristo Mountains region from the NOAA’s fire history and paleoclimate services. However, I will continue to search for other data sources such as the Fire Weather Index (FWI) and recent fire incident data to assess the wildfire risks in the area. I will keep you updated as I gather more information. Thank you for your patience.
 
 User: Ok
 

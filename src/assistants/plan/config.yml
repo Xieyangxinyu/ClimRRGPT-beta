@@ -52,7 +52,7 @@ available_datasets: '
 
   - Long term fire history records: The metadata from the North American Tree-ring Fire Scar Synthesis (NAFSS) provides a rich dataset including scientific studies derived from tree-ring records across North America, capturing centuries of wildfire occurrences. This dataset can be instrumental in analyzing wildfire risk by providing historical context and identifying patterns or cycles in wildfire activity in the long term. Choose this dataset if you want to analyze the long-term patterns of wildfire activity throughout history.
 
-  - Recent fire incident data: Wildland Fire Interagency Geospatial Services (WFIGS) Group wildfire incidents record allows you to retrieve yearly and monthly wildfire incident counts between 2015 and 2023, within 50 miles of the provided location. Choose this dataset if you want to analyze the recent fire incidents in the area and make recommendations on immediate actions to mitigate the risks.
+  - Recent fire incident data: Wildland Fire Interagency Geospatial Services (WFIGS) Group wildfire incidents record allows you to retrieve yearly and monthly wildfire incident counts between 2015 and 2023, within 36 km of the provided location. Choose this dataset if you want to analyze the recent fire incidents in the area and make recommendations on immediate actions to mitigate the risks.
   '
 
 name: Plan
