@@ -77,7 +77,7 @@ def display_feedback(message, index):
                     with st.form(f"Entailment Feedback {index}"):
                         st.write("Entailment Feedback")
                         # Multiple choice question under Entailment
-                        q1 = st.radio("Are my recommendations logically following from the information (data, literature) provided?", ["Yes", "No", "Could be better"])
+                        q1 = st.radio("Are my analysis or recommendations logically following from the information (data, literature) provided?", ["Yes", "No", "Could be better"])
 
                         # Form submit button
                         submitted = st.form_submit_button("Submit")
@@ -89,7 +89,7 @@ def display_feedback(message, index):
                     with st.form(f"Accessibility Feedback {index}"):
                         st.write("Accessibility Feedback")
                         # Multiple choice question under Accessibility
-                        q1 = st.radio("Does my response contain too much jargon?", ["Yes", "No", "Could be better"])
+                        q1 = st.radio("Does my response contain too many jargons?", ["Yes", "No", "Could be better"])
                         q2 = st.radio("Does my response provide enough explanation?", ["Yes", "No", "Could be better"])
                         q3 = st.radio("Does my response contain redundant or useless information?", ["Yes", "No", "Could be better"])
 
