@@ -109,7 +109,14 @@ def convert_scores(input_data):
         total_count = 0
         count_na = 0
 
-        for response in input_data:
+        for i, response in enumerate(input_data):
+            if len(input_data) == 2:
+                # Is there any new factual information? Is there any contradictory information?
+                response = 'No' if response == 'Yes' else 'Yes'
+            elif len(input_data) == 3:
+                if i == 0 or i == 2: # Does my response contain too many jargons? Does my response contain redundant or useless information?
+                    response = 'No' if response == 'Yes' else 'Yes'
+
             if response != 'Not Applicable':
                 total_score += score_map.get(response, 0)
                 total_count += 1
