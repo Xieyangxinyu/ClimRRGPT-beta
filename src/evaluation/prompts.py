@@ -59,7 +59,8 @@ def evaluate_correctness_in_values_and_recommendations(tool_output, llm_response
 
 def evaluate_entailment_in_reference(tool_output, llm_response, user_profile=None, previous_query=None):
     message = ["Your task is to list all the points stated in the **LLM Response** section, and verify with the 'Abstract' of the papers in the **Tool Outputs** section. "
-               "For each point, you need to further extract only important nouns, technical terms, or facts for evaluation.",
+               "For each point, you need to further extract only important nouns, technical terms, or facts for evaluation. "
+               "Think about if the analysis or recommendations logically following the information in **Tool Outputs**",
 
                "Following are the texts you need to analyze: \n" + tool_output + '\n' + llm_response + "\nNow, please answer these two questions:\n"
                "(1) Is there any new factual information only in **LLM Response** but not in any abstracts? You don't need to mention any subjective suggestions. Answer 'Yes', 'No', 'Could be better', or 'Not Applicable.'\n"
@@ -71,7 +72,8 @@ def evaluate_entailment_in_reference(tool_output, llm_response, user_profile=Non
 
 def evaluate_entailment_in_values_and_recommendations(tool_output, llm_response, user_profile=None, previous_query=None):
     message = ["Your task is to list all the points stated in the **LLM Response** section, and verify with the information in the **Tool Outputs** section. "
-               "For each point, you need to further extract only important nouns, technical terms, or facts for evaluation.",
+               "For each point, you need to further extract only important nouns, technical terms, or facts for evaluation."
+               "Think about if the analysis or recommendations logically following the information in **Tool Outputs**",
 
                "Following are the texts you need to analyze: \n" + tool_output + '\n' + llm_response + "\nNow, please answer these two questions:\n"
                "(1) Is there any new factual information only in **LLM Response** but not in any abstracts? You don't need to mention any subjective suggestions. Answer 'Yes', 'No', 'Could be better', or 'Not Applicable.'\n"
