@@ -48,7 +48,7 @@ def evaluate_correctness_in_reference(tool_output, llm_response, user_profile=No
 def evaluate_correctness_in_values_and_recommendations(tool_output, llm_response, user_profile=None, previous_query=None):
     message = ["Given information in the following '**Tool Outputs**' and '**LLM Responses**', step by step identify each important terms or nouns, "
                "and verify each numerical values in the model responses associated with these nouns. "
-               "You should write Python codes that inputs the numerical values in the given information and in the responses to check deterministically if they are matched.",
+               "You should write Python codes that inputs the numerical values in '**Tool Outputs**' and '**LLM Responses**' to check deterministically if they are matched.",
 
                "Following are the texts you need to analyze:\n" + tool_output + '\n' + llm_response,
 
