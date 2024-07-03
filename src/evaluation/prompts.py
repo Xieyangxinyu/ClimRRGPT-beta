@@ -63,9 +63,17 @@ def evaluate_entailment_in_values_and_recommendations(tool_output, llm_response,
 
 
 def evaluate_accessibility_in_reference(tool_output, llm_response, user_profile=None, previous_query=None):
-    pass
+    message = ["Your task is to analyze the accessibility of the model's response to the human users. "
+               "For each question, always answer either 'Yes', 'No', 'Could be better', or 'Not Applicable'",
+
+               "Given this model's response: \n" + llm_response + "\n"
+               "(1) Does the response contain too many jargons? Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
+               "(2) Does the response provide enough explanation? Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
+               "(3) Does the response contain redundant or useless information? Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'."
+              ]
+    return message
 
 
 def evaluate_accessibility_in_values_and_recommendations(tool_output, llm_response, user_profile=None, previous_query=None):
-    pass
-
+    # same as evaluate_accessibility_in_reference
+    return evaluate_accessibility_in_reference(tool_output, llm_response, user_profile, previous_query)
