@@ -91,3 +91,30 @@ def parse_user_profile(data):
             user_profile[key] = value
 
     return user_profile
+
+
+def convert_scores(input_data):
+    # Check if input_data is a string that could represent a list
+    if isinstance(input_data, str) and input_data.strip().startswith('[') and input_data.strip().endswith(']'):
+        input_data = ast.literal_eval(input_data)  # Convert string representation of list to actual list
+
+    match = re.match(r"(\d+)/(\d+)", input_data) is not None
+    if match is not None:
+        errors, total = map(int, match.groups())
+        return total-errors, total, 0
+
+    else:
+        score_map = {'Yes': 2, 'Could be better': 1, 'No': 0}
+        total_score = 0
+        total_count = 0
+        count_na = 0
+
+        for response in input_data:
+            if response != 'Not Applicable':
+                total_score += score_map.get(response, 0)
+                total_count += 1
+            else:
+                count_na += 1
+
+        return total_score, total_count, count_na
+

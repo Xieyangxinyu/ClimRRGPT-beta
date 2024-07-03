@@ -5,8 +5,7 @@ from utils import *
 
 
 def evaluate_relevance_in_reference(tool_output, llm_response, user_profile=None, previous_query=None):
-    message = ["Your task is to analyze the relevance of the model's response to the contexts by answering the following questions. "
-               "For each question, always answer either 'Yes', 'No', 'Could be better', or 'Not Applicable'",
+    message = ["Your task is to analyze the relevance of the model's response to the contexts by answering the following questions.",
 
                "Given this model's response: \n" + llm_response + "\n"
                "(1) Does the response answer the user's last question? The question is '" + previous_query + "' Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
@@ -15,6 +14,7 @@ def evaluate_relevance_in_reference(tool_output, llm_response, user_profile=None
                "(4) Is the response relevant to the user's location? The location is '" + user_profile['location'] + "' Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
                "(5) Is the response relevant to the user's timeline? The timeline is '" + user_profile['timeline'] + "' Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
                "(6) Is the response relevant to the user's scope? The scope is '" + user_profile['scope'] + "' Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
+               "Please answer these questions one by one and output a Python list of your responses."
               ]
     return message
 
@@ -37,8 +37,10 @@ def evaluate_correctness_in_reference(tool_output, llm_response, user_profile=No
                "Following are the texts you need to analyze:\n" + tool_output + '\n' + llm_response,
 
                "Solely based on this LLM's response, is it true that each paper in the '**LLM Responses**' or '### References' paragraphs can be found in the '**Tool Outputs**' paragraph "
-               "and all the information is correct? Only answer 'Yes' or 'No', except for the case of 'No', "
-               "also provide the number of errors and the total lengths of the dictionaries of '**LLM Responses**' and '### References' by filling this answer format '[Num_of_Errors]/[Len_of_Dict]'."
+               "and all the information is correct? Answer either 'Yes' or 'No'. "
+               "In case of 'Yes', give me the total lengths of the dictionaries of '**LLM Responses**' and '### References' by filling this answer format '0/[Len_of_Dict]', where '0' means zero error. "
+               "In case of 'No', provide the number of errors and the total lengths of the dictionaries of '**LLM Responses**' and '### References' by filling this answer format '[Num_of_Errors]/[Len_of_Dict]'."
+               "Do NOT provide any other responses."
                ]
     return message
 
@@ -50,7 +52,8 @@ def evaluate_correctness_in_values_and_recommendations(tool_output, llm_response
 
                "Following are the texts you need to analyze:\n" + tool_output + '\n' + llm_response,
 
-               "Solely based on this LLM's response, is it true that all important terms, nouns, and numerical value in the '**LLM Responses**' are correct?"]
+               "Solely based on this LLM's response, is it true that all important terms, nouns, and numerical value in the '**LLM Responses**' are correct?"
+              ]
     return message
 
 
@@ -59,9 +62,10 @@ def evaluate_entailment_in_reference(tool_output, llm_response, user_profile=Non
                "For each point, you need to further extract only important nouns, technical terms, or facts for evaluation.",
 
                "Following are the texts you need to analyze: \n" + tool_output + '\n' + llm_response + "\nNow, please answer these two questions:\n"
-               "(1) Is there any new factual information only in **LLM Response** but not in any abstracts? You don't need to mention any subjective suggestions. Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'\n"
-               "(2) Is there any contradictory information? Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'"
-            ]
+               "(1) Is there any new factual information only in **LLM Response** but not in any abstracts? You don't need to mention any subjective suggestions. Answer 'Yes', 'No', 'Could be better', or 'Not Applicable.'\n"
+               "(2) Is there any contradictory information? Answer 'Yes', 'No', 'Could be better', or 'Not Applicable.'\n"
+               "Please answer these questions one by one and output a Python list of your responses."
+             ]
     return message
 
 
@@ -70,9 +74,10 @@ def evaluate_entailment_in_values_and_recommendations(tool_output, llm_response,
                "For each point, you need to further extract only important nouns, technical terms, or facts for evaluation.",
 
                "Following are the texts you need to analyze: \n" + tool_output + '\n' + llm_response + "\nNow, please answer these two questions:\n"
-               "(1) Is there any new factual information only in **LLM Response** but not in any abstracts? You don't need to mention any subjective suggestions. Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'\n"
-               "(2) Is there any contradictory information? Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'"
-               ]
+               "(1) Is there any new factual information only in **LLM Response** but not in any abstracts? You don't need to mention any subjective suggestions. Answer 'Yes', 'No', 'Could be better', or 'Not Applicable.'\n"
+               "(2) Is there any contradictory information? Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
+               "Please answer these questions one by one and output a Python list of your responses."
+              ]
     return message
 
 
@@ -83,7 +88,8 @@ def evaluate_accessibility_in_reference(tool_output, llm_response, user_profile=
                "Given this model's response: \n" + llm_response + "\n"
                "(1) Does the response contain too many jargons? Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
                "(2) Does the response provide enough explanation? Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
-               "(3) Does the response contain redundant or useless information? Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'."
+               "(3) Does the response contain redundant or useless information? Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
+               "Please answer these questions one by one and output a Python list of your responses."
               ]
     return message
 

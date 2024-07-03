@@ -35,7 +35,9 @@ class Evaluator:
         self.user_profile = utils.parse_user_profile(self.user_profile)
 
         # Initialize overall scores
-        self.scores = {'relevance_score': 0, 'correctness_score': 0, 'entailment_score': 0, 'accessibility_score': 0}
+        self.scores = {'relevance_score': 0, 'correctness_score': 0, 'entailment_score': 0, 'accessibility_score': 0,
+                       'relevance_total': 0, 'correctness_total': 0, 'entailment_total': 0, 'accessibility_total': 0,
+                       'relevance_na': 0, 'correctness_na': 0, 'entailment_na': 0, 'accessibility_na': 0}
 
 
     def init_assistant(self, model='gpt-4-turbo'):
@@ -89,20 +91,26 @@ class Evaluator:
 
 
     def evaluate(self):
-        for data in self.data_dict:
+        for i, data in tqdm(enumerate(self.data_dict)):
             # Extract each pair of tool output and llm response
             tool_output = data['tool_output']
             llm_response = data['llm_response']
             data_type = data['type']
             previous_query = data['previous_query']
 
-            current_scores = []
             for aspect in ['relevance', 'correctness', 'entailment', 'accessibility']:
-                score = self.evaluate_single_aspect(tool_output, llm_response, data_type, previous_query, aspect)
-                current_scores.append(score)
-                self.scores[f'{aspect}_score'] += score
+                response = self.evaluate_single_aspect(tool_output, llm_response, data_type, previous_query, aspect)
 
-            print(f"Relevance: {current_scores[0]}, Correctness: {current_scores[1]}, Entailment: {current_scores[2]}, Accessibility: {current_scores[3]}")
+                score = utils.convert_scores(response)
+                self.scores[f'{aspect}_score'] += score[0]
+                self.scores[f'{aspect}_total'] += score[1]
+                self.scores[f'{aspect}_na'] += score[2]
+
+            print(f"Data {i}/{len(data)}", f"Relevance: {self.scores['relevance_score']}/{self.scores['relevance_total']}({self.scores['relevance_na']})={self.scores['relevance_score']/(self.scores['relevance_total']+1e-6)}",
+                  f"Correctness: {self.scores['correctness_score']}/{self.scores['correctness_total']}({self.scores['correctness_na']})={self.scores['correctness_score']/(self.scores['correctness_total']+1e-6)}",
+                  f"Entailment: {self.scores['entailment_score']}/{self.scores['entailment_total']}({self.scores['entailment_na']})={self.scores['entailment_score']/(self.scores['entailment_total']+1e-6)}",
+                  f"Accessibility: {self.scores['accessibility_score']}/{self.scores['accessibility_total']}({self.scores['accessibility_na']})={self.scores['accessibility_score']/(self.scores['accessibility_total']+1e-6)}")
+
 
 
 if __name__ == "__main__":
