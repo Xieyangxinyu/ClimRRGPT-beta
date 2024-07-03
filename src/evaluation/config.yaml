@@ -1,0 +1,6 @@
+file_name: '../../Chicago_fire/tools.txt'
+user_profile: '../../Chicago_fire/checklist.txt'
+interaction_file: '../../Chicago_fire/interaction.jsonl'
+output_dir: 'outputs/'
+llm_model: 'gpt-4-turbo'
+verbose: False
