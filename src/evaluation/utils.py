@@ -15,7 +15,7 @@ def find_previous_user_query(interactions, llm_response_first_sentence):
     return None
 
 
-def parse_file(filepath, interaction_history):
+def parse_file(filepath, interactions):
     # Read the entire text file
     with open(filepath, 'r', encoding='utf-8') as file:
         content = file.read()
@@ -46,6 +46,8 @@ def parse_file(filepath, interaction_history):
         print(f"{PURPLE}tool_outputs{ENDC}", tool_outputs, f"{PURPLE}type{ENDC}", type_value, f"{PURPLE}llm_response{ENDC}", llm_response)
 
         # Find previous user query that matches the first sentence of the llm_response
+        first_sentence = llm_response.split('\n')[1].strip()
+        print(f"{PURPLE}first_sentence{ENDC}", first_sentence)
         previous_query = find_previous_user_query(interactions, first_sentence)
         print(f"{PURPLE}previous_query{ENDC}", previous_query)
 
