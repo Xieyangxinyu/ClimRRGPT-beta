@@ -42,12 +42,10 @@ def parse_file(filepath, interactions):
         # remainder = parts[1].strip()
 
         # Determine the type based on the presence of 'Title' or 'title'
-        type_value = 'literature' if 'title' in tool_outputs.lower() else 'values_and_recommendations'
+        type_value = 'literature' if 'title:' in tool_outputs.lower() else 'values_and_recommendations'
         print(f"{PURPLE}tool_outputs{ENDC}", tool_outputs, f"{PURPLE}type{ENDC}", type_value, f"{PURPLE}llm_response{ENDC}", llm_response)
-
         # Find previous user query that matches the first sentence of the llm_response
         first_sentence = llm_response.split('\n')[1].strip()
-        print(f"{PURPLE}first_sentence{ENDC}", first_sentence)
         previous_query = find_previous_user_query(interactions, first_sentence)
         print(f"{PURPLE}previous_query{ENDC}", previous_query)
 
@@ -126,4 +124,19 @@ def convert_scores(input_data):
                 count_na += 1
 
         return total_score, total_count, count_na
+    
+import json
 
+if __name__ == '__main__':
+    # Define the path to the file
+    filepath = 'Beaverton_mitigation_policy/tools.txt'
+    
+    # Read the interactions data from json file
+    interactions = []
+    with open('Beaverton_mitigation_policy/interaction.jsonl', 'r') as file:
+        for line in file:
+            interactions.append(json.loads(line))
+
+    # Call the function to parse the file
+    results = parse_file(filepath, interactions)
+    print(results)

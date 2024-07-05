@@ -13,7 +13,7 @@ def on_copy_click(text):
     st.session_state.copied.append(text)
     clipboard.copy(text)
 
-def display_feedback(message, index):
+def display_feedback(message, index, file):
     increment = 0
     if message["role"] == "assistant":
         like_key = f"like_{index}"
@@ -109,7 +109,9 @@ def display_feedback(message, index):
 
     message_save = {k: v for k, v in message.items() if k != "content"}
     message_save["content"] = message["content"] if type(message["content"]) == str else message["content"][0]
-    json.dump(message_save, file, indent=4, )
+    #json.dump(message_save, file, indent=4)
+    file.write(json.dumps(message_save) + "\n")
+    file.flush()
     return increment
 
 if "messages" not in st.session_state:
@@ -141,7 +143,7 @@ elif "messages" in st.session_state:
                 states[key] = st.session_state[key]
         pickle.dump(states, file)
 
-def display_reponse(message, index=0):
+def display_reponse(message, index=0, file=None):
     with st.chat_message(message["role"]):
         response = message["content"]
         if type(response) != str:
@@ -155,14 +157,14 @@ def display_reponse(message, index=0):
                 for fig in figs:
                     st.plotly_chart(fig, use_container_width=True)
         st.markdown(response)
-        return display_feedback(message, index)
+        return display_feedback(message, index, file)
 
 index = 0
 with open("chat_history/interaction.jsonl", "w") as file:
     for message in st.session_state.messages:
         like_key = f"like_{index}"
         dislike_key = f"dislike_{index}"
-        index += display_reponse(message, index)
+        index += display_reponse(message, index, file)
 
 if st.session_state.location_confirmed == False:
     lat = st.session_state.lat

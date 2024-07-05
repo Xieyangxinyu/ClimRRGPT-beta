@@ -15,7 +15,9 @@ class Evaluator:
 
         # Load the file to evaluate
         with open(args['interaction_file'], 'r') as interaction_file:
-            self.interaction_history = json.load(interaction_file)
+            self.interaction_history = []
+            for line in interaction_file:
+                self.interaction_history.append(json.loads(line))
 
         self.data_dict = parse_file(self.args['file_name'], self.interaction_history)
 
