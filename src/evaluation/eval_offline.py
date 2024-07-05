@@ -1,38 +1,27 @@
 import torch
-import numpy as np
 from tqdm import tqdm
-import os
 import json
-import random
-import re
 import argparse
 import yaml
-
-import utils
-import prompts
-
-# OpenAI ChatGPT API
-import openai
-from openai import OpenAI
+from src.evaluation.utils import parse_file, parse_user_profile, convert_scores
+from src.evaluation.prompts import Prompts
+from src.config import client
 
 
 class Evaluator:
     def __init__(self, args):
         self.args = args
-
-        # Load API keys or tokens
-        with open('api_keys/openai_key.txt', 'r') as api_key_file:
-            self.api_key = api_key_file.read()
+        self.prompts = Prompts()
 
         # Load the file to evaluate
         with open(args['interaction_file'], 'r') as interaction_file:
             self.interaction_history = json.load(interaction_file)
 
-        self.data_dict = utils.parse_file(self.args['file_name'], self.interaction_history)
+        self.data_dict = parse_file(self.args['file_name'], self.interaction_history)
 
         with open(args['user_profile'], 'r') as user_profile_file:
             self.user_profile = user_profile_file.read()
-        self.user_profile = utils.parse_user_profile(self.user_profile)
+        self.user_profile = parse_user_profile(self.user_profile)
 
         # Initialize overall scores
         self.scores = {'relevance_score': 0, 'correctness_score': 0, 'entailment_score': 0, 'accessibility_score': 0,
@@ -42,7 +31,6 @@ class Evaluator:
 
     def init_assistant(self, model='gpt-4-turbo'):
         # Each evaluation is a separate thread
-        client = OpenAI(api_key=self.api_key)
         assistant = client.beta.assistants.create(
             name="Response Evaluator",
             model=model,
@@ -51,10 +39,10 @@ class Evaluator:
         )
 
         thread = client.beta.threads.create()
-        return client, assistant, thread
+        return assistant, thread
 
 
-    def query_assistant(self, client, assistant_id, thread_id, content):
+    def query_assistant(self, assistant_id, thread_id, content):
         message = client.beta.threads.messages.create(
             thread_id=thread_id,
             role="user",
@@ -79,14 +67,14 @@ class Evaluator:
 
     def evaluate_single_aspect(self, tool_output, llm_response, data_type, previous_query, aspect):
         if data_type == 'literature':
-            messages = getattr(prompts, f'evaluate_{aspect}_in_references')(tool_output, llm_response, self.user_profile, previous_query)
+            messages = getattr(self.prompts, f'evaluate_{aspect}_in_references')(tool_output, llm_response, self.user_profile, previous_query)
         else:
-            messages = getattr(prompts, f'evaluate_{aspect}_in_values_and_recommendations')(tool_output, llm_response, self.user_profile, previous_query)
+            messages = getattr(self.prompts, f'evaluate_{aspect}_in_values_and_recommendations')(tool_output, llm_response, self.user_profile, previous_query)
 
-        client, assistant, thread = self.init_assistant(self.args['llm_model'])
-        response = self.query_assistant(client, assistant.id, thread.id, messages[1])
+        assistant, thread = self.init_assistant(self.args['llm_model'])
+        response = self.query_assistant(assistant.id, thread.id, messages[1])
         if response is not None and len(messages) > 2:
-            response = self.query_assistant(client, assistant.id, thread.id, messages[2])
+            response = self.query_assistant(assistant.id, thread.id, messages[2])
         return response
 
 
@@ -101,7 +89,7 @@ class Evaluator:
             for aspect in ['relevance', 'correctness', 'entailment', 'accessibility']:
                 response = self.evaluate_single_aspect(tool_output, llm_response, data_type, previous_query, aspect)
 
-                score = utils.convert_scores(response)
+                score = convert_scores(response)
                 self.scores[f'{aspect}_score'] += score[0]
                 self.scores[f'{aspect}_total'] += score[1]
                 self.scores[f'{aspect}_na'] += score[2]
