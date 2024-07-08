@@ -1,4 +1,5 @@
 import re
+import ast
 
 # Define the ANSI escape sequence for purple
 PURPLE = '\033[95m'
@@ -85,7 +86,7 @@ def parse_user_profile(data):
 
             # Clean up the key and value
             key = key.strip().strip('*- ').replace("**", "").lower()  # Remove extra characters and make lowercase
-            value = value.strip()
+            value = value.replace("**", "").strip()
 
             # Add the key-value pair to the dictionary
             user_profile[key] = value
@@ -128,6 +129,7 @@ def convert_scores(input_data):
 import json
 
 if __name__ == '__main__':
+    '''
     # Define the path to the file
     filepath = 'Beaverton_mitigation_policy/tools.txt'
     
@@ -140,3 +142,12 @@ if __name__ == '__main__':
     # Call the function to parse the file
     results = parse_file(filepath, interactions)
     print(results)
+
+    '''
+
+    filepath = 'Beaverton_mitigation_policy/checklist.txt'
+    with open(filepath, 'r') as file:
+        user_profile = file.read()
+    
+    user_profile_dict = parse_user_profile(user_profile)
+    print(user_profile_dict)

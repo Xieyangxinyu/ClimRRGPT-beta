@@ -31,7 +31,7 @@ class Evaluator:
                        'relevance_na': 0, 'correctness_na': 0, 'entailment_na': 0, 'accessibility_na': 0}
 
 
-    def init_assistant(self, model='gpt-4-turbo'):
+    def init_assistant(self, messages, model='gpt-4-turbo'):
         # Each evaluation is a separate thread
         assistant = client.beta.assistants.create(
             name="Response Evaluator",
@@ -73,7 +73,7 @@ class Evaluator:
         else:
             messages = getattr(self.prompts, f'evaluate_{aspect}_in_values_and_recommendations')(tool_output, llm_response, self.user_profile, previous_query)
 
-        assistant, thread = self.init_assistant(self.args['llm_model'])
+        assistant, thread = self.init_assistant(messages, self.args['llm_model'])
         response = self.query_assistant(assistant.id, thread.id, messages[1])
         if response is not None and len(messages) > 2:
             response = self.query_assistant(assistant.id, thread.id, messages[2])
