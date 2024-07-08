@@ -16,11 +16,7 @@ def find_previous_user_query(interactions, llm_response_first_sentence):
     return None
 
 
-def parse_file(filepath, interactions):
-    # Read the entire text file
-    with open(filepath, 'r', encoding='utf-8') as file:
-        content = file.read()
-
+def parse_tool_file(content, interactions):
     # Pattern to find sections with correct delimiter
     sections_pattern = r'\*\*Tool Outputs\*\*(.*?)\*\*LLM Response\*\*(.*?)(?=\*\*Tool Outputs\*\*|$)'
 
@@ -44,11 +40,11 @@ def parse_file(filepath, interactions):
 
         # Determine the type based on the presence of 'Title' or 'title'
         type_value = 'literature' if 'title:' in tool_outputs.lower() else 'values_and_recommendations'
-        print(f"{PURPLE}tool_outputs{ENDC}", tool_outputs, f"{PURPLE}type{ENDC}", type_value, f"{PURPLE}llm_response{ENDC}", llm_response)
+        #print(f"{PURPLE}tool_outputs{ENDC}", tool_outputs, f"{PURPLE}type{ENDC}", type_value, f"{PURPLE}llm_response{ENDC}", llm_response)
         # Find previous user query that matches the first sentence of the llm_response
         first_sentence = llm_response.split('\n')[1].strip()
         previous_query = find_previous_user_query(interactions, first_sentence)
-        print(f"{PURPLE}previous_query{ENDC}", previous_query)
+        #print(f"{PURPLE}previous_query{ENDC}", previous_query)
 
         # Initialize dictionary for this pair
         entry = {
@@ -71,12 +67,12 @@ def parse_file(filepath, interactions):
     return results
 
 
-def parse_user_profile(data):
+def parse_user_profile(content):
     # Initialize an empty dictionary
     user_profile = {}
 
     # Split the data into lines
-    lines = data.split("\n")
+    lines = content.split("\n")
 
     # Iterate over each line
     for line in lines:
@@ -99,7 +95,7 @@ def convert_scores(input_data):
     if isinstance(input_data, str) and input_data.strip().startswith('[') and input_data.strip().endswith(']'):
         input_data = ast.literal_eval(input_data)  # Convert string representation of list to actual list
 
-    match = re.match(r"(\d+)/(\d+)", input_data) is not None
+    match = re.match(r"(\d+)/(\d+)", input_data)
     if match is not None:
         errors, total = map(int, match.groups())
         return total-errors, total, 0
@@ -126,29 +122,10 @@ def convert_scores(input_data):
 
         return total_score, total_count, count_na
     
-import json
-
 if __name__ == '__main__':
-    # Define the path to the file
-    filepath = 'Beaverton_mitigation_policy/tools.txt'
-    
-    # Read the interactions data from json file
-    interactions = []
-    with open('Beaverton_mitigation_policy/interaction.jsonl', 'r') as file:
-        for line in file:
-            interactions.append(json.loads(line))
-
-    # Call the function to parse the file
-    results = parse_file(filepath, interactions)
-    print(results)
-
-
-    '''
-    filepath = 'Beaverton_mitigation_policy/checklist.txt'
+    filepath = 'Beaverton_mitigation_policy/user_profile.txt'
     with open(filepath, 'r') as file:
         user_profile = file.read()
     
     user_profile_dict = parse_user_profile(user_profile)
     print(user_profile_dict)
-
-    '''

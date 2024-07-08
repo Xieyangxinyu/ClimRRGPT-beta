@@ -12,7 +12,7 @@ class Prompts:
                 "(2) Is the response relevant to the user's profession? The profession is '" + user_profile['profession'] + "' Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
                 "(3) Is the response relevant to the user's concern? The concern is '" + user_profile['concern'] + "' Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
                 "(4) Is the response relevant to the user's location? The location is '" + user_profile['location'] + "' Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
-                "(5) Is the response relevant to the user's timeline? The timeline is '" + user_profile['timeline'] + "' Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
+                "(5) Is the response relevant to the user's timeline? The timeline is '" + user_profile['time'] + "' Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
                 "(6) Is the response relevant to the user's scope? The scope is '" + user_profile['scope'] + "' Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
                 "Please answer these questions one by one and output a Python list of your responses."
                 ]
