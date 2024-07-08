@@ -74,7 +74,8 @@ class Assistant(ABC):
 
             with open("chat_history/tools.txt", "a") as f:
                 f.write("\n\n\n\n**Tool Outputs**\n")
-                f.write(tool_outputs[0]['output'])
+                for tool_output in tool_outputs:
+                    f.write(tool_output['output'])
                 f.write("\n**LLM Response**\n")
                 f.write(full_response)
                 f.write("\n")

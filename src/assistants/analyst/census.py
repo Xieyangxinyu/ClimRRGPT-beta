@@ -12,8 +12,6 @@ def get_census_info(lon: float, lat: float) -> str:
     
     geocode = geolookup(longitude = lon, latitude= lat)['GEOID'][0]
     state_code = geocode[0:2]
-    county_code = geocode[2:5]
-    tract_code = geocode[5:11]
     radius_meters = 36 * 1000  # radius in meters
 
     point = Point(lon, lat)
@@ -36,6 +34,8 @@ def get_census_info(lon: float, lat: float) -> str:
     # B25001_001E: Housing units
     # B19013_001E: Median household income
     # B27001_001E: Health insurance coverage
+    # Sources: https://api.census.gov/data/2019/acs/acs5/variables.html
+
     state_tract = gpd.read_file(f"https://www2.census.gov/geo/tiger/TIGER2022/BG/tl_2022_{state_code}_bg.zip")
     state_tract = state_tract.to_crs(epsg=4326)
     state_tract["GEOID"] = state_tract["GEOID"].astype(str)
@@ -54,13 +54,15 @@ def get_census_info(lon: float, lat: float) -> str:
     bg_df["GEOID"] = bg_df["GEOID"].astype(str)
     bg_df = state_tract.merge(bg_df, on = "GEOID")
 
+    bg_df['poverty_count'] = bg_df['C17002_002E'] + bg_df['C17002_003E'] 
+
     # sum each column to a new dataframe
-    bg_df_sum = pd.DataFrame(bg_df[['C17002_001E', 'C17002_002E', 'C17002_003E', 'B01003_001E', 'B25001_001E', 'B27001_001E']].sum()).T
+    bg_df_sum = pd.DataFrame(bg_df[['poverty_count', 'C17002_002E', 'B01003_001E', 'B25001_001E', 'B27001_001E']].sum()).T
 
-    output = f"In 2022, the total population within roughly 36km of location (lat: {lat}, lon: {lon}) is {bg_df_sum['B01003_001E'][0]}. The number of individual under the poverty line is {bg_df_sum['C17002_001E'][0]}. In particular, {bg_df_sum['C17002_002E'][0]} individuals hold income less than half of what is considered the minimum required to meet basic living expenses. There are {bg_df_sum['B25001_001E'][0]} housing units in the area. The number of individuals with health insurance coverage is {bg_df_sum['B27001_001E'][0]}."
+    output = f"In 2022, the total population within roughly 36km of location (lat: {lat}, lon: {lon}) is {bg_df_sum['B01003_001E'][0]}. The number of individual under the poverty line is {bg_df_sum['poverty_count'][0]}. In particular, {bg_df_sum['C17002_002E'][0]} individuals hold income less than half of what is considered the minimum required to meet basic living expenses. There are {bg_df_sum['B25001_001E'][0]} housing units in the area. The number of individuals with health insurance coverage is {bg_df_sum['B27001_001E'][0]}."
 
 
-    bg_df = bg_df[['GEOID', 'C17002_001E', 'C17002_002E', 'C17002_003E', 'B01003_001E', 'B25001_001E', 'B27001_001E', 'geometry']]
+    bg_df = bg_df[['GEOID', 'poverty_count', 'C17002_002E', 'B01003_001E', 'B25001_001E', 'B27001_001E', 'geometry']]
     bg_df = bg_df.to_crs(epsg=4326)
     layer = pdk.Layer(
         'GeoJsonLayer',
@@ -83,7 +85,7 @@ def get_census_info(lon: float, lat: float) -> str:
     
     maps = pdk.Deck(layers=[layer, icon_layer], 
                     initial_view_state=view_state, 
-                    tooltip={"text": "GEOID: {GEOID} \n Population: {B01003_001E} \n Below Poverty: {C17002_001E} \n Below Half Poverty: {C17002_002E} \n Health Insurance Coverage: {B27001_001E} \n Housing Units: {B25001_001E}"},
+                    tooltip={"text": "GEOID: {GEOID} \n Population: {B01003_001E} \n Below Poverty: {poverty_count} \n Below Half Poverty: {C17002_002E} \n Health Insurance Coverage: {B27001_001E} \n Housing Units: {B25001_001E}"},
                     map_style = 'mapbox://styles/mapbox/light-v10')
 
     maps = [f"The census block groups overlapping with the area within 36 km of the location (lat: {lat}, lon: {lon})" , maps]
@@ -94,7 +96,7 @@ def get_census_info(lon: float, lat: float) -> str:
                         fill_color='royalblue',  # Header background color
                         align='left',
                         font=dict(color='white', size=14)),
-        cells=dict(values=[bg_df_sum['B01003_001E'][0], bg_df_sum['C17002_001E'][0], bg_df_sum['C17002_002E'][0], bg_df_sum['B27001_001E'][0], bg_df_sum['B25001_001E'][0]],
+        cells=dict(values=[bg_df_sum['B01003_001E'][0], bg_df_sum['poverty_count'][0], bg_df_sum['C17002_002E'][0], bg_df_sum['B27001_001E'][0], bg_df_sum['B25001_001E'][0]],
                         fill_color=['paleturquoise', 'lavender'],  # Cell background colors
                         align='left',
                         font=dict(color='black', size=14)))

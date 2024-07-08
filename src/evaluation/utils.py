@@ -129,7 +129,6 @@ def convert_scores(input_data):
 import json
 
 if __name__ == '__main__':
-    '''
     # Define the path to the file
     filepath = 'Beaverton_mitigation_policy/tools.txt'
     
@@ -143,11 +142,13 @@ if __name__ == '__main__':
     results = parse_file(filepath, interactions)
     print(results)
 
-    '''
 
+    '''
     filepath = 'Beaverton_mitigation_policy/checklist.txt'
     with open(filepath, 'r') as file:
         user_profile = file.read()
     
     user_profile_dict = parse_user_profile(user_profile)
     print(user_profile_dict)
+
+    '''
