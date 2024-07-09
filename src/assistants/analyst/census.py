@@ -33,7 +33,6 @@ def get_census_info(lon: float, lat: float) -> str:
     # B01003_001E: total population
     # B25001_001E: Housing units
     # B19013_001E: Median household income
-    # B27001_001E: Health insurance coverage
     # Sources: https://api.census.gov/data/2019/acs/acs5/variables.html
 
     state_tract = gpd.read_file(f"https://www2.census.gov/geo/tiger/TIGER2022/BG/tl_2022_{state_code}_bg.zip")
@@ -41,7 +40,7 @@ def get_census_info(lon: float, lat: float) -> str:
     state_tract["GEOID"] = state_tract["GEOID"].astype(str)
     state_tract = state_tract[state_tract.intersects(buffer.geometry[0])]
     
-    block_groups = c.acs5.state_county_blockgroup(fields = ('C17002_001E', 'C17002_002E', 'C17002_003E', 'B01003_001E', 'B25001_001E', 'B19013_001E', 'B27001_001E'),
+    block_groups = c.acs5.state_county_blockgroup(fields = ('C17002_001E', 'C17002_002E', 'C17002_003E', 'B01003_001E', 'B25001_001E', 'B19013_001E'),
         state_fips = state_code,
         county_fips = '*',
         tract = '*',
@@ -59,7 +58,7 @@ def get_census_info(lon: float, lat: float) -> str:
     # sum each column to a new dataframe
     bg_df_sum = pd.DataFrame(bg_df[['poverty_count', 'C17002_002E', 'B01003_001E', 'B25001_001E', 'B27001_001E']].sum()).T
 
-    output = f"In 2022, the total population within roughly 36km of location (lat: {lat}, lon: {lon}) is {bg_df_sum['B01003_001E'][0]}. The number of individual under the poverty line is {bg_df_sum['poverty_count'][0]}. In particular, {bg_df_sum['C17002_002E'][0]} individuals hold income less than half of what is considered the minimum required to meet basic living expenses. There are {bg_df_sum['B25001_001E'][0]} housing units in the area. The number of individuals with health insurance coverage is {bg_df_sum['B27001_001E'][0]}."
+    output = f"In 2022, the total population within roughly 36km of location (lat: {lat}, lon: {lon}) is {bg_df_sum['B01003_001E'][0]}. The number of individual under the poverty line is {bg_df_sum['poverty_count'][0]}. In particular, {bg_df_sum['C17002_002E'][0]} individuals hold income less than half of what is considered the minimum required to meet basic living expenses. There are {bg_df_sum['B25001_001E'][0]} housing units in the area."
 
 
     bg_df = bg_df[['GEOID', 'poverty_count', 'C17002_002E', 'B01003_001E', 'B25001_001E', 'B27001_001E', 'geometry']]
@@ -85,18 +84,18 @@ def get_census_info(lon: float, lat: float) -> str:
     
     maps = pdk.Deck(layers=[layer, icon_layer], 
                     initial_view_state=view_state, 
-                    tooltip={"text": "GEOID: {GEOID} \n Population: {B01003_001E} \n Below Poverty: {poverty_count} \n Below Half Poverty: {C17002_002E} \n Health Insurance Coverage: {B27001_001E} \n Housing Units: {B25001_001E}"},
+                    tooltip={"text": "GEOID: {GEOID} \n Population: {B01003_001E} \n Below Poverty: {poverty_count} \n Below Half Poverty: {C17002_002E} \n Housing Units: {B25001_001E}"},
                     map_style = 'mapbox://styles/mapbox/light-v10')
 
     maps = [f"The census block groups overlapping with the area within 36 km of the location (lat: {lat}, lon: {lon})" , maps]
     # draw a table with the data
 
     fig = go.Figure(data=[go.Table(
-        header=dict(values=['Population', 'Below Poverty', 'Below Half Poverty', 'Health Insurance Coverage', 'Housing Units'],
+        header=dict(values=['Population', 'Below Poverty', 'Below Half Poverty', 'Housing Units'],
                         fill_color='royalblue',  # Header background color
                         align='left',
                         font=dict(color='white', size=14)),
-        cells=dict(values=[bg_df_sum['B01003_001E'][0], bg_df_sum['poverty_count'][0], bg_df_sum['C17002_002E'][0], bg_df_sum['B27001_001E'][0], bg_df_sum['B25001_001E'][0]],
+        cells=dict(values=[bg_df_sum['B01003_001E'][0], bg_df_sum['poverty_count'][0], bg_df_sum['C17002_002E'][0], bg_df_sum['B25001_001E'][0]],
                         fill_color=['paleturquoise', 'lavender'],  # Cell background colors
                         align='left',
                         font=dict(color='black', size=14)))
