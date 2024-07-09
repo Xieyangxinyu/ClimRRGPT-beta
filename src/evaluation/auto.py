@@ -13,8 +13,13 @@ def score_sbert_similarity(text1, text2):
 # get the similarity score between two texts using ROUGE score
 def score_rouge_similarity(text1, text2):
     rouge = Rouge()
-    scores = rouge.get_scores(text1, text2)
-    return scores[0]['rouge-l']['f']
+    scores = rouge.get_scores(text1, text2)[0]
+    
+    return {
+        'rouge-1': scores['rouge-1']['f'],
+        'rouge-2': scores['rouge-2']['f'],
+        'rouge-l': scores['rouge-l']['f']
+    }
 
 
 # TODO: whether hallucination comes up in the generated text

@@ -77,7 +77,7 @@ def display_feedback(message, index, file):
                     with st.form(f"Entailment Feedback {index}"):
                         st.write("Entailment Feedback")
                         # Multiple choice question under Entailment
-                        q1 = st.radio("Are my analysis or recommendations logically following from the information (data, literature) provided?", ["Yes", "No", "Could be better"])
+                        q1 = st.radio("Do my analyses or recommendations logically follow from the information (data, literature) provided?", ["Yes", "No", "Could be better"])
 
                         # Form submit button
                         submitted = st.form_submit_button("Submit")

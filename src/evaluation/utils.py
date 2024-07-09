@@ -1,5 +1,7 @@
 import re
 import ast
+import numpy as np
+from scipy.stats import spearmanr
 
 # Define the ANSI escape sequence for purple
 PURPLE = '\033[95m'
@@ -12,7 +14,7 @@ def find_previous_user_query(interactions, llm_response_first_sentence):
         if entry['role'] == 'user':
             last_user_content = entry['content']
         elif entry['role'] == 'assistant' and llm_response_first_sentence in entry['content']:
-            return last_user_content
+            return last_user_content, entry
     return None
 
 
@@ -43,7 +45,7 @@ def parse_tool_file(content, interactions):
         #print(f"{PURPLE}tool_outputs{ENDC}", tool_outputs, f"{PURPLE}type{ENDC}", type_value, f"{PURPLE}llm_response{ENDC}", llm_response)
         # Find previous user query that matches the first sentence of the llm_response
         first_sentence = llm_response.split('\n')[1].strip()
-        previous_query = find_previous_user_query(interactions, first_sentence)
+        previous_query, current_entry = find_previous_user_query(interactions, first_sentence)
         #print(f"{PURPLE}previous_query{ENDC}", previous_query)
 
         # Initialize dictionary for this pair
@@ -51,7 +53,8 @@ def parse_tool_file(content, interactions):
             'tool_outputs': tool_outputs,
             'llm_response': llm_response,
             'type': type_value,
-            'previous_query': previous_query
+            'previous_query': previous_query,
+            'current_entry': current_entry
         }
 
         # # Extract instructions if present
@@ -89,43 +92,56 @@ def parse_user_profile(content):
 
     return user_profile
 
-
-def convert_scores(input_data):
-    # Check if input_data is a string that could represent a list
-    if isinstance(input_data, str) and input_data.strip().startswith('[') and input_data.strip().endswith(']'):
-        input_data = ast.literal_eval(input_data)  # Convert string representation of list to actual list
-
-    match = re.match(r"(\d+)/(\d+)", input_data)
-    if match is not None:
-        errors, total = map(int, match.groups())
-        return total-errors, total, 0
-
-    else:
-        score_map = {'Yes': 2, 'Could be better': 1, 'No': 0}
-        total_score = 0
-        total_count = 0
-        count_na = 0
-
-        for i, response in enumerate(input_data):
-            if len(input_data) == 2:
-                # Is there any new factual information? Is there any contradictory information?
-                response = 'No' if response == 'Yes' else 'Yes'
-            elif len(input_data) == 3:
-                if i == 0 or i == 2: # Does my response contain too many jargons? Does my response contain redundant or useless information?
-                    response = 'No' if response == 'Yes' else 'Yes'
-
-            if response != 'Not Applicable':
-                total_score += score_map.get(response, 0)
-                total_count += 1
+def parse_current_entry(entry, aspect):
+    return_list = []
+    if aspect == 'relevance':
+        for key in range(1, 7):
+            if f"relevance_feedback_q{key}" in entry.keys():
+                return_list.append(entry[f"relevance_feedback_q{key}"])
             else:
-                count_na += 1
+                return_list.append('Not Applicable')
+    elif aspect == 'accessibility':
+        for key in range(1, 4):
+            if f"accessibility_feedback_q{key}" in entry.keys():
+                if key in [1, 3]:
+                    return_list.append('No' if entry[f"accessibility_feedback_q{key}"] == 'Yes' else 'Yes')
+            else:
+                return_list.append('Not Applicable')
+    elif aspect == 'entailment':
+        for key in range(1, 2):
+            if f"entailment_feedback_q{key}" in entry.keys():
+                return_list.append(entry[f"entailment_feedback_q{key}"])
+            else:
+                return_list.append('Not Applicable')
+    
+    return return_list
+            
 
-        return total_score, total_count, count_na
+
+def convert_scores(input_score):
+    # Check if input_score is a string that contains a list
+    if isinstance(input_score, str) and "[" in input_score and "]" in input_score:
+        # truncate the input_score to within the brackets
+        input_score = input_score[input_score.index("["):input_score.rindex("]") + 1]
+        input_score = ast.literal_eval(input_score)  # Convert string representation of list to actual list
+
+    # print the type of input_score to debug, use green color for debugging
+    print(f"{PURPLE}input_score type{ENDC}", type(input_score))
+    print(f"{PURPLE}input_score{ENDC}", input_score)
+
+    if isinstance(input_score, list):
+        if len(input_score) == 3:
+            for i in [0, 2]:
+                input_score[i] = 'No' if input_score[i] == 'Yes' else 'Yes'
+        return input_score
+    else:
+        # Check if the input data contains the format '[Num_of_Matches]/[Total_Number]'
+        scores = re.findall(r"(\d+)/(\d+)", str(input_score))
+        matches, total = map(int, scores[0])
+
+        print(f"{PURPLE}matches{ENDC}", matches, f"{PURPLE}total{ENDC}", total)
+
+        return matches, total, 0, input_score
     
 if __name__ == '__main__':
-    filepath = 'Beaverton_mitigation_policy/user_profile.txt'
-    with open(filepath, 'r') as file:
-        user_profile = file.read()
-    
-    user_profile_dict = parse_user_profile(user_profile)
-    print(user_profile_dict)
+    print(convert_scores("Yes, 0/8"))
