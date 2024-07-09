@@ -105,6 +105,8 @@ def parse_current_entry(entry, aspect):
             if f"accessibility_feedback_q{key}" in entry.keys():
                 if key in [1, 3]:
                     return_list.append('No' if entry[f"accessibility_feedback_q{key}"] == 'Yes' else 'Yes')
+                else:
+                    return_list.append(entry[f"accessibility_feedback_q{key}"])
             else:
                 return_list.append('Not Applicable')
     elif aspect == 'entailment':

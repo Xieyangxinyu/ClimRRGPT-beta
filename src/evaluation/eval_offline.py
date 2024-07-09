@@ -88,10 +88,7 @@ class Evaluator:
             messages = getattr(self.prompts, f'evaluate_{aspect}_in_values_and_recommendations')(tool_outputs, llm_response, self.user_profile, previous_query)
 
         assistant, thread = self.init_assistant(messages, self.args['llm_model'])
-        if aspect == 'correctness':
-            response = self.query_assistant(assistant.id, thread.id, messages[1], tools_on = False)
-        else:
-            response = self.query_assistant(assistant.id, thread.id, messages[1], tools_on = False)
+        response = self.query_assistant(assistant.id, thread.id, messages[1], tools_on = False)
         if response is not None and len(messages) > 2:
             response = self.query_assistant(assistant.id, thread.id, messages[2], tools_on = False)
         return response
@@ -182,22 +179,20 @@ class Evaluator:
 
             for aspect in ['relevance', 'entailment', 'accessibility']:
                 human_score = parse_current_entry(current_entry, aspect)
-                if sum([1 for score in human_score if score != 'Not Applicable']) == 0:
-                    continue
+                if sum([1 for score in human_score if score != 'Not Applicable']) != 0:
+                    
+                    response = self.evaluate_single_aspect(tool_outputs, llm_response, data_type, previous_query, aspect)
+                    input_score = convert_scores(response)
 
-                response = self.evaluate_single_aspect(tool_outputs, llm_response, data_type, previous_query, aspect)
-
-                input_score = convert_scores(response)
-
-                assert len(human_score) == len(input_score)
-                # create a dataframe with one colume for case name, one column for aspect, one for human score, and one for input score; append the dataframe df with the new data
-                df = pd.concat([df, pd.DataFrame({
-                    'case': [self.case] * len(human_score),
-                    'aspect': [aspect] * len(human_score),
-                    'human_score': human_score,
-                    'input_score': input_score
-                })], ignore_index=True)
-
+                    assert len(human_score) == len(input_score)
+                    # create a dataframe with one colume for case name, one column for aspect, one for human score, and one for input score; append the dataframe df with the new data
+                    df = pd.concat([df, pd.DataFrame({
+                        'case': [self.case] * len(human_score),
+                        'aspect': [aspect] * len(human_score),
+                        'human_score': human_score,
+                        'input_score': input_score
+                    })], ignore_index=True)
+                    
             for aspect in ['correctness']:
                 response = self.evaluate_single_aspect(tool_outputs, llm_response, data_type, previous_query, aspect)
                 total_score, total_count, _, _ = convert_scores(response)
@@ -209,12 +204,12 @@ class Evaluator:
                     sbert_score, rouge_score = self.automatic_eval_for_literature(tool_outputs, llm_response)
                     data["auto_score"]["sbert_score"] = sbert_score
                     data["auto_score"]["rouge_score"] = rouge_score
-
+        
         # save the data_dict to a file
         with open(f'{self.case}/data_dict.json', 'w') as f:
             json.dump(self.data_dict, f, indent=4)
             
-        df.to_csv("evaluation.csv")
+        df.to_csv(f'{self.case}/evaluation.csv', index=False)
 
     def automatic_eval_for_literature(self, tool_outputs, llm_response):
         sbert_score = score_sbert_similarity(tool_outputs, llm_response)
@@ -246,4 +241,4 @@ if __name__ == "__main__":
 
     # Initialize the evaluation class
     evaluator = Evaluator(args)
-    evaluator.llm_evaluate()
+    evaluator.manual_evaluate()

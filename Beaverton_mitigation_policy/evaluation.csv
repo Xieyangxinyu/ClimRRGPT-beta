@@ -1,41 +1,32 @@
-,case,aspect,human_score,input_score
-0,Beaverton_mitigation_policy,relevance,Not Applicable,Not Applicable
-1,Beaverton_mitigation_policy,relevance,Not Applicable,Yes
-2,Beaverton_mitigation_policy,relevance,Not Applicable,Yes
-3,Beaverton_mitigation_policy,relevance,Not Applicable,Yes
-4,Beaverton_mitigation_policy,relevance,Not Applicable,Yes
-5,Beaverton_mitigation_policy,relevance,Not Applicable,Could be better
-6,Beaverton_mitigation_policy,entailment,Yes,Yes
-7,Beaverton_mitigation_policy,accessibility,No,No
-8,Beaverton_mitigation_policy,accessibility,Could be better,Yes
-9,Beaverton_mitigation_policy,accessibility,No,No
-10,Beaverton_mitigation_policy,relevance,Yes,Yes
-11,Beaverton_mitigation_policy,relevance,Yes,Yes
-12,Beaverton_mitigation_policy,relevance,Yes,Yes
-13,Beaverton_mitigation_policy,relevance,Yes,Yes
-14,Beaverton_mitigation_policy,relevance,Yes,Could be better
-15,Beaverton_mitigation_policy,relevance,Yes,Yes
-16,Beaverton_mitigation_policy,entailment,Not Applicable,Yes
-17,Beaverton_mitigation_policy,accessibility,No,No
-18,Beaverton_mitigation_policy,accessibility,Yes,Yes
-19,Beaverton_mitigation_policy,accessibility,No,No
-20,Beaverton_mitigation_policy,relevance,Yes,Yes
-21,Beaverton_mitigation_policy,relevance,Yes,Yes
-22,Beaverton_mitigation_policy,relevance,Yes,Yes
-23,Beaverton_mitigation_policy,relevance,Yes,Could be better
-24,Beaverton_mitigation_policy,relevance,Yes,Yes
-25,Beaverton_mitigation_policy,relevance,Yes,Yes
-26,Beaverton_mitigation_policy,entailment,Not Applicable,Yes
-27,Beaverton_mitigation_policy,accessibility,No,No
-28,Beaverton_mitigation_policy,accessibility,Could be better,Yes
-29,Beaverton_mitigation_policy,accessibility,Yes,No
-30,Beaverton_mitigation_policy,relevance,Could be better,Yes
-31,Beaverton_mitigation_policy,relevance,Yes,Yes
-32,Beaverton_mitigation_policy,relevance,Yes,Yes
-33,Beaverton_mitigation_policy,relevance,Yes,Could be better
-34,Beaverton_mitigation_policy,relevance,Yes,Yes
-35,Beaverton_mitigation_policy,relevance,Yes,Yes
-36,Beaverton_mitigation_policy,entailment,Not Applicable,Could be better
-37,Beaverton_mitigation_policy,accessibility,Could be better,No
-38,Beaverton_mitigation_policy,accessibility,Could be better,Yes
-39,Beaverton_mitigation_policy,accessibility,No,No
+case,aspect,human_score,input_score
+Beaverton_mitigation_policy,entailment,Yes,Yes
+Beaverton_mitigation_policy,accessibility,Yes,Yes
+Beaverton_mitigation_policy,accessibility,Could be better,Yes
+Beaverton_mitigation_policy,accessibility,Yes,Yes
+Beaverton_mitigation_policy,relevance,Yes,Yes
+Beaverton_mitigation_policy,relevance,Yes,Yes
+Beaverton_mitigation_policy,relevance,Yes,Yes
+Beaverton_mitigation_policy,relevance,Yes,Yes
+Beaverton_mitigation_policy,relevance,Yes,Yes
+Beaverton_mitigation_policy,relevance,Yes,Yes
+Beaverton_mitigation_policy,accessibility,Yes,Yes
+Beaverton_mitigation_policy,accessibility,Yes,Yes
+Beaverton_mitigation_policy,accessibility,Yes,Yes
+Beaverton_mitigation_policy,relevance,Yes,Yes
+Beaverton_mitigation_policy,relevance,Yes,Yes
+Beaverton_mitigation_policy,relevance,Yes,Yes
+Beaverton_mitigation_policy,relevance,Yes,Yes
+Beaverton_mitigation_policy,relevance,Yes,Yes
+Beaverton_mitigation_policy,relevance,Yes,Yes
+Beaverton_mitigation_policy,accessibility,Yes,Yes
+Beaverton_mitigation_policy,accessibility,Could be better,Could be better
+Beaverton_mitigation_policy,accessibility,No,Yes
+Beaverton_mitigation_policy,relevance,Could be better,Yes
+Beaverton_mitigation_policy,relevance,Yes,Yes
+Beaverton_mitigation_policy,relevance,Yes,Yes
+Beaverton_mitigation_policy,relevance,Yes,Could be better
+Beaverton_mitigation_policy,relevance,Yes,Yes
+Beaverton_mitigation_policy,relevance,Yes,Could be better
+Beaverton_mitigation_policy,accessibility,Yes,Yes
+Beaverton_mitigation_policy,accessibility,Could be better,Yes
+Beaverton_mitigation_policy,accessibility,Yes,Yes

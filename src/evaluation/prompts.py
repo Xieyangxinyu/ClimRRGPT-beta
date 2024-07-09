@@ -5,16 +5,16 @@ class Prompts:
         pass
 
     def evaluate_relevance_in_reference(self, tool_output, llm_response, user_profile=None, previous_query=None):
-        message = ["Your task is to analyze the relevance of the model's response to the contexts by answering the following questions.",
+        message = ["Your task is to analyze the relevance of the model's response to the contexts by answering the following questions. Please answer these questions one by one with your reasoning. Lastly, output a Python list of your responses.",
 
-                "Given this model's response: \n" + llm_response + "\n"
+                "Given this model's response: \n" + llm_response + "\n\n"
                 "(1) Does the response answer the user's last question? The question is '" + previous_query + "' Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
                 "(2) Is the response relevant to the user's profession? The profession is '" + user_profile['profession'] + "' Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
                 "(3) Is the response relevant to the user's concern? The concern is '" + user_profile['concern'] + "' Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
                 "(4) Is the response relevant to the user's location? The location is '" + user_profile['location'] + "' Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
                 "(5) Is the response relevant to the user's timeline? The timeline is '" + user_profile['time'] + "' Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
                 "(6) Is the response relevant to the user's scope? The scope is '" + user_profile['scope'] + "' Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
-                "Please answer these questions one by one and output a Python list of your responses."
+                "Please answer these questions one by one with your reasoning. Lastly, output a Python list of your responses.\n\n"
                 ]
         return message
 
@@ -61,7 +61,7 @@ class Prompts:
                 "Think about if the analyses or recommendations in **LLM Response** are logically supported by the information in **Tool Outputs** by analyzing 1/ are there new factual information only in **LLM Response** but not in any tool outputs, and 2/ are there any contradictory information.",
 
                 "Following are the texts you need to analyze: \n" + tool_output + '\n' + llm_response + "\nNow, please answer the following question:\n"
-                "Do the analyses or recommendations in **LLM Response** logically follow from the information in **Tool Outputs**? Answer ['Yes'], ['No'], ['Could be better'], or ['Not Applicable] in the form of a Python list.'"
+                "Do the analyses or recommendations in **LLM Response** logically follow from the information in **Tool Outputs**? Please answer this question with your reasoning. Lastly, output a Python list of your responses. That is, summarize your answer as ['Yes'], ['No'], ['Could be better'], or ['Not Applicable] in the form of a Python list.'"
                 ]
         return message
 
@@ -72,20 +72,20 @@ class Prompts:
                 "Think about if the analyses or recommendations in **LLM Response** are logically supported by the information in **Tool Outputs** by analyzing 1/ are there new factual information only in **LLM Response** but not in any tool outputs, and 2/ are there any contradictory information.",
 
                 "Following are the texts you need to analyze: \n" + tool_output + '\n' + llm_response + "\nNow, please answer the following question:\n"
-                "Do the analyses or recommendations in **LLM Response** logically follow from the information in **Tool Outputs**? Answer ['Yes'], ['No'], ['Could be better'], or ['Not Applicable] in the form of a Python list.'"
+                "Do the analyses or recommendations in **LLM Response** logically follow from the information in **Tool Outputs**?  Please answer this question with your reasoning. Lastly, output a Python list of your responses. That is, summarize your answer as ['Yes'], ['No'], ['Could be better'], or ['Not Applicable] in the form of a Python list.'"
                 ]
         return message
 
 
     def evaluate_accessibility_in_reference(self, tool_output, llm_response, user_profile=None, previous_query=None):
         message = ["Your task is to analyze the accessibility of the model's response to the human users. "
-                "For each question, always answer either 'Yes', 'No', 'Could be better', or 'Not Applicable'",
+                "For each question, always answer either 'Yes', 'No', 'Could be better', or 'Not Applicable'. Please answer these questions one by one with your reasoning. Lastly, output a Python list of your responses.",
 
                 "Given this model's response: \n" + llm_response + "\n"
                 f"(1) Does the response contain too many jargons for someone whose profession is {user_profile['profession']}? Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
                 "(2) Does the response provide enough explanation? Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
                 "(3) Does the response contain redundant or useless information? Answer 'Yes', 'No', 'Could be better', or 'Not Applicable'.\n"
-                "Please answer these questions one by one and output a Python list of your responses."
+                "Please answer these questions one by one with your reasoning. Lastly, output a Python list of your responses."
                 ]
         return message
 
