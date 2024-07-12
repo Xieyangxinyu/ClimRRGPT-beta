@@ -16,37 +16,12 @@ def on_copy_click(text):
 def display_feedback(message, index, file):
     increment = 0
     if message["role"] == "assistant":
-        like_key = f"like_{index}"
-        dislike_key = f"dislike_{index}"
-
         for feedback in ["Correctness", "Relevance", "Entailment", "Accessibility"]:
             feedback_key = f"{feedback}_{index}"
             if feedback_key not in st.session_state:
                 st.session_state[feedback_key] = ""
-        
-        col1, col2, col3 = st.columns([1, 1, 2])
-        # Render like button or indicate it's been pressed
-        if st.session_state.get(like_key) or message.get("liked"):
-            col1.success("Liked 👍")
-            message["liked"] = True
-            message["disliked"] = False
-        else:
-            if col1.button("👍", key=like_key):
-                st.session_state[like_key] = True  # Mark as liked
-                message["liked"] = True  # Mark as liked
-                message["disliked"] = False  # Mark as not disliked
 
-        # Similarly for dislike button
-        if st.session_state.get(dislike_key) or message.get("disliked"):
-            col2.error("Disliked 👎")
-            message["liked"] = False  # Mark as not liked
-            message["disliked"] = True
-        else:
-            if col2.button("👎", key=dislike_key):
-                st.session_state[dislike_key] = True
-                message["liked"] = False
-                message["disliked"] = True
-        col3.button("📋", on_click=on_copy_click, args=(message["content"],), key=index)
+        st.button("📋", on_click=on_copy_click, args=(message["content"],), key=index)
 
         feedback_dict = {}
         with st.expander("Click to provide feedback"):
@@ -162,8 +137,6 @@ def display_reponse(message, index=0, file=None):
 index = 0
 with open("chat_history/interaction.jsonl", "w") as file:
     for message in st.session_state.messages:
-        like_key = f"like_{index}"
-        dislike_key = f"dislike_{index}"
         index += display_reponse(message, index, file)
 
 if st.session_state.location_confirmed == False:
@@ -200,19 +173,17 @@ if st.session_state.location_confirmed == False:
             fill_opacity=0.2
         ).add_to(m2)
         st.write(f"Clicked Coordinates:{data}. The location, with radius 36km, has been shown on the map below. Please confirm the location by clicking the 'Confirm Location' button.")
+        m2 = folium.Map(location=[data[0], data[1]], zoom_start=9)
         folium.Marker(location=[data[0], data[1]], popup='Initial Location').add_to(m2)
         st_folium(m2, height=350, width=700)
     except:
         data = [lat, lon]
         
 
-    # Initialize a session state variable if not already set
-    if 'location_confirmed' not in st.session_state:
-        st.session_state.location_confirmed = False
-
     # Button to confirm the location
     if st.button("Confirm Location"):
         st.session_state.location_confirmed = True
+        # only show up to 4 decimal places
         user_prompt = f"The location has been confirmed: latitude {data[0]}, longitude {data[1]}."
         with st.chat_message("user"):
             st.markdown(user_prompt)
@@ -222,7 +193,8 @@ if st.session_state.location_confirmed == False:
         st.session_state.messages.append({"role": "assistant", "content": full_response})
         st.rerun()
 
-if user_prompt := st.chat_input("Ask me anything?"):
+
+elif user_prompt := st.chat_input("Ask me anything?"):
     if user_prompt.lower() == 'resume conversation':
         st.session_state.assistant.resume_conversation()
         user_prompt = None

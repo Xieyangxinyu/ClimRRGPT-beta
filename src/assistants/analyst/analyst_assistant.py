@@ -4,8 +4,10 @@ from src.assistants.analyst.history import long_term_fire_history_records
 from src.assistants.analyst.incident import recent_fire_incident_data
 from src.assistants.analyst.literature import literature_search
 from src.assistants.analyst.census import get_census_info
-from src.config import client, model
+from src.config import client
 import streamlit as st
+from src.utils import get_openai_response, stream_static_text
+
 
 class AnalystAssistant(Assistant):
     def __init__(self, config_path, update_assistant, checklist, plan):
@@ -20,6 +22,10 @@ class AnalystAssistant(Assistant):
             "census": get_census_info
         }
 
+        stream_text = stream_static_text(self.config['init_message'])
+        st.write_stream(stream_text)
+        st.session_state.messages.append({"role": "assistant", "content": self.config['init_message']})
+
     def initialize_instructions(self):
         return self.config["instructions"] + "\n" + self.checklist + "\nHere is your plan to assist your clinet:\n" + self.plan
     
@@ -30,10 +36,7 @@ class AnalystAssistant(Assistant):
         thread_messages = [message.content[0].text.value for message in thread_messages]
         messages = [{"role": "system", "content": f"Here is your overall plan to assist your client:\n{self.plan}\n\n"}] + [{"role": role, "content": content} for role, content in zip(roles, thread_messages)] + addtional_message
 
-        follow_up = client.chat.completions.create(
-            model=model,
-            messages = messages
-            ).choices[0].message.content
+        follow_up = get_openai_response(messages)
         
         return follow_up
         
@@ -53,15 +56,16 @@ class AnalystAssistant(Assistant):
 
         available_tools = self.get_follow_up(thread_id, addtional_message)
 
-        follow_up += available_tools
+        follow_up += " " + available_tools
         
         print(follow_up)
         return follow_up, tools
     
     def get_assistant_response(self, user_message=None, thread_id = None):
         message_placeholder = st.empty()
-        message_placeholder.markdown("Let me think about that for a moment...🧐▌")
-
+        stream_text = stream_static_text("I'm working diligently on my analysis for you... This may take a bit of time...🧐 Please do not respond yet ...▌")
+        message_placeholder.write_stream(stream_text)
+        
         tools = self.assistant.tools
         if user_message is not None:
             _ = client.beta.threads.messages.create(
@@ -100,12 +104,14 @@ class AnalystAssistant(Assistant):
         return function_response
     
     def display_maps(self, maps):
+        if maps is None:
+            return
         caption, maps = maps
         st.write(caption)
         st.pydeck_chart(maps)
 
     def display_plots(self, figs):
-        if len(figs) == 0:
+        if figs is None or len(figs) == 0:
             return
         for fig in figs:
             st.plotly_chart(fig, use_container_width=True)
@@ -116,7 +122,8 @@ class AnalystAssistant(Assistant):
             response, maps, figs = response
             self.display_maps(maps)
             self.display_plots(figs)
-            self.visualizations.append([maps, figs])
+            if maps is not None or len(figs) > 0:
+                self.visualizations.append([maps, figs])
         response = self.add_appendix(response, tool.function.name)
         return response
 

@@ -56,12 +56,12 @@ def get_census_info(lon: float, lat: float) -> str:
     bg_df['poverty_count'] = bg_df['C17002_002E'] + bg_df['C17002_003E'] 
 
     # sum each column to a new dataframe
-    bg_df_sum = pd.DataFrame(bg_df[['poverty_count', 'C17002_002E', 'B01003_001E', 'B25001_001E', 'B27001_001E']].sum()).T
+    bg_df_sum = pd.DataFrame(bg_df[['poverty_count', 'C17002_002E', 'B01003_001E', 'B25001_001E']].sum()).T
 
     output = f"In 2022, the total population within roughly 36km of location (lat: {lat}, lon: {lon}) is {bg_df_sum['B01003_001E'][0]}. The number of individual under the poverty line is {bg_df_sum['poverty_count'][0]}. In particular, {bg_df_sum['C17002_002E'][0]} individuals hold income less than half of what is considered the minimum required to meet basic living expenses. There are {bg_df_sum['B25001_001E'][0]} housing units in the area."
 
 
-    bg_df = bg_df[['GEOID', 'poverty_count', 'C17002_002E', 'B01003_001E', 'B25001_001E', 'B27001_001E', 'geometry']]
+    bg_df = bg_df[['GEOID', 'poverty_count', 'C17002_002E', 'B01003_001E', 'B25001_001E', 'geometry']]
     bg_df = bg_df.to_crs(epsg=4326)
     layer = pdk.Layer(
         'GeoJsonLayer',

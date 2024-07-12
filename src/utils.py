@@ -1,6 +1,6 @@
 from src.config import client, model
-import json
 import yaml
+import time
 
 def load_config(path):
     """
@@ -22,13 +22,17 @@ def get_assistant(config, initialize_instructions):
                 name=name,
                 instructions=instructions,
                 tools=tools,
-                model=model
+                model=model,
+                top_p=0.8,
+                temperature=0.7,
             )
         else:
             assistant = client.beta.assistants.create(
                 name=name,
                 instructions=instructions,
-                model=model
+                model=model,
+                top_p=0.8,
+                temperature=0.7,
             )
         #with open(f"{config['path']}", "w") as f:
         #    yaml.dump(config, f)
@@ -78,65 +82,16 @@ def add_appendix(response: str, appendix_path: str):
     response += appendix
     return response
 
-def get_openai_response(messages, temperature = None, tools = None):
-     
-    if temperature:
-        response = client.chat.completions.create(
-            model=model,
-            messages=messages,
-            temperature=temperature,
-        )
-    elif tools:
-        response = client.chat.completions.create(
-            model=model,
-            messages=messages,
-            tools=tools,
-            tool_choice="auto",
-        )
-    else:
-        response = client.chat.completions.create(
-            model=model,
-            messages=messages,
-        )
-        
-    return response.choices[0].message.content
-
-def run_conversation(messages, tools, available_functions, config):
+def get_openai_response(messages, top_p = 0.95):
     response = client.chat.completions.create(
         model=model,
         messages=messages,
-        tools=tools,
-        tool_choice="auto",
+        top_p=top_p,
     )
-    messages.pop()
-    response_message = response.choices[0].message
-    #print(response_message)
-    if response_message.tool_calls:
-        response_message.tool_calls = response_message.tool_calls[:1]
-        tool_calls = response_message.tool_calls
-        messages.append(response_message)
-        for tool_call in tool_calls:
-            try:
-                function_name = tool_call.function.name
-                function_to_call = available_functions[function_name]
-                function_args = json.loads(tool_call.function.arguments)
-                function_response = function_to_call(**function_args)
-                if config["available_functions"][function_name]["appendix"]:
-                    path = config["path"] + "appendix/" + config["available_functions"][function_name]["appendix"]
-                    function_response = add_appendix(function_response, path)
-            except Exception as e:
-                print(e)
-                function_response = str(e) 
-                #function_response = run_conversation(messages[:-1], tools, available_functions, config)
-            
-            message = {
-                "tool_call_id": tool_call.id,
-                "role": "tool",
-                "name": function_name,
-                "content": function_response,
-            }
-            #print(function_response)
-            messages.append(message)
-        return messages
-    
-    return response_message.content
+        
+    return response.choices[0].message.content
+
+def stream_static_text(text):
+    for word in text.split(" "):
+        yield word + " "
+        time.sleep(0.02)

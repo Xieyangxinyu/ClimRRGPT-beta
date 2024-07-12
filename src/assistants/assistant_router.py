@@ -17,6 +17,7 @@ class AssistantRouter:
         
         self.assistant_dict = {
             "ChecklistAssistant": [ChecklistAssistant, "src/assistants/profile/config.yml"],
+            "FollowUpAssistant": [ChecklistAssistant, "src/assistants/profile/config_follow_up.yml"],
             "PlanAssistant": [PlanAssistant, "src/assistants/plan/config.yml"],
             "AnalystAssistant": [AnalystAssistant, "src/assistants/analyst/config.yml"]
         }
@@ -45,6 +46,7 @@ class AssistantRouter:
         self.new_thread = False
         full_response, run_id, tool_outputs = self.current_assistant.get_assistant_response(user_message, self.current_thread.id)
         if len(tool_outputs):
+            full_response += "\n\n"
             full_response += self.current_assistant.respond_to_tool_output(self.current_thread.id, run_id, tool_outputs)
         elif self.new_thread:
             return self.get_assistant_response()

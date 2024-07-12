@@ -1,4 +1,3 @@
-import streamlit as st
 import geopandas as gpd
 import pydeck as pdk
 from shapely.geometry import Point, mapping
@@ -96,3 +95,4 @@ def get_pin_layer(lat, lon):
         get_size=1,
     )
     return icon_layer
+

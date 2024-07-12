@@ -38,9 +38,19 @@ class Assistant(ABC):
         run_id = event.data.id
         return full_response, run_id, tool_outputs
     
-    def get_assistant_response(self, user_message=None, thread_id = None):
-        message_placeholder = st.empty()
-        message_placeholder.markdown("Let me think about that for a moment...🧐▌")
+
+    def add_assistant_message(self, message, thread_id):
+        _ = client.beta.threads.messages.create(
+            thread_id=thread_id,
+            role="assistant",
+            content=message
+        )
+
+    
+    def get_assistant_response(self, user_message=None, thread_id = None, message_placeholder=None):
+        if message_placeholder == None:
+            message_placeholder = st.empty()
+            message_placeholder.markdown("Let me think about that for a moment...🧐▌")
         if thread_id == None:
             thread = create_thread()
             thread_id = thread.id
@@ -57,13 +67,16 @@ class Assistant(ABC):
             assistant_id=self.assistant.id,
             stream=True,
         )
+
         full_response, run_id, tool_outputs = self.stream_output(stream, message_placeholder)
+        #print(f"full_response: {full_response}")
         return full_response, run_id, tool_outputs
     
     def respond_to_tool_output(self, thread_id, run_id, tool_outputs):
         message_placeholder = st.empty()
         message_placeholder.markdown("Let me think about that for a moment...🧐▌")
         if tool_outputs:
+
             stream = client.beta.threads.runs.submit_tool_outputs(
                 thread_id=thread_id,
                 run_id=run_id,

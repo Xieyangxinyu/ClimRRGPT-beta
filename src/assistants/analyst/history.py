@@ -157,6 +157,8 @@ def long_term_fire_history_records(lat, lon):
     distances = fire_data.apply(lambda row: geodesic((lat, lon), (row['latitude'], row['longitude'])).kilometers, axis=1)
     fire_data['distance'] = distances
     nearby_records = fire_data[fire_data['distance'] <= max_distance_km].sort_values(by='distance')[:3]
+    
+    combined_records = nearby_records.groupby('reference').agg(aggregation_functions).reset_index().to_dict('records')
 
     layer = pdk.Layer(
         'ScatterplotLayer',
@@ -189,7 +191,6 @@ def long_term_fire_history_records(lat, lon):
         'link_to_data': list,
         'link_to_metadata': list
     }
-    combined_records = nearby_records.groupby('reference').agg(aggregation_functions).reset_index().to_dict('records')
 
     for record in combined_records:
         url = record['link_to_metadata']
@@ -203,8 +204,7 @@ def long_term_fire_history_records(lat, lon):
 
     # if no records found, return a message
     if not combined_records:
-        # throw an error message
-        return "No fire history records found within 36 km of the given location. This only means that we do not find research data from NOAA''s fire history and paleoclimate services. I will let the user know and try to search for other data sources such as FWI and recent fire incidents."
+        return "No fire history records found within 36 km of the given location. This only means that we do not find research data from NOAA''s fire history and paleoclimate services. I will let the user know and try to search for other data sources such as FWI and recent fire incidents.", None, []
     else:
         return f"The three closest fire history records found within 36 km of the location (lat: {lat}, lon: {lon})\n\n" + str(combined_records), maps, []
 
