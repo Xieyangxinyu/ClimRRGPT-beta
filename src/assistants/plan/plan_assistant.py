@@ -11,18 +11,21 @@ class PlanAssistant(Assistant):
             "plan_complete": self.plan_complete,
         }
         self.init_message_sent = False
-        # create an assistant
+        
+        '''
         self.feedback_assistant = client.beta.assistants.create(
                 name="FeedbackAssistant",
                 instructions= f"**Task**: Check the response carefully for correctness and give constructive criticism for how to improve it.\n\n\nThe plan assistant only has access to these datasets:\n{self.config['available_datasets']}.\n\n",
                 model=model
             )
+        '''
+
         stream_text = stream_static_text(self.config['init_message'])
         st.write_stream(stream_text)
         st.session_state.messages.append({"role": "assistant", "content": self.config['init_message']})
     
     def initialize_instructions(self):
-        return f"{self.config['instructions']}\n{self.config['available_datasets']}\n\nHere is the information about your client: {self.checklist}"
+        return f"{self.config['instructions']}\n{self.config['available_datasets']}\n{self.config['example']}\nHere is the information about your client: {self.checklist}"
     
     def plan_complete(self, plan: str):
         args = {"checklist": self.checklist,
@@ -46,6 +49,7 @@ class PlanAssistant(Assistant):
                 content=user_message,
             )
 
+        '''
         run = client.beta.threads.runs.create_and_poll(
             thread_id=thread_id,
             assistant_id=self.assistant.id,
@@ -72,6 +76,7 @@ class PlanAssistant(Assistant):
                         thread_id=thread_id
                     )
             print(messages.data[0].content[0].text.value)
+        '''
         
         full_response, run_id, tool_outputs = super().get_assistant_response(user_message, thread_id, message_placeholder=message_placeholder)
 

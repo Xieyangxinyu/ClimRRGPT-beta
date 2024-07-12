@@ -189,6 +189,7 @@ def long_term_fire_history_records(lat, lon):
         'link_to_data': list,
         'link_to_metadata': list
     }
+    
     combined_records = nearby_records.groupby('reference').agg(aggregation_functions).reset_index().to_dict('records')
 
     for record in combined_records:

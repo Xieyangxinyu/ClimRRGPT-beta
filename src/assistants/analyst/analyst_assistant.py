@@ -41,7 +41,7 @@ class AnalystAssistant(Assistant):
         return follow_up
         
 
-    def decision_point(self, thread_id, user_message = None, tools = []):
+    def decision_point(self, thread_id, user_message = None):
         follow_up = ""
         thread_messages = client.beta.threads.messages.list(thread_id).data
         if len(thread_messages) > 0 and thread_messages[0].role == "user":
@@ -52,14 +52,14 @@ class AnalystAssistant(Assistant):
             #if "Directly respond to the client's questions." in follow_up:
             #    return follow_up, []
         
-        addtional_message = [{"role": "system", "content": "First, decide what you would like to do for this step in less than 20 words. Next, identify at most one tool to use for this step: 'fire_weather_index', 'long_term_fire_history_records', 'recent_fire_incident_data', 'literature_search' or `no tool needed`.\n\nFor example, 'Analyze the Fire Weather Index dataset. `fire_weather_index`.' or 'Assess the impact of the rise in recent wildfire activity with some literature search. `literature_search`.' Search for relevant literature on the impact of wildfires on water resources and unpaved roads. `literature_search`.' or 'Develop recommendations to mitigate wildfire risks. `no tool needed`.' or 'Understand local population to see who will be impacted by the risk.' `census`. \n\n**Make sure to output** the tool you would like to use."}]
+        addtional_message = [{"role": "system", "content": "First, decide what you would like to do for this step in **less than 20 words**. Next, identify at most one tool to use for this step: 'fire_weather_index', 'long_term_fire_history_records', 'recent_fire_incident_data', 'literature_search' or `no tool needed`.\n\nFor example, 'Analyze the Fire Weather Index dataset. `fire_weather_index`.' or 'Assess the impact of the rise in recent wildfire activity with some literature search. `literature_search`.' Search for relevant literature on the impact of wildfires on water resources and unpaved roads. `literature_search`.' or 'Develop recommendations to mitigate wildfire risks. `no tool needed`.' or 'Understand local population to see who will be impacted by the risk.' `census`. \n\n**Make sure to output** the tool you would like to use."}]
 
         available_tools = self.get_follow_up(thread_id, addtional_message)
 
         follow_up += " " + available_tools
         
         print(follow_up)
-        return follow_up, tools
+        return follow_up
     
     def get_assistant_response(self, user_message=None, thread_id = None):
         message_placeholder = st.empty()
@@ -75,20 +75,13 @@ class AnalystAssistant(Assistant):
             )
             self.visualizations = []
 
-        message, tools = self.decision_point(thread_id, user_message, tools)
-
-        _ = client.beta.threads.messages.create(
-            thread_id=thread_id,
-            role="assistant",
-            content=message
-        )
+        message = self.decision_point(thread_id, user_message)
         
         stream = client.beta.threads.runs.create(
             thread_id=thread_id,
             assistant_id=self.assistant.id,
             stream=True,
-            instructions=f"Here is the information about your client:\n{self.checklist}\nHere is your overall plan to assist your client: {self.plan}",
-            tools = tools
+            instructions=f"Here is the information about your client:\n{self.checklist}\nHere is your overall plan to assist your client: {self.plan}\nHere is your plan for this step: {message}"
         )
         full_response, run_id, tool_outputs = self.stream_output(stream, message_placeholder)
 

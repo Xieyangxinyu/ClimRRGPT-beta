@@ -158,7 +158,25 @@ def long_term_fire_history_records(lat, lon):
     fire_data['distance'] = distances
     nearby_records = fire_data[fire_data['distance'] <= max_distance_km].sort_values(by='distance')[:3]
     
+    aggregation_functions = {
+        'siteName': list,
+        'latitude': list,
+        'longitude': list,
+        'link_to_data': list,
+        'link_to_metadata': list
+    }
+
     combined_records = nearby_records.groupby('reference').agg(aggregation_functions).reset_index().to_dict('records')
+    for record in combined_records:
+        url = record['link_to_metadata']
+        # if url is a list, take the first one
+        if isinstance(url, list):
+            url = url[0]
+        record['publications'] = get_publications(url)
+
+    if not combined_records:
+        return "No fire history records found within 36 km of the given location. This only means that we do not find research data from NOAA''s fire history and paleoclimate services. I will let the user know and try to search for other data sources such as FWI and recent fire incidents.", None, []
+    
 
     layer = pdk.Layer(
         'ScatterplotLayer',
@@ -184,29 +202,9 @@ def long_term_fire_history_records(lat, lon):
         map_style = 'mapbox://styles/mapbox/light-v10'
     )
 
-    aggregation_functions = {
-        'siteName': list,
-        'latitude': list,
-        'longitude': list,
-        'link_to_data': list,
-        'link_to_metadata': list
-    }
-
-    for record in combined_records:
-        url = record['link_to_metadata']
-        # if url is a list, take the first one
-        if isinstance(url, list):
-            url = url[0]
-        record['publications'] = get_publications(url)
-
-
     maps = [f"The three closest fire history records found within 36 km of the location (lat: {lat}, lon: {lon})" , maps]
 
-    # if no records found, return a message
-    if not combined_records:
-        return "No fire history records found within 36 km of the given location. This only means that we do not find research data from NOAA''s fire history and paleoclimate services. I will let the user know and try to search for other data sources such as FWI and recent fire incidents.", None, []
-    else:
-        return f"The three closest fire history records found within 36 km of the location (lat: {lat}, lon: {lon})\n\n" + str(combined_records), maps, []
+    return f"The three closest fire history records found within 36 km of the location (lat: {lat}, lon: {lon})\n\n" + str(combined_records), maps, []
 
 if __name__ == '__main__':
     # Testing the function
