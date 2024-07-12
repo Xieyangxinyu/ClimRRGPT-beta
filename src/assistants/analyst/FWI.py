@@ -124,6 +124,16 @@ def categorize_fwi(value):
     else:
         return 'Very Extreme'
 
+fwi_class_colors = {
+    'Low': 'rgb(255, 255, 0, 0.5)',
+    'Medium': 'rgb(255, 204, 0, 0.5)',
+    'High': 'rgb(255, 153, 0, 0.5)',
+    'Very High': 'rgb(255, 102, 0, 0.5)',
+    'Extreme': 'rgb(255, 51, 0, 0.5)',
+    'Very Extreme': 'rgb(255, 0, 0, 0.5)'
+}
+
+
 def categorize_fwi_color(value):
     try:
         if pd.isnull(value):
@@ -211,8 +221,8 @@ def FWI_retrieval(lat, lon):
             fwi_values_with_categories[3].append(f"{value} (se: ± {wildfire_sd[key]}) {categorize_fwi(value)}")
     
     data = {
-    'FWI Class': ['Low', 'Medium', 'High', 'Very High', 'Extreme', 'Very Extreme'],
-    'FWI Values in Class': ['0-9 FWI', '9-21 FWI', '21-34 FWI', '34-39 FWI', '39-53 FWI', 'Above 53 FWI']
+        'FWI Class': ['Low', 'Medium', 'High', 'Very High', 'Extreme', 'Very Extreme'],
+        'FWI Values in Class': ['0-9 FWI', '9-21 FWI', '21-34 FWI', '34-39 FWI', '39-53 FWI', 'Above 53 FWI']
     }
 
 
@@ -235,14 +245,16 @@ def FWI_retrieval(lat, lon):
     fig.update_layout(title=f'Fire Weather Index (FWI) Data for Location (lat: {lat}, lon: {lon}) with standard error')
    
 
+    class_colors = [fwi_class_colors[cls] for cls in data['FWI Class']]
+
     fig2 = go.Figure(data=[go.Table(
-    header=dict(values=['FWI Class', 'FWI Values in Class'],
-                fill_color='paleturquoise',
-                align='left', font=dict(color='black', size=14)),
-    cells=dict(values=[data['FWI Class'], data['FWI Values in Class']],
-               fill_color='lavender',
-               align='left',font=dict(color='black', size=14)))
-    ])
+        header=dict(values=['FWI Class', 'FWI Values in Class'],
+                    fill_color='paleturquoise',
+                    align='left', font=dict(color='black', size=14)),
+        cells=dict(values=[data['FWI Class'], data['FWI Values in Class']],
+                fill_color=[class_colors, ['lavender']*len(class_colors)],
+                align='left', font=dict(color='black', size=14))
+    )])
     fig2.update_layout(height=380)
 
     fwi_df_geo = fwi_df_geo.to_crs(epsg=4326)

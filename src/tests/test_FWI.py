@@ -2,7 +2,7 @@ import geopandas as gpd
 from shapely.geometry import Point
 import pandas as pd
 import streamlit as st
-import pydeck as pdk
+import plotly.graph_objects as go
 from src.assistants.analyst.utils import get_pin_layer, MapDisplay
 
 class FWIMapDisplay(MapDisplay):
@@ -107,6 +107,14 @@ def extract_fwi_values_to_dataframe(wildfire_indices):
     
     return fwi_df
 
+fwi_class_colors = {
+    'Low': 'rgb(255, 255, 0, 0.5)',
+    'Medium': 'rgb(255, 204, 0, 0.5)',
+    'High': 'rgb(255, 153, 0, 0.5)',
+    'Very High': 'rgb(255, 102, 0, 0.5)',
+    'Extreme': 'rgb(255, 51, 0, 0.5)',
+    'Very Extreme': 'rgb(255, 0, 0, 0.5)'
+}
 
 def categorize_fwi(value):
     """Categorize the FWI value into its corresponding class and return the value and category."""
@@ -179,29 +187,24 @@ def FWI_retrieval(lat, lon):
     # round the values to 2 decimal places
     fwi_df_geo = fwi_df_geo.round(2)
 
-    maps_dict = {}
+    data = {
+    'FWI Class': ['Low', 'Medium', 'High', 'Very High', 'Extreme', 'Very Extreme'],
+    'FWI Values in Class': ['0-9 FWI', '9-21 FWI', '21-34 FWI', '34-39 FWI', '39-53 FWI', 'Above 53 FWI']
+    }
 
-    for season in ["spring", "summer", "autumn", "winter"]:
-        for period in ["Hist", "Midc", "Endc"]:
-            column_name = f'wildfire_{season}_{period}'
-            fwi_df_geo['color'] = fwi_df_geo[column_name].apply(categorize_fwi_color)
-            layer = pdk.Layer(
-                'GeoJsonLayer',
-                fwi_df_geo,
-                opacity=0.8,
-                get_fill_color='color',
-                get_line_color=[255, 0, 0],
-                line_width_min_pixels=1,
-                pickable=True
-            )
+    class_colors = [fwi_class_colors[cls] for cls in data['FWI Class']]
 
-            view_state = pdk.ViewState(latitude=lat, longitude=lon, zoom=8, pitch=50)
-            
-            maps_dict[column_name] = pdk.Deck(layers=[layer], initial_view_state=view_state, 
-                        tooltip={"text": f"Crossmodel: {{Crossmodel}}. FWI: {{{column_name}}}."},
-                        map_style='mapbox://styles/mapbox/light-v10')
+    fig2 = go.Figure(data=[go.Table(
+        header=dict(values=['FWI Class', 'FWI Values in Class'],
+                    fill_color='paleturquoise',
+                    align='left', font=dict(color='black', size=14)),
+        cells=dict(values=[data['FWI Class'], data['FWI Values in Class']],
+                fill_color=[class_colors, ['lavender']*len(class_colors)],
+                align='left', font=dict(color='black', size=14))
+    )])
+    fig2.update_layout(height=380)
     
-    return [f"Fire Weather Index (FWI) Data for Location (lat: {lat}, lon: {lon}) within a 36 km radius, shown at a grid cell level.", FWIMapDisplay(maps_dict)]
+    return [fig2]
 
 def display_maps(maps):
     caption, map = maps
@@ -219,5 +222,5 @@ def display_plots(figs):
 import streamlit as st
 if __name__ == '__main__':
     # Testing the function
-    maps = FWI_retrieval(35.5939, -105.2239)
-    display_maps(maps)
+    plots = FWI_retrieval(35.5939, -105.2239)
+    display_plots(plots)
