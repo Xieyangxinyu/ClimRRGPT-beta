@@ -6,6 +6,7 @@ from geopandas import GeoDataFrame
 import pandas as pd
 from functools import partial
 import pyproj
+import streamlit as st
 
 def create_geographic_circle(lat, lon, radius_in_km):
     local_azimuthal_projection = f"+proj=aeqd +R=6371000 +units=m +lat_0={lat} +lon_0={lon}"
@@ -96,3 +97,25 @@ def get_pin_layer(lat, lon):
     )
     return icon_layer
 
+class MapDisplay:
+    def __init__(self, map):
+        self.map = map
+
+    def display(self):
+        st.pydeck_chart(self.map)
+
+
+def display_maps(maps):
+    if maps is None:
+        return
+    caption, this_map = maps
+    st.write(caption)
+    # if map is a MapDisplay object, call its display method
+    assert isinstance(this_map, MapDisplay)
+    this_map.display()
+
+def display_plots(figs):
+    if figs is None or len(figs) == 0:
+        return
+    for fig in figs:
+        st.plotly_chart(fig, use_container_width=True)

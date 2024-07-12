@@ -1,7 +1,7 @@
 from src.assistants.assistant import Assistant
 from src.config import client, model
 import streamlit as st
-from src.utils import get_openai_response, stream_static_text
+from src.utils import get_openai_response, stream_static_text, TEXT_CURSOR
 
 
 def verify_location_on_map(lat, lon):
@@ -39,8 +39,7 @@ class ChecklistAssistant(Assistant):
             if not self.init_message_sent:
                 self.add_assistant_message("Let's get started with our first question: What is your professional background?", thread_id)
                 self.init_message_sent = True
-                stream_text = stream_static_text(self.config['init_message'])
-                st.write_stream(stream_text)
+                stream_static_text(self.config['init_message'])
                 return self.config['init_message'], None, []
             return super().get_assistant_response(thread_id = thread_id)
     
@@ -48,8 +47,8 @@ class ChecklistAssistant(Assistant):
     def checklist_update(self, checklist: str):
         if self.checklist is not None:
             return "Checklist has already been updated."
-        message_placeholder = st.empty()
-        message_placeholder.markdown("I am coming up with a few follow-up questions. This may take a bit of time...🧐▌")
+        
+        stream_static_text(f"I am coming up with a few follow-up questions. This may take a bit of time...🧐 Please do not respond yet ...{TEXT_CURSOR}")
 
         follow_up = client.chat.completions.create(
             model=model,
@@ -86,9 +85,8 @@ class ChecklistAssistant(Assistant):
         }
         
         self.update_assistant("FollowUpAssistant", args)
-        message_placeholder.empty()
 
-        return "Checklist has been updated. Please tell your client that you have come up with a few more follow-up questions and will ask them for more details. Ask the client if they are ready to proceed."
+        return "Checklist has been updated. Please tell your client that you have come up with a few more follow-up questions about the scope of this session and will ask them for more details. Ask the client if they are ready to proceed."
         
     def checklist_complete(self, checklist: str):
 

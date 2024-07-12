@@ -12,13 +12,13 @@ available_functions:
   verify_location_on_map:
     add_to_message: false
     appendix: null
-    description: Call this function to verify the location provided by the client.
+    description: Call this function to verify the location provided by the client. 
     parameters:
       lat:
-        description: 'The latitude of the location.'
+        description: 'The latitude of the location. For example, for 35.5939° N, input 35.5939; for 35.5939° S, input -35.5939.'
         type: number
       lon:
-        description: 'The longitude of the location.'
+        description: 'The longitude of the location. For example, for 105.2239° W, input -105.2239; for 105.2239° E, input 105.2239.'
         type: number
     required: ["lat", "lon"]
 
@@ -29,7 +29,7 @@ follow_up_instructions: |
   
   Ask 3 follow-up questions based on your client''s profile below so that you can help your client better. Here are steps to follow:
 
-  1/ Think deeply about the client''s profession, scope and concerns. What are the most important aspects of wildfire risks that they should consider? For example, emergency/hazard mitigation planners are interested in the location, intensity, probability of hazard, and vulnerability of the community impacted by the hazard; community planners are interested in the risk the community will face, and how to design the community to mitigate the risk; flood plan developers are interested in how wildfire will change the flood risk in the area; land managers are interested in how wildfire will impact the ecosystem and biodiversity.
+  1/ Think deeply about the client''s profession, concerns and particularly the **scope**. What are the most important aspects of wildfire risks that they should consider? For example, emergency/hazard mitigation planners are interested in the location, intensity, probability of hazard, and vulnerability of the community impacted by the hazard; community planners are interested in the risk the community will face, and how to design the community to mitigate the risk; flood plan developers are interested in how wildfire will change the flood risk in the area; land managers are interested in how wildfire will impact the ecosystem and biodiversity.
 
   2/ Check if these typical concerns are covered in the checklist. If not, add follow-up questions to address them.
 

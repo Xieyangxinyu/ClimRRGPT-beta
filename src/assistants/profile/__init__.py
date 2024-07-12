@@ -1,1 +1,1 @@
-from assistants.profile.checklist_assistant import ChecklistAssistant
+from src.assistants.profile.checklist_assistant import ChecklistAssistant

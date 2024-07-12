@@ -37,6 +37,8 @@ dataset_decision: |
 
 
 available_datasets: |
+  Here are the descriptions of the three datasets to choose from, they are:
+
   - Fire Weather Index (FWI): The FWI is used to assess the potential trends fire danger towards the Mid-Century (2045 - 2054) and the end of the Century (2085 - 2094), and compare against the historical period (1995 - 2004). Choose this dataset if you want to analyze the trends in fire danger and understand the potential changes in fire risk over time.
 
   - Long term fire history records: The metadata from the North American Tree-ring Fire Scar Synthesis (NAFSS) provides a rich dataset including scientific studies derived from tree-ring records across North America, capturing centuries of wildfire occurrences. This dataset can be instrumental in analyzing wildfire risk by providing historical context and identifying patterns or cycles in wildfire activity in the long term. Choose this dataset if you want to analyze the long-term patterns of wildfire activity throughout history.
@@ -45,15 +47,15 @@ available_datasets: |
 
 
 init_message: |
-  While I am working diligently creating a comprehensive plan, I wanted to touch base and let you know that I can leverage three powerful datasets that each offer unique insights into wildfire risks within a 36km radius of the area of interest we discussed earlier:
-  
-  These are the datasets available for analysis:
+  While I am working diligently creating a comprehensive plan, I want to touch base and let you know that I can leverage three powerful datasets that each offer unique insights into wildfire risks within a 36km radius of the area of interest we discussed earlier:
 
   - Fire Weather Index (FWI) from [ClimRR](https://disgeoportal.egs.anl.gov/ClimRR/) allows us to assess potential trends in fire danger from the historical period (1995-2004) through the mid-century (2045-2054) and up to the end of the century (2085-2094). This dataset is ideal if you're interested in understanding how fire risks may evolve over time.
 
   - Long term fire history records from [International Multiproxy Paleofire Database (IMPD)](https://www.ncei.noaa.gov/products/paleoclimatology/fire-history), specifically the metadata from the North American Tree-ring Fire Scar Synthesis (NAFSS) provides a rich dataset including scientific studies derived from tree-ring records across North America, capturing centuries of wildfire occurrences. This dataset can be instrumental in analyzing wildfire risk by providing historical context and identifying patterns or cycles in wildfire activity in the long term. If analyzing long-term wildfire trends is a priority for you, this dataset is a fantastic resource.
 
   - Recent fire incident data reported to the [IRWIN system](https://data-nifc.opendata.arcgis.com/datasets/nifc::wildland-fire-incident-locations/about): Wildland Fire Interagency Geospatial Services (WFIGS) Group wildfire incidents record allows you to retrieve yearly and monthly wildfire incident counts between 2015 and 2023. This dataset is perfect if you want to focus on recent fire incidents in your area.
+
+  **Currently, these are the datasets I can access. If I mistakenly suggest analyzing types of data that are beyond my current access, please kindly point them out to me so I can adjust our plan accordingly.**
 
   In addition to these datasets, the related academic papers are compiled by the Argonne National Laboratory's [Community and Infrastructure Adaptation to Climate Change (CIACC) tool](https://www.tandfonline.com/doi/abs/10.1080/23789689.2024.2355772). For each retrieval, I can extract abstracts from 3 relevant published papers within the corpus and provide you with a summary of the findings.
 

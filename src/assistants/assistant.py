@@ -4,6 +4,7 @@ from src.assistants.stream import check_tool_call, manage_tool_call, check_messa
 import json
 import streamlit as st
 from abc import ABC, abstractmethod
+from src.utils import TEXT_CURSOR
 
 class Assistant(ABC):
     def __init__(self, config_path, update_assistant):
@@ -18,13 +19,13 @@ class Assistant(ABC):
     def initialize_instructions(self):
         pass
     
-    def stream_output(self, stream, message_placeholder):
+    def stream_output(self, stream):
         tool_outputs = []
         full_response = ''
         streaming = False
+        message_placeholder = st.empty()
         for event in stream:
             if check_tool_call(event):
-                message_placeholder.empty()
                 tool_outputs += manage_tool_call(event, self.on_tool_call_created)
             if check_message_delta(event):
                 text_stream = get_text_stream(event)
@@ -34,7 +35,7 @@ class Assistant(ABC):
                 for delta in text_stream:
                     text_delta = get_text_delta(delta)
                     full_response += (text_delta or "")
-                    message_placeholder.markdown(full_response + "▌")
+                    message_placeholder.markdown(full_response + TEXT_CURSOR)
         run_id = event.data.id
         return full_response, run_id, tool_outputs
     
@@ -47,10 +48,7 @@ class Assistant(ABC):
         )
 
     
-    def get_assistant_response(self, user_message=None, thread_id = None, message_placeholder=None):
-        if message_placeholder == None:
-            message_placeholder = st.empty()
-            message_placeholder.markdown("Let me think about that for a moment...🧐▌")
+    def get_assistant_response(self, user_message=None, thread_id = None):
         if thread_id == None:
             thread = create_thread()
             thread_id = thread.id
@@ -68,13 +66,11 @@ class Assistant(ABC):
             stream=True,
         )
 
-        full_response, run_id, tool_outputs = self.stream_output(stream, message_placeholder)
+        full_response, run_id, tool_outputs = self.stream_output(stream)
         #print(f"full_response: {full_response}")
         return full_response, run_id, tool_outputs
     
     def respond_to_tool_output(self, thread_id, run_id, tool_outputs):
-        message_placeholder = st.empty()
-        message_placeholder.markdown("Let me think about that for a moment...🧐▌")
         if tool_outputs:
 
             stream = client.beta.threads.runs.submit_tool_outputs(
@@ -83,7 +79,7 @@ class Assistant(ABC):
                 tool_outputs=tool_outputs,
                 stream=True,
             )
-            full_response, _, _ = self.stream_output(stream, message_placeholder)
+            full_response, _, _ = self.stream_output(stream)
 
             with open("chat_history/tools.txt", "a") as f:
                 f.write("\n\n\n\n**Tool Outputs**\n")
@@ -92,7 +88,6 @@ class Assistant(ABC):
                 f.write("\n**LLM Response**\n")
                 f.write(full_response)
                 f.write("\n")
-        message_placeholder.empty()
         return full_response
 
     def on_tool_call_created(self, tool):

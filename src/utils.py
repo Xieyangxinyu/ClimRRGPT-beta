@@ -1,6 +1,8 @@
 from src.config import client, model
 import yaml
 import time
+import streamlit as st
+TEXT_CURSOR = "▕"
 
 def load_config(path):
     """
@@ -82,16 +84,56 @@ def add_appendix(response: str, appendix_path: str):
     response += appendix
     return response
 
-def get_openai_response(messages, top_p = 0.95):
+def get_openai_response(messages, top_p = 0.95, max_tokens = 256, temperature = 0.7):
     response = client.chat.completions.create(
         model=model,
         messages=messages,
         top_p=top_p,
+        max_tokens=max_tokens,
+        temperature=temperature
     )
         
     return response.choices[0].message.content
 
-def stream_static_text(text):
+def create_text_stream(text):
     for word in text.split(" "):
         yield word + " "
-        time.sleep(0.02)
+        time.sleep(0.08)
+
+def stream_static_text(text):
+    stream_text = create_text_stream(text)
+    st.write_stream(stream_text)
+
+
+def get_conversation_summary(messages, summary_instructions = "**Please summarize the previous conversation in a few sentences.**", max_tokens = 512):
+    """
+    This function returns a summary of the conversation by calling the OpenAI API.
+    """
+
+    messages += [{"role": "system", "content": summary_instructions}]
+
+    response = get_openai_response(messages, max_tokens=max_tokens)
+
+    return response
+
+
+
+def retry_on_generation_error(messages, response, possible_actions, exact_match = False):
+    """
+    This function retries the generation if the response is not in the list of possible actions.
+    """
+    if exact_match:
+        while response not in possible_actions:
+            response = get_openai_response(messages, temperature = 1)
+    else:
+        while not any([action in response for action in possible_actions]):
+            response = get_openai_response(messages, temperature = 1)
+    return response
+
+
+def get_openai_response_with_retries(messages, possible_actions, top_p = 0.95, max_tokens = 256, temperature = 0.7, exact_match = False):
+    response = get_openai_response(messages, top_p = top_p, max_tokens = max_tokens, temperature = temperature)
+    return retry_on_generation_error(messages, response, possible_actions, exact_match = exact_match)
+
+
+

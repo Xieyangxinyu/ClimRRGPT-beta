@@ -1,9 +1,8 @@
 import pandas as pd
-from src.assistants.analyst.utils import get_pinned_map
 import plotly.subplots as sp
 import plotly.graph_objects as go
 import pydeck as pdk
-from src.assistants.analyst.utils import get_pin_layer
+from src.assistants.analyst.utils import get_pin_layer, MapDisplay
 
 
 def prune_data(source_file = "./data/Wildland_Fire_Incident_Locations.csv"):
@@ -112,7 +111,7 @@ def recent_fire_incident_data(lat, lon, start_year=2015, end_year=2023):
         map_style = 'mapbox://styles/mapbox/light-v10'
     )
 
-    maps = [f"The Fire Incident Records (shown in red dots) within 36 km of the location (lat: {lat}, lon: {lon})" , maps]
+    maps = [f"The Fire Incident Records (shown in red dots) within 36 km of the location (lat: {lat}, lon: {lon})" , MapDisplay(maps)]
 
     return summary, maps, [fig]
     

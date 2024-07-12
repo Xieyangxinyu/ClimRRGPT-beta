@@ -91,21 +91,21 @@ def display_feedback(message, index, file):
     return increment
 
 if "messages" not in st.session_state:
-    # check if the session state variable can be loaded
-    try:
-        with open("chat_history/session_state.pkl", "rb") as file:
-            data = pickle.load(file)
-            for key in ["messages", "assistant", "location_confirmed", "copied", "lat", "lon"]:
-                if key in data.keys():
-                    st.session_state[key] = data[key]
-    except:
-        st.session_state.messages = []
-        st.session_state.assistant = AssistantRouter("ChecklistAssistant")
-        with st.chat_message("assistant"):
-            full_response = st.session_state.assistant.get_assistant_response()
-        st.session_state.messages.append({"role": "assistant", "content": full_response})
-        st.session_state.location_confirmed = True
-        st.session_state.copied = []
+    # check if the session state variable can be loaded=
+    st.session_state.messages = []
+    
+    with open("chat_history/user_profile.txt", "r") as file:
+        checklist = file.read()
+
+    with open("chat_history/plan.txt", "r") as file:
+        plan = file.read()
+
+    st.session_state.assistant = AssistantRouter('AnalystAssistant', None, {"checklist": checklist, "plan": plan})
+    with st.chat_message("assistant"):
+        full_response = st.session_state.assistant.get_assistant_response()
+    st.session_state.messages.append({"role": "assistant", "content": full_response})
+    st.session_state.location_confirmed = True
+    st.session_state.copied = []
 
         #checklist = '- Profession: Risk Manager\n- Concern: High intensity fire near Las Vegas, NM; primary risk factors to be concerned about.\n- Location: Sangre de Cristo Mountains \n- Time: Immediate measures to mitigate risks\n- Scope: Water resources and unpaved roads\n'
         #args = {"checklist": checklist}

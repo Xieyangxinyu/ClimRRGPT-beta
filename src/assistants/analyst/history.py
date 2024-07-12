@@ -2,7 +2,7 @@ from geopy.distance import geodesic
 import numpy as np
 import pandas as pd
 import requests
-from src.assistants.analyst.utils import get_pin_layer
+from src.assistants.analyst.utils import get_pin_layer, MapDisplay
 import json
 import pydeck as pdk
 
@@ -175,7 +175,7 @@ def long_term_fire_history_records(lat, lon):
         record['publications'] = get_publications(url)
 
     if not combined_records:
-        return "No fire history records found within 36 km of the given location. This only means that we do not find research data from NOAA''s fire history and paleoclimate services. I will let the user know and try to search for other data sources such as FWI and recent fire incidents.", None, []
+        return "No fire history records found within 36 km of the given location. This only means that we do not find research data from NOAA''s fire history and paleoclimate services. Please inform your client of this limitation. Ask if your client would like to explore alternative sources for analysis, such as the Fire Weather Index (FWI) or recent fire incident data.", None, []
     
 
     layer = pdk.Layer(
@@ -202,7 +202,7 @@ def long_term_fire_history_records(lat, lon):
         map_style = 'mapbox://styles/mapbox/light-v10'
     )
 
-    maps = [f"The three closest fire history records found within 36 km of the location (lat: {lat}, lon: {lon})" , maps]
+    maps = [f"The three closest fire history records found within 36 km of the location (lat: {lat}, lon: {lon})" , MapDisplay(maps)]
 
     return f"The three closest fire history records found within 36 km of the location (lat: {lat}, lon: {lon})\n\n" + str(combined_records), maps, []
 

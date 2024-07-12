@@ -78,3 +78,32 @@ init_message: |
   - Number of People Below Poverty Level
 
   If you need to assess the potential impact of a wildfire on the local community, you can ask me to provide this demographic information by asking questions like: "who will be affected by the wildfire?"
+
+caution_message: |
+  While I am preparing for a response, I want to touch base regarding any recommendations I provide in this session. While all the suggestions and recommendations are based on our expertise and current understanding of your specific situation, it is crucial to recognize that further investigation and verification are necessary before implementing any significant changes or investments.
+
+summary_instructions: |
+  Provide a comprehensive summary of the previous conversation, including the user's concerns and questions, as well as the information provided by the assistant. This will help maintain a clear and focused approach moving forward.
+
+  More importantly, pay attention to the following:
+  - Clarify the current stage of your action plan to assist the user with their wildfire-related concerns. What specific steps have been taken so far, and what is the immediate next action to be undertaken? This will help maintain a clear and focused approach moving forward.
+
+
+query_assessment_instructions: |
+  When interacting with your client, assess the content of their query. If the client explicitly poses a question, your response should address it directly. In this case, simply type: 'Respond to the client's questions.'
+
+  If the client does not present a clear question and instead provides information or context that aligns with your planned approach or strategy, proceed accordingly without deviation. In this situation, simply type: 'Proceed with the plan.'
+
+  **Important:** Your response should only be either 'Respond to the client's questions.' or 'Proceed with the plan.'
+
+
+tiny_plan_instructions: |
+  Before you proceed, let's make a one-step plan by following this brief process. First, articulate your specific action for this step in **20 words or less**. Then, choose only one relevant tool from the following options: 'fire_weather_index', 'long_term_fire_history_records', 'recent_fire_incident_data', 'literature_search', or 'no tool needed'.
+
+  For example:
+  - 'Analyze the Fire Weather Index dataset.' `fire_weather_index`
+  - 'Review recent studies on wildfire impacts on water resources.' `literature_search`
+  - 'Develop strategies to reduce wildfire risks.' `no tool needed`
+  - 'Examine the impact of recent wildfires.' `recent_fire_incident_data`
+
+  **Please specify** the tool you intend to use at the end of your input.

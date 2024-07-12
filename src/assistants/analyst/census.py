@@ -5,7 +5,7 @@ import pydeck as pdk
 import plotly.graph_objects as go
 import pandas as pd
 from shapely.geometry import Point
-from src.assistants.analyst.utils import get_pin_layer
+from src.assistants.analyst.utils import get_pin_layer, MapDisplay
 c = Census("93c3297165ad8b5b6c81e0ed9e2e44a38e56224f")
 
 def get_census_info(lon: float, lat: float) -> str:
@@ -87,7 +87,7 @@ def get_census_info(lon: float, lat: float) -> str:
                     tooltip={"text": "GEOID: {GEOID} \n Population: {B01003_001E} \n Below Poverty: {poverty_count} \n Below Half Poverty: {C17002_002E} \n Housing Units: {B25001_001E}"},
                     map_style = 'mapbox://styles/mapbox/light-v10')
 
-    maps = [f"The census block groups overlapping with the area within 36 km of the location (lat: {lat}, lon: {lon})" , maps]
+    maps = [f"The census block groups overlapping with the area within 36 km of the location (lat: {lat}, lon: {lon})" , MapDisplay(maps)]
     # draw a table with the data
 
     fig = go.Figure(data=[go.Table(
