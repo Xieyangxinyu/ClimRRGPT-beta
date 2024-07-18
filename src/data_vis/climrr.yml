@@ -7,12 +7,36 @@ Fire Weather Index (FWI) projections:
       'wildfire_winter_Hist', 'wildfire_winter_Midc', 'wildfire_winter_Endc'
     ]
   periods: ['Hist', 'Midc', 'Endc']
-  title: "Fire Weather Index (FWI) Analysis"
-  subtitle: "Explore historical, mid-century, and end-century FWI values across different seasons. Higher FWI values indicate increased fire risk."
+  title: Fire Weather Index (FWI) Analysis
+  subtitle: Explore historical, mid-century, and end-century FWI values across different seasons. Higher FWI values indicate higher fire risk.
   season: True
   
 Precipitation projections:
   path: data/climrr/Precipitation_inches_AnnualTotal.csv
   values_of_interests: [
-    
+    'hist', 'rcp85_midc', 'rcp85_endc'
   ]
+  periods: ['hist', 'midc', 'endc']
+  title: Annual Total Precipitation Analysis
+  subtitle: Explore historical, mid-century, and end-century annual total precipitation values. Higher values indicate higher precipitation.
+  season: False
+
+Consecutive Dry Days projections:
+  path: data/climrr/ConsecutiveDayswithNoPrecipitation.csv
+  values_of_interests: [
+    'hist', 'rcp85_midc', 'rcp85_endc'
+  ]
+  periods: ['hist', 'midc', 'endc']
+  title: Consecutive Dry Days Analysis
+  subtitle: Explore historical, mid-century, and end-century consecutive dry days. Higher values indicate longer periods without precipitation.
+  season: False
+
+Wind Speed projections:
+  path: data/climrr/WindSpeed.csv
+  values_of_interests: [
+    'hist', 'rcp85_midc', 'rcp85_endc'
+  ]
+  periods: ['hist', 'midc', 'endc']
+  title: Wind Speed Analysis
+  subtitle: Explore historical, mid-century, and end-century wind speed values. Higher values indicate higher wind speeds.
+  season: False

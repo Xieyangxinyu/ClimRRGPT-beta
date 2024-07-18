@@ -7,13 +7,13 @@ import pandas as pd
 from streamlit_folium import st_folium
 import plotly.express as px
 from src.data_vis import analyze_wildfire_perimeters, analyze_census_data
-from src.data_vis.climrr import ClimRRSeasonalProjectionsFWI
+from src.data_vis.climrr import ClimRRAnnualProjectionsWindSpeed
 st.set_page_config(layout="wide")
 from src.llms import OpenSourceModels
 import re
 import json
 
-analyze_fwi = ClimRRSeasonalProjectionsFWI().analyze
+analyze_fwi = ClimRRAnnualProjectionsWindSpeed().analyze
 get_response = OpenSourceModels(model='gemma2').get_response
 
 st.title("FWI Map Display")
@@ -79,7 +79,7 @@ def parse_location(response):
 
 @st.cache_data
 def get_lat_long(location_description):
-    if False:
+    if True:
         # Initialize Nominatim API
         geolocator = Nominatim(user_agent="Xinyu")
         
