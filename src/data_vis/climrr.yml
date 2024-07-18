@@ -10,6 +10,32 @@ Fire Weather Index (FWI) projections:
   title: Fire Weather Index (FWI) Analysis
   subtitle: Explore historical, mid-century, and end-century FWI values across different seasons. Higher FWI values indicate higher fire risk.
   season: True
+
+Seasonal Temperature Maximum projections:
+  path: data/climrr/SeasonalTemperatureMaximum.csv
+  values_of_interests: [
+    'hist_winter', 'rcp85_midc_winter', 'rcp85_endc_winter',
+    'hist_spring', 'rcp85_midc_spring', 'rcp85_endc_spring',
+    'hist_summer', 'rcp85_midc_summer', 'rcp85_endc_summer',
+    'hist_autumn', 'rcp85_midc_autumn', 'rcp85_endc_autumn'
+  ]
+  periods: ['hist', 'midc', 'endc']
+  title: Seasonal Maximum Temperature Analysis
+  subtitle: Explore historical, mid-century, and end-century seasonal maximum temperature values. Higher values indicate higher temperatures.
+  season: True
+
+Seasonal Temperature Minimum projections:
+  path: data/climrr/SeasonalTemperatureMinimum.csv
+  values_of_interests: [
+    'hist_winter', 'rcp85_midc_winter', 'rcp85_endc_winter',
+    'hist_spring', 'rcp85_midc_spring', 'rcp85_endc_spring',
+    'hist_summer', 'rcp85_midc_summer', 'rcp85_endc_summer',
+    'hist_autumn', 'rcp85_midc_autumn', 'rcp85_endc_autumn'
+  ]
+  periods: ['hist', 'midc', 'endc']
+  title: Seasonal Minimum Temperature Analysis
+  subtitle: Explore historical, mid-century, and end-century seasonal minimum temperature values. Higher values indicate higher temperatures.
+  season: True
   
 Precipitation projections:
   path: data/climrr/Precipitation_inches_AnnualTotal.csv
@@ -40,3 +66,24 @@ Wind Speed projections:
   title: Wind Speed Analysis
   subtitle: Explore historical, mid-century, and end-century wind speed values. Higher values indicate higher wind speeds.
   season: False
+
+Cooling Degree Days projections:
+  path: data/climrr/CoolingDegreeDays.csv
+  values_of_interests: [
+    'hist', 'rcp85_midc'
+  ]
+  periods: ['hist', 'midc']
+  title: Cooling Degree Days Analysis
+  subtitle: Explore historical and mid-century cooling degree days. Higher values indicate higher cooling requirements.
+  season: False
+
+Heating Degree Days projections:
+  path: data/climrr/HeatingDegreeDays.csv
+  values_of_interests: [
+    'hist', 'rcp85_midc'
+  ]
+  periods: ['hist', 'midc']
+  title: Heating Degree Days Analysis
+  subtitle: Explore historical and mid-century heating degree days. Higher values indicate higher heating requirements.
+  season: False
+
