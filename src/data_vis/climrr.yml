@@ -1,0 +1,18 @@
+Fire Weather Index (FWI) projections:
+  path: ./data/FireWeatherIndex_Wildfire.csv
+  values_of_interests: [
+      'wildfire_spring_Hist', 'wildfire_spring_Midc', 'wildfire_spring_Endc', 
+      'wildfire_summer_Hist', 'wildfire_summer_Midc', 'wildfire_summer_Endc',
+      'wildfire_autumn_Hist', 'wildfire_autumn_Midc', 'wildfire_autumn_Endc',
+      'wildfire_winter_Hist', 'wildfire_winter_Midc', 'wildfire_winter_Endc'
+    ]
+  periods: ['Hist', 'Midc', 'Endc']
+  title: "Fire Weather Index (FWI) Analysis"
+  subtitle: "Explore historical, mid-century, and end-century FWI values across different seasons. Higher FWI values indicate increased fire risk."
+  season: True
+  
+Precipitation projections:
+  path: data/climrr/Precipitation_inches_AnnualTotal.csv
+  values_of_interests: [
+    
+  ]

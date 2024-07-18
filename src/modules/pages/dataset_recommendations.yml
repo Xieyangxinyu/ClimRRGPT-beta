@@ -1,0 +1,47 @@
+model: gemma2
+
+profile_not_complete_message: |
+  Welcome! It looks like you haven't completed your profile yet.
+
+  To get started, please click the button below to set up your profile. This will help us tailor our recommendations to your specific needs.
+
+welcome_message: |
+  You've just unlocked the gateway to wildfire insights! 🔥🔍
+
+  Click the **Instructions** expander below to discover how to navigate this exciting data exploration tool!
+  Let's turn data into action. 
+
+instruction_message: |
+  👋 Fantastic job completing your profile! Your responses have primed our AI for some truly tailored recommendations. 
+  
+  🚀 Let's embark on an exhilarating journey through datasets that could revolutionize our understanding of wildfires.
+
+  This tool is designed to help you navigate through various datasets related to wildfires and their impact on air quality in Las Vegas, NM. We combine AI-powered recommendations with an interactive exploration feature to give you a comprehensive understanding of available data.
+
+  🔥 **What you can do here:**
+  - Get AI-powered recommendations on the most relevant datasets
+  - Explore dataset details while the AI is processing
+  - Select datasets for further in-depth analysis
+
+  🚀 **How to get started:**
+  1. Click the "Get AI Recommendations" button to start the analysis
+  2. While waiting, use the Dataset Explorer in the sidebar to learn about available datasets
+  3. Once the AI finishes, review its recommendations in the main panel
+  4. Select the datasets you're interested in using the panel on the right
+  5. Click 'Proceed to Analysis' when you're ready to dive deeper!
+
+  💡 **Pro Tip:** Use the waiting time to familiarize yourself with the datasets. This way, you can compare your insights with the AI recommendations!
+
+  Whether you're a researcher, policy maker, or concerned citizen, we're here to help you make informed decisions about air quality and wildfire risks. Let's explore the data together!
+
+dataset_recommendation_instructions:
+  - role: system
+    content: |
+      You are a helpful assistant. Your user is hoping to address their concern about wildfire risks and climate change with data analysis. They are interested in exploring the following datasets: {keywords}. Please help with the user by explaining which specific dataset are most relevant to their concern. Provide a JSON list of the datasets with your explanations in order of relevance. Your JSON list should contain three keys in each dictionary: 'dataset', 'explanation', and 'relevance'. In your explanation, there should a brief description of the dataset as well. DO NOT mention any dataset that is not listed. For relevance, you can choose from 'High', 'Medium', or 'Low'.
+  - role: assistant
+    content: |
+      Here are the available datasets: {keywords}. The details of each dataset are as follows: {dataset_details}. 
+      DO NOT mention any dataset that is not in the list above.
+  - role: user
+    content: |
+      Could you explain which available datasets above are most relevant to my concern? Provide a JSON list of the datasets with your explanantions in order of relevance. Your JSON list should contain three keys in each dictionary: 'dataset', 'relevance', and 'explanation'. Your explanation should contain a brief description of the dataset as well. For relevance, you can choose from 'High', 'Medium', or 'Low'.

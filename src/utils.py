@@ -98,7 +98,7 @@ def get_openai_response(messages, top_p = 0.95, max_tokens = 256, temperature = 
 def create_text_stream(text):
     for word in text.split(" "):
         yield word + " "
-        time.sleep(0.08)
+        time.sleep(0.05)
 
 def stream_static_text(text):
     stream_text = create_text_stream(text)

@@ -1,3 +1,0 @@
-1. What specific concerns do you have about the impact of wildfires and climate change on urban development and housing at the wildland-urban interface?
-2. In the context of developing plans for Las Vegas, NM, what particular aspects of wildfire risks and climate change are you most interested in exploring? 
-3. How do you currently approach risk management planning and housing development in areas prone to wildfires, and what challenges have you encountered in relation to wildfires and climate change?

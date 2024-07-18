@@ -1,0 +1,56 @@
+model: 'gemma2'
+
+init_questions:
+  Profession: What is your profession?
+  Concern: What is your primary concern about wildfire risks and climate change?
+  Location: What is the general location you are interested in exploring?
+  Timeline: What is the time frame for which you are interested in assessing wildfire risks and implementing strategies?
+  Scope: In more detail, what are the specific aspects of wildfire risks that you are interested in exploring?
+
+
+instruction_message: |
+  🔍 How to Navigate Your WildfireGPT Journey:
+
+  1. 📝 Answer the questions: Start by responding to the question about your primary wildfire and climate change concerns in the text box provided.
+
+  2. ➡️ Use navigation buttons: 
+    - Click "Next" to proceed to the following question
+    - Use "Previous" if you need to go back and modify an answer
+
+  3. 💡 Need inspiration? Click "Give me suggestions!" for helpful prompts if you're unsure how to respond.
+
+  4. 📚 Expand "Instructions": Click this dropdown anytime for a refresher on how to use the interface.
+
+  5. 🎯 Be specific: The more detailed your answers, the better we can tailor your action plan!
+
+  6. 🔄 Review and refine: You can always go back to previous questions to adjust your responses.
+
+  Remember, each answer shapes your custom wildfire action plan. Let's make every response count! 🌟🔥
+
+dataset_selection_message:
+  init_message: |
+    We will begin by identifying the datasets you are interested in exploring.
+
+profile_suggestions:
+  Profession: |
+    This could be a specific job title, or a general description of your role. 
+    **It's always helpful to be as specific as possible.**
+  Concern: |
+    Other people have expressed concerns about the following aspects of wildfire risks and climate change:
+    
+    - increased frequency and intensity of wildfires due to prolonged droughts.
+    - the impact of wildfires on air quality and public health.
+    - the economic costs of wildfire suppression and recovery.
+    - the role of climate change in exacerbating wildfire risks.
+    
+    Do any of these resonate with you?
+    
+    **Remember, it is always helpful to be as specific as possible.**
+  Location: |
+      To get us started, this could be a specific city, county, or region. You can specify multiple locations if needed. 
+      It's always more helpful to give as much detail as possible. 
+      You will also get to select specific locations on a map to specify what exact area you are interested in.
+  Timeline: |
+      This could be the next 5-10 years, 10 - 30 years, etc...
+  Scope: |
+      I'm coming up with some suggestions for you based on your responses to the previous questions...

@@ -1,0 +1,43 @@
+model: 'gemma2'
+
+profile_not_complete_message: |
+  Welcome! It looks like you haven't completed your profile yet.
+
+  To get started, please click the button below to set up your profile. This will help us tailor our recommendations to your specific needs.
+
+
+datasets_not_selected_message: |
+  Welcome! It looks like you haven't selected any datasets yet. Are you sure you want to proceed without selecting any datasets?
+
+  To select datasets, please click the button below to view the available datasets and select the ones you're interested in.
+
+welcome_message: |
+  You've just unlocked the gateway to wildfire insights! 🔥🔍 
+
+  Before we set our goals, let's identify two concrete questions that you'd like to explore in the scientific literature. 
+  
+  These questions will help you think more deeply about what you want to learn with the help of WildfireGPT today. The more specific and intriguing your questions, the more exciting your journey will be! 🚀
+
+  Click the **Instructions** expander below to discover how to navigate this exciting goal setting tool! 🚀
+
+instruction_message: |
+  🔍 Your WildfireGPT Question Identification Adventure:
+
+  1. 🧠 Brainstorm: Think beyond the chosen datasets. What do you want to learn about wildfires that requires deeper research? Review your profile if needed for inspiration.
+
+  2. 💡 Click "Generate Question Suggestion" for AI-inspired ideas
+
+  3. ➡️ Use "Next," "Previous," or "Finish" to navigate. 🚀 Hit "Finish" when you're ready!
+
+  Remember, your questions are the compass for your wildfire exploration. Make them as specific and intriguing as you can! 🔥📚🌟
+
+question_recommendation_instructions:
+  - role: system
+    content: |
+      You are a helpful assistant. Your user is hoping to address their concern about wildfire risks and climate change by surveying existing scientific literatures. Please help with the user by brainstorming two specific questions that they might be interested in exploring by surveying the scientific literature. **Focus on the user's scope of interest.**
+  - role: user
+    content: |
+      Please identify the first question that I should explore from the scientific literature based on my concern. Ideally, this question cannot be directly answered by the datasets I have chosen. Because this is literature review, I cannot make any projections or predictions, I can at best hope for some deeper understanding. Only output the question. **Focus on my scope of interest.**
+  - role: user
+    content: |
+      In complement to the first question, please identify the second question that I should explore from the scientific literature based on my concern. Ideally, this question cannot be directly answered by the datasets I have chosen. Because this is literature review, I cannot make any projections or predictions, I can at best hope for some deeper understanding. Only output the question. **Focus on my scope of interest.**

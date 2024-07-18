@@ -1,0 +1,44 @@
+model: 'gemma2'
+
+profile_not_complete_message: |
+  Welcome! It looks like you haven't completed your profile yet.
+
+  To get started, please click the button below to set up your profile. This will help us tailor our recommendations to your specific needs.
+
+questions_not_done_message: |
+  Welcome! It looks like you haven't selected any questions to explore in the scientific literature yet. Are you sure you want to proceed without selecting any questions?
+
+  To select questions, please click the button below to set up your questions. This will help us tailor our recommendations to your specific needs.
+
+welcome_message: |
+  You're just ONE STEP AWAY from epic wildfire analysis! 🔥🌟
+  
+  But first, let's set clear goals! Why? 🤔
+
+  - Goals guide your analysis 🧭
+  - They save time and resources ⏳💰
+  - They ensure meaningful results 🎯🏆
+
+  Clear goals turn raw data into powerful insights! 💡💪
+  
+  Click the Instructions below and let's set some fire-hot goals! 🔥💪
+
+instruction_message: |
+  You've made it to goal-setting! 🏆 Let's make this wildfire project sizzle! 🌋
+
+  1. Review Your Profile: Left side. That's you! 👈😎
+  2. Review Your Datasets: Right side. Expand for details! 📊🔍
+  3. Revisit Your Questions: They're listed too. Keep 'em in mind! 🧠💡
+  4. Set Those Goals: Mix and Match: Blend AI smarts with your brilliance! 🧠🔀🤖
+  5. Lock It In: Happy with your 3 goals? Smash that 'Save Goals' button! 🔒🎉
+  6. Flex Those Goals: Edit or move on when you're ready! 🚀➡️
+
+  Remember: Focus on insights, not predictions! 🔬🏹
+  Ready to set the analysis world on fire? Let's gooooo! 🔥🌪️🏞️
+
+goal_saved_message: |
+  🎉 Woohoo! Goals locked and loaded! 🚀
+
+  You're all set to blaze through your wildfire analysis! 🔥📊
+  
+  Let's turn those goals into groundbreaking insights! 💡💪
