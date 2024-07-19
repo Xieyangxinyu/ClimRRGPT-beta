@@ -66,7 +66,7 @@ else:
     if len(st.session_state.instruction_message) > 0:
         st.write(st.session_state.config["welcome_message"])
         with st.expander("Instructions"):
-            st.write(st.session_state.instruction_message)
+            st.write(st.session_state.config["instruction_message"])
 
     if not st.session_state.questions_done:
         current_question = st.session_state.questions[st.session_state.current_brainstorm_index] if st.session_state.current_brainstorm_index < len(st.session_state.questions) else ""
