@@ -180,7 +180,7 @@ else:
         # Attach previous analyses
         for prev_dataset, prev_analysis in st.session_state.analysis.items():
             if prev_dataset != dataset:
-                messages.append({"role": "system", "content": f"Previous analysis for {prev_dataset}:\n{prev_analysis}"})
+                messages = [messages[0]] + [{"role": "system", "content": f"Previous analysis for {prev_dataset}:\n{prev_analysis}"}] + messages[1:]
         
         with col3:
             if st.button("Generate AI Analysis", key=f'analysis_{dataset}'):
