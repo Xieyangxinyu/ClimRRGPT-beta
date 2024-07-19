@@ -7,8 +7,8 @@ import re
 
 add_page_title(initial_sidebar_state="collapsed")
 
-st.session_state.config = load_config("src/modules/pages/question_identification.yml")
-available_datasets = load_config("./src/modules/pages/dataset_description.yml")['available_datasets']
+st.session_state.config = load_config("src/modules/experience/question_identification.yml")
+available_datasets = load_config("./src/modules/experience/dataset_description.yml")['available_datasets']
 model = st.session_state.config['model']
 get_response = OpenSourceModels(model=model).get_response
 
@@ -43,12 +43,12 @@ def get_question_suggestion(messages):
     for i in range(st.session_state.current_brainstorm_index):
         messages.append({"role": "assistant", "content": question_recommendation_instructions[i + 1]['content']})
     response = parse_question(get_response(messages=messages, stream=True,
-        options={"top_p": 0.95, "max_tokens": 256, "temperature": 0.7, "stop": ["\n"]}
+        options={"top_p": 0.95, "max_tokens": 256, "temperature": 1, "stop": ["\n"]}
     ))
     while not response:
         stream_static_text("Sorry that wasn't a good question. Let me try again!")
         response = parse_question(get_response(messages=messages, stream=True,
-            options={"top_p": 0.95, "max_tokens": 256, "temperature": 0.7, "stop": ["\n"]}
+            options={"top_p": 0.95, "max_tokens": 256, "temperature": 1, "stop": ["\n"]}
         ))
         
     return response
@@ -56,11 +56,11 @@ def get_question_suggestion(messages):
 if ("profile_done" not in st.session_state) or not st.session_state.profile_done:
     st.write(st.session_state.config["profile_not_complete_message"])
     if st.button("Complete My Profile"):
-        st.switch_page("pages/profile.py")
+        st.switch_page("experience/profile.py")
 elif not "selected_datasets" in st.session_state or len(st.session_state.selected_datasets) == 0:
         st.write(st.session_state.config["datasets_not_selected_message"])
         if st.button("Select Datasets"):
-            st.switch_page("pages/dataset_recommendations.py")
+            st.switch_page("experience/dataset_recommendations.py")
 else:
     messages, question_recommendation_instructions = initialize_session_state()
     if len(st.session_state.instruction_message) > 0:
@@ -137,4 +137,4 @@ else:
             if st.button("Proceed to Goal Setting", use_container_width=True):
                 # Add code here to move to the next step (e.g., literature review)
                 del st.session_state['instruction_message']
-                st.switch_page("pages/goal_setting.py")
+                st.switch_page("experience/goal_setting.py")

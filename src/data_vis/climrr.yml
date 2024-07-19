@@ -10,6 +10,25 @@ Fire Weather Index (FWI) projections:
   title: Fire Weather Index (FWI) Analysis
   subtitle: Explore historical, mid-century, and end-century FWI values across different seasons. Higher FWI values indicate higher fire risk.
   season: True
+  prompt: |
+    Analyze the following Fire Weather Index (FWI) data and provide a comprehensive interpretation:
+
+    Mean FWI Values (with Standard Deviation) in Markdown Table format:
+
+    {table_markdown}
+
+    Mean FWI Values (with Standard Deviation) in JSON format:
+
+    {table_json}
+
+    Based on this data and my goals:
+    1. Describe the overall trend in FWI values from historical to end-century periods.
+    2. Identify which season(s) show the highest fire risk and how this changes over time.
+    3. Highlight any significant changes or patterns across seasons or time periods.
+    4. Contextualize the data: explaining how the FWI data and trends relate to me.
+
+    Provide your analysis in a concise yet comprehensive manner. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
+
 
 Seasonal Temperature Maximum projections:
   path: data/climrr/SeasonalTemperatureMaximum.csv
@@ -23,6 +42,24 @@ Seasonal Temperature Maximum projections:
   title: Seasonal Maximum Temperature Analysis
   subtitle: Explore historical, mid-century, and end-century seasonal maximum temperature values. Higher values indicate higher temperatures.
   season: True
+  prompt: |
+    Analyze the following Seasonal Maximum Temperature data and provide a comprehensive interpretation:
+
+    Mean Maximum Temperature Values (with Standard Deviation) in Markdown Table format:
+
+    {table_markdown}
+
+    Mean Maximum Temperature Values (with Standard Deviation) in JSON format:
+
+    {table_json}
+
+    Based on this data and my goals:
+    1. Describe the overall trend in maximum temperature values from historical to end-century periods.
+    2. Identify which season(s) show the highest temperatures and how this changes over time.
+    3. Highlight any significant changes or patterns across seasons or time periods.
+    4. Contextualize the data: explaining how the temperature data and trends relate to me.
+
+    Provide your analysis in a concise yet comprehensive manner. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
 
 Seasonal Temperature Minimum projections:
   path: data/climrr/SeasonalTemperatureMinimum.csv
@@ -36,6 +73,24 @@ Seasonal Temperature Minimum projections:
   title: Seasonal Minimum Temperature Analysis
   subtitle: Explore historical, mid-century, and end-century seasonal minimum temperature values. Higher values indicate higher temperatures.
   season: True
+  prompt: |
+    Analyze the following Seasonal Minimum Temperature data and provide a comprehensive interpretation:
+
+    Mean Minimum Temperature Values (with Standard Deviation) in Markdown Table format:
+
+    {table_markdown}
+
+    Mean Minimum Temperature Values (with Standard Deviation) in JSON format:
+
+    {table_json}
+
+    Based on this data and my goals:
+    1. Describe the overall trend in minimum temperature values from historical to end-century periods.
+    2. Identify which season(s) show the lowest temperatures and how this changes over time.
+    3. Highlight any significant changes or patterns across seasons or time periods.
+    4. Contextualize the data: explaining how the temperature data and trends relate to me.
+
+    Provide your analysis in a concise yet comprehensive manner. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
   
 Precipitation projections:
   path: data/climrr/Precipitation_inches_AnnualTotal.csv
@@ -46,6 +101,24 @@ Precipitation projections:
   title: Annual Total Precipitation Analysis
   subtitle: Explore historical, mid-century, and end-century annual total precipitation values. Higher values indicate higher precipitation.
   season: False
+  prompt: |
+    Analyze the following Annual Total Precipitation data and provide a comprehensive interpretation:
+
+    Mean Annual Total Precipitation Values (with Standard Deviation) in Markdown Table format:
+
+    {table_markdown}
+
+    Mean Annual Total Precipitation Values (with Standard Deviation) in JSON format:
+
+    {table_json}
+
+    Based on this data and my goals:
+    1. Describe the overall trend in annual total precipitation values from historical to end-century periods.
+    2. Identify any significant changes or patterns in precipitation levels over time.
+    3. Discuss the implications of these changes in precipitation for wildfire risks and climate change.
+    4. Contextualize the data: explaining how the precipitation data and trends relate to me.
+
+    Provide your analysis in a concise yet comprehensive manner. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
 
 Consecutive Dry Days projections:
   path: data/climrr/ConsecutiveDayswithNoPrecipitation.csv
@@ -56,6 +129,24 @@ Consecutive Dry Days projections:
   title: Consecutive Dry Days Analysis
   subtitle: Explore historical, mid-century, and end-century consecutive dry days. Higher values indicate longer periods without precipitation.
   season: False
+  prompt: |
+    Analyze the following Consecutive Dry Days data and provide a comprehensive interpretation:
+
+    Mean Consecutive Dry Days Values (with Standard Deviation) in Markdown Table format:
+
+    {table_markdown}
+
+    Mean Consecutive Dry Days Values (with Standard Deviation) in JSON format:
+
+    {table_json}
+
+    Based on this data and my goals:
+    1. Describe the overall trend in consecutive dry days from historical to end-century periods.
+    2. Identify any significant changes or patterns in the duration of dry periods over time.
+    3. Discuss the implications of these changes in dry days for wildfire risks and climate change.
+    4. Contextualize the data: explaining how the dry days data and trends relate to me.
+
+    Provide your analysis in a concise yet comprehensive manner. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
 
 Wind Speed projections:
   path: data/climrr/WindSpeed.csv
@@ -66,6 +157,24 @@ Wind Speed projections:
   title: Wind Speed Analysis
   subtitle: Explore historical, mid-century, and end-century wind speed values. Higher values indicate higher wind speeds.
   season: False
+  prompt: |
+    Analyze the following Wind Speed data and provide a comprehensive interpretation:
+
+    Mean Wind Speed Values (with Standard Deviation) in Markdown Table format:
+
+    {table_markdown}
+
+    Mean Wind Speed Values (with Standard Deviation) in JSON format:
+
+    {table_json}
+
+    Based on this data and my goals:
+    1. Describe the overall trend in wind speed values from historical to end-century periods.
+    2. Identify any significant changes or patterns in wind speeds over time.
+    3. Discuss the implications of these changes in wind speed for wildfire risks and climate change.
+    4. Contextualize the data: explaining how the wind speed data and trends relate to me.
+
+    Provide your analysis in a concise yet comprehensive manner. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
 
 Cooling Degree Days projections:
   path: data/climrr/CoolingDegreeDays.csv
@@ -76,6 +185,24 @@ Cooling Degree Days projections:
   title: Cooling Degree Days Analysis
   subtitle: Explore historical and mid-century cooling degree days. Higher values indicate higher cooling requirements.
   season: False
+  prompt: |
+    Analyze the following Cooling Degree Days data and provide a comprehensive interpretation:
+
+    Mean Cooling Degree Days Values (with Standard Deviation) in Markdown Table format:
+
+    {table_markdown}
+
+    Mean Cooling Degree Days Values (with Standard Deviation) in JSON format:
+
+    {table_json}
+
+    Based on this data and my goals:
+    1. Describe the overall trend in cooling degree days from historical to mid-century periods.
+    2. Identify any significant changes or patterns in cooling degree days over time.
+    3. Discuss the implications of these changes in cooling requirements for wildfire risks and climate change.
+    4. Contextualize the data: explaining how the cooling degree days data and trends relate to me.
+
+    Provide your analysis in a concise yet comprehensive manner. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
 
 Heating Degree Days projections:
   path: data/climrr/HeatingDegreeDays.csv
@@ -86,4 +213,22 @@ Heating Degree Days projections:
   title: Heating Degree Days Analysis
   subtitle: Explore historical and mid-century heating degree days. Higher values indicate higher heating requirements.
   season: False
+  prompt: |
+    Analyze the following Heating Degree Days data and provide a comprehensive interpretation:
+
+    Mean Heating Degree Days Values (with Standard Deviation) in Markdown Table format:
+
+    {table_markdown}
+
+    Mean Heating Degree Days Values (with Standard Deviation) in JSON format:
+
+    {table_json}
+
+    Based on this data and my goals:
+    1. Describe the overall trend in heating degree days from historical to mid-century periods.
+    2. Identify any significant changes or patterns in heating degree days over time.
+    3. Discuss the implications of these changes in heating requirements for wildfire risks and climate change.
+    4. Contextualize the data: explaining how the heating degree days data and trends relate to me.
+
+    Provide your analysis in a concise yet comprehensive manner. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
 

@@ -5,11 +5,12 @@ import json
 from copy import deepcopy
 import re
 from st_pages import add_page_title
+from src.modules.experience.util import format_to_json
 
 add_page_title(layout="wide", initial_sidebar_state="collapsed")
 
-st.session_state.config = load_config("src/modules/pages/dataset_recommendations.yml")
-available_datasets = load_config("./src/modules/pages/dataset_description.yml")['available_datasets']
+st.session_state.config = load_config("src/modules/experience/dataset_recommendations.yml")
+available_datasets = load_config("./src/modules/experience/dataset_description.yml")['available_datasets']
 model = st.session_state.config['model']
 get_response = OpenSourceModels(model=model).get_response
 
@@ -37,13 +38,19 @@ def parse_dataset_recommendation(response, valid_keywords=available_datasets.key
     except json.JSONDecodeError:
         print("Invalid JSON format.")
         return []
-    
+
     valid_entries = []
     
     for entry in parsed_data:
         if all(key in entry for key in ["dataset", "relevance", "explanation"]):
             if entry["dataset"] in valid_keywords:
                 valid_entries.append(entry)
+            else:
+                # look to see if any of the keywords are in the dataset name
+                for keyword in valid_keywords:
+                    if keyword in entry["dataset"]:
+                        valid_entries.append(entry)
+                        break
     
     return valid_entries
 
@@ -66,42 +73,64 @@ def stream_handler(stream):
                     st.markdown(f"**Instruction:** {details['instruction']}")
     return response
 
-def get_dataset_recommendations():
-    # Simulate AI processing
-    with st.spinner("AI is analyzing which datasets to choose... Please do not click any buttons on the sidebar or refresh the page. In the meantime, AI will provide you with the description of each dataset it is considering."):
-        available_datasets = load_config("./src/modules/pages/dataset_description.yml")['available_datasets']
-        keywords = available_datasets.keys()
-        available_datasets = {key: value['description'] + ' ' + value['instruction'] for key, value in available_datasets.items()}
-        dataset_details = json.dumps(available_datasets, indent=4)
+def get_single_dataset_recommendation(dataset_name, dataset_details):
+    messages = deepcopy(st.session_state.messages)
+    dataset_recommendation_instructions = st.session_state.config['dataset_recommendation_instructions']
+    
+    messages[0]['content'] = dataset_recommendation_instructions[0]['content'].format(keywords=dataset_name)
+    messages.append(
+        {"role": "assistant", 
+         "content": dataset_recommendation_instructions[1]['content'].format(keywords=dataset_name, 
+                                                                             dataset_details=
+                                                                             format_to_json([{dataset_name: dataset_details}]))})
+    messages.append({"role": "user", "content": dataset_recommendation_instructions[2]['content']})
 
-        messages = deepcopy(st.session_state.messages)
-        
-        messages = deepcopy(st.session_state.messages)
-        dataset_recommendation_instructions = st.session_state.config['dataset_recommendation_instructions']
-        messages[0]['content'] = dataset_recommendation_instructions[0]['content'].format(keywords=', '.join(keywords))
-        messages.append({"role": "assistant", "content": dataset_recommendation_instructions[1]['content'].format(keywords=', '.join(keywords), dataset_details=dataset_details)})
-        messages.append({"role": "user", "content": dataset_recommendation_instructions[2]['content']})
-
-        response = get_response(messages=messages,
-            stream=True, stream_handler=stream_handler,
-            options={"top_p": 0.95, "max_tokens": 256, "temperature": 0.7}
-        )
-
-        # parse the response into the introduction passage and the JSON list
-        
-        st.session_state.dataset_recommendation = parse_dataset_recommendation(response)
-        while len(st.session_state.dataset_recommendation) == 0:
-            response = get_response(messages=messages,
-                options={"top_p": 0.95, "max_tokens": 256, "temperature": 0.7}
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            response = get_response(messages=messages, 
+                options={"top_p": 0.8, "max_tokens": 256, "temperature": 0.7}
             )
-            st.session_state.dataset_recommendation = parse_dataset_recommendation(response)
+            recommendation = parse_dataset_recommendation(response, valid_keywords=[dataset_name])
+            if recommendation:
+                return recommendation
+        except Exception as e:
+            st.warning(f"Oops! We hit a snag while processing {dataset_name} (Attempt {attempt + 1}/{max_retries}). We're trying again!")
+    
+    # If all attempts fail, return a friendly message with the suggestion
+    st.error(f"We couldn't generate a recommendation for {dataset_name} at this time. Don't worry, though!")
+    return [{
+        "dataset": dataset_name,
+        "relevance": "To be determined",
+        "explanation": "We encountered a hiccup while analyzing this dataset. 🤔 No worries! You can still explore it yourself. Need to go over the dataset descriptions? Click the `Available Datasets` button on the sidebar. 👈 Your insights might be just what we need!"
+    }]
+
+def get_dataset_recommendations():
+    available_datasets = load_config("./src/modules/experience/dataset_description.yml")['available_datasets']
+    
+    recommendations = []
+    progress_bar = st.progress(0)
+    
+    for i, (dataset_name, dataset_info) in enumerate(available_datasets.items()):
+        with st.expander(dataset_name, expanded=False):
+            st.markdown(f"**Description:** {dataset_info['description']}")
+            st.markdown(f"**Instruction:** {dataset_info['instruction']}")
         
-        st.success("AI Analysis Complete!")
+        # dataset_details = dataset_info with only description and instruction
+        dataset_details = {key: dataset_info[key] for key in ["description", "instruction"]}
+        recommendation = get_single_dataset_recommendation(dataset_name, dataset_details)
+        
+        recommendations.extend(recommendation)
+        
+        progress_bar.progress((i + 1) / len(available_datasets))
+
+    st.session_state.dataset_recommendation = recommendations
+    st.success("AI Analysis Complete!")
 
 if ("profile_done" not in st.session_state) or not st.session_state.profile_done:
     st.write(st.session_state.config["profile_not_complete_message"])
     if st.button("Complete My Profile"):
-        st.switch_page("pages/profile.py")
+        st.switch_page("experience/profile.py")
 else:
     st.markdown(st.session_state.config['welcome_message'])
     with st.expander("Instructions"):
@@ -152,6 +181,6 @@ else:
                 st.success(f"You've selected {len(selected_datasets)} dataset(s).")
                 if st.button("Proceed to Goal Setting", type="primary"):
                     st.session_state.selected_datasets = selected_datasets
-                    st.switch_page("pages/question_identification.py")
+                    st.switch_page("experience/question_identification.py")
             else:
                 st.info("Select at least one dataset to proceed.")

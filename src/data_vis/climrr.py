@@ -9,9 +9,8 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import io
 import base64
-
 from src.utils import load_config
-from src.data_vis.climrr_utils import convert_to_dataframe
+from src.data_vis.climrr_utils import convert_to_dataframe, categorize_fwi, fwi_color
 
 config = load_config('src/data_vis/climrr.yml')
 
@@ -50,11 +49,11 @@ class DataVisualizer(ABC):
         self.add_legend()
 
     def map_comparing_period_by_choosing_season(self, crossmodels, df):
-        season = st.radio('Select Season:', ['spring', 'summer', 'autumn', 'winter'], horizontal=True)
+        season = st.radio('Select Season:', ['spring', 'summer', 'autumn', 'winter'], horizontal=True, key = f"{self.keyword}_season")
         self.map_comparing_period(crossmodels, df, season)
 
     def map_comparing_season_by_choosing_period(self, crossmodels, df):
-        period = st.radio('Select Time Period:', self.data_info['periods'], horizontal=True)
+        period = st.radio('Select Time Period:', self.data_info['periods'], horizontal=True, key = f"{self.keyword}_period")
         seasons = ['spring', 'summer', 'autumn', 'winter']
         cols = st.columns(4, gap="small")
         for i, season in enumerate(seasons):
@@ -70,9 +69,10 @@ class DataVisualizer(ABC):
         df = convert_to_dataframe(self.df, self.values_of_interests, crossmodels)
         
         if self.data_info.get('season', False):
-            self.analyze_seasonal(crossmodels, df)
+            return self.analyze_seasonal(crossmodels, df)
         else:
-            self.analyze_annual(crossmodels, df)
+            return self.analyze_annual(crossmodels, df)
+        
 
     def analyze_seasonal(self, crossmodels, df):
         st.header("Time Period & Seasonal Comparison")
@@ -115,8 +115,12 @@ class DataVisualizer(ABC):
     def display_results(self, mean, std, figs):
         pass
 
-import matplotlib.pyplot as plt
-from src.data_vis.climrr_utils import categorize_fwi, fwi_color
+    def get_messages(self, table):
+        table = pd.DataFrame(table)
+        prompt = self.data_info['prompt'].format(table_markdown = table.to_markdown(), table_json = table.to_json())
+        messages = [{'role': 'system', 'content': "You are a helpful assistant that interprets climate data and relates it to specific user goals."},
+                     {'role': 'user', 'content': prompt}]
+        return messages
 
 class ClimRRSeasonalProjectionsFWI(DataVisualizer):
     def __init__(self):
@@ -130,7 +134,7 @@ class ClimRRSeasonalProjectionsFWI(DataVisualizer):
         season_columns = [col for col in df.columns if season in col and period in col]
         season_fwi_df = df[['Crossmodel'] + season_columns]
         col_name = season_columns[0]
-        season_fwi_df['class'] = season_fwi_df[col_name].apply(categorize_fwi)
+        season_fwi_df.loc[:, 'class'] = season_fwi_df[col_name].apply(categorize_fwi)
 
         fwi_df_geo = gpd.GeoDataFrame(crossmodels.merge(season_fwi_df, left_on='Crossmodel', right_on='Crossmodel'))
 
@@ -201,7 +205,6 @@ class ClimRRSeasonalProjectionsFWI(DataVisualizer):
                                      index=['spring', 'summer', 'autumn', 'winter'])
             
             display_table = table.map(lambda x: f"{x:.2f}") + ' (' + std_table.map(lambda x: f"{x:.2f}") + ')'
-            display_table = display_table + ' ' + table.map(categorize_fwi)
             
             st.caption("Mean FWI Values (Std Dev)")
             st.dataframe(display_table, use_container_width=True)
@@ -214,8 +217,10 @@ class ClimRRSeasonalProjectionsFWI(DataVisualizer):
             }
             st.dataframe(pd.DataFrame(data), hide_index=True, use_container_width=True)
             st.write("This table shows the classification of FWI values into risk categories.")    
+            display_table = display_table + ' ' + table.map(categorize_fwi)
 
-        return table, col3
+        messages = self.get_messages(display_table.transpose())
+        return col3, messages
     
 class ClimRRAnnualProjectionsPrecipitation(DataVisualizer):
     def __init__(self):
@@ -248,7 +253,7 @@ class ClimRRAnnualProjectionsPrecipitation(DataVisualizer):
         fig.subplots_adjust(bottom=0.5)
 
         norm = mcolors.Normalize(vmin=self.min_value, vmax=self.max_value)
-        cb = fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=self.color_scale), 
+        fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=self.color_scale), 
                           cax=ax, orientation='horizontal', label='Precipitation (mm)')
         
         buf = io.BytesIO()
@@ -300,8 +305,8 @@ class ClimRRAnnualProjectionsPrecipitation(DataVisualizer):
             st.write(f"Maximum: {self.max_value:.2f} mm")
             st.write("This shows the range of precipitation values in the dataset.")
 
-        self.add_legend()
-        return table, col3
+        messages = self.get_messages(table)
+        return col3, messages
 
 class ClimRRAnnualProjectionsCDNP(DataVisualizer):
     def __init__(self):
@@ -334,7 +339,7 @@ class ClimRRAnnualProjectionsCDNP(DataVisualizer):
         fig.subplots_adjust(bottom=0.5)
 
         norm = mcolors.Normalize(vmin=self.min_value, vmax=self.max_value)
-        cb = fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=self.color_scale), 
+        fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=self.color_scale), 
                           cax=ax, orientation='horizontal', label='Consecutive Days with No Precipitation')
         
         buf = io.BytesIO()
@@ -386,8 +391,8 @@ class ClimRRAnnualProjectionsCDNP(DataVisualizer):
             st.write(f"Maximum: {self.max_value:.2f} days")
             st.write("This shows the range of Consecutive Days with No Precipitation in the dataset.")
 
-        self.add_legend()
-        return table, col3
+        messages = self.get_messages(table)
+        return col3, messages
 
 class ClimRRAnnualProjectionsWindSpeed(DataVisualizer):
     def __init__(self):
@@ -420,7 +425,7 @@ class ClimRRAnnualProjectionsWindSpeed(DataVisualizer):
         fig.subplots_adjust(bottom=0.5)
 
         norm = mcolors.Normalize(vmin=self.min_value, vmax=self.max_value)
-        cb = fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=self.color_scale), 
+        fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=self.color_scale), 
                           cax=ax, orientation='horizontal', label='Wind Speed (m/s)')
         
         buf = io.BytesIO()
@@ -471,10 +476,10 @@ class ClimRRAnnualProjectionsWindSpeed(DataVisualizer):
             st.write(f"Maximum: {self.max_value:.2f} m/s")
             st.write("This shows the range of Wind Speed values in the dataset.")
 
-        self.add_legend()
-        return table, col3
+        messages = self.get_messages(table)
+        return col3, messages
 
-class ClimRRCoolingDegreeDays(DataVisualizer):
+class ClimRRAnnualProjectionsCoolingDegreeDays(DataVisualizer):
     def __init__(self):
         super().__init__('Cooling Degree Days projections')
 
@@ -506,7 +511,7 @@ class ClimRRCoolingDegreeDays(DataVisualizer):
         fig.subplots_adjust(bottom=0.5)
 
         norm = mcolors.Normalize(vmin=self.min_value, vmax=self.max_value)
-        cb = fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=self.color_scale), 
+        fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=self.color_scale), 
                           cax=ax, orientation='horizontal', label='Cooling Degree Days')
         
         buf = io.BytesIO()
@@ -557,8 +562,6 @@ class ClimRRCoolingDegreeDays(DataVisualizer):
             st.write(f"Maximum: {self.max_value:.2f}")
             st.write("This shows the range of Cooling Degree Days in the dataset.")
 
-        self.add_legend()
-
     def analyze(self, crossmodels):
         st.title(self.data_info['title'])
         st.write(self.data_info['subtitle'])
@@ -576,7 +579,7 @@ class ClimRRCoolingDegreeDays(DataVisualizer):
         df = df.drop(columns='Crossmodel')
         return df.mean(), df.std()
     
-class ClimRRHeatingDegreeDays(DataVisualizer):
+class ClimRRAnnualProjectionsHeatingDegreeDays(DataVisualizer):
     def __init__(self):
         super().__init__('Heating Degree Days projections')
 
@@ -608,7 +611,7 @@ class ClimRRHeatingDegreeDays(DataVisualizer):
         fig.subplots_adjust(bottom=0.5)
 
         norm = mcolors.Normalize(vmin=self.min_value, vmax=self.max_value)
-        cb = fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=self.color_scale), 
+        fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=self.color_scale), 
                           cax=ax, orientation='horizontal', label='Heating Degree Days')
         
         buf = io.BytesIO()
@@ -659,7 +662,8 @@ class ClimRRHeatingDegreeDays(DataVisualizer):
             st.write(f"Maximum: {self.max_value:.2f}")
             st.write("This shows the range of Heating Degree Days in the dataset.")
 
-        self.add_legend()
+        messages = self.get_messages(table)
+        return col3, messages
 
     def analyze(self, crossmodels):
         st.title(self.data_info['title'])
@@ -672,18 +676,18 @@ class ClimRRHeatingDegreeDays(DataVisualizer):
         st.header("Heating Degree Days Meta-Analysis")
         mean, std = self.calculate_statistics(df)
         fig = self.create_plot(mean)
-        self.display_results(mean, std, fig)
+        return self.display_results(mean, std, fig)
 
     def calculate_statistics(self, df):
         df = df.drop(columns='Crossmodel')
         return df.mean(), df.std()
     
 
-class ClimRRSeasonalTemperature(DataVisualizer):
+class ClimRRSeasonalProjectionsTemperature(DataVisualizer):
     def __init__(self, temp_type):
         self.temp_type = temp_type  # 'Maximum' or 'Minimum'
         super().__init__(f'Seasonal Temperature {temp_type} projections')
-        self.seasons = ['winter', 'spring', 'summer', 'autumn']
+        self.seasons = ['spring', 'summer', 'autumn', 'winter']
 
     def create_color_scale(self):
         return plt.cm.get_cmap('RdYlBu_r')  # Red (hot) to Blue (cold) color scale
@@ -710,7 +714,7 @@ class ClimRRSeasonalTemperature(DataVisualizer):
         fig.subplots_adjust(bottom=0.5)
 
         norm = mcolors.Normalize(vmin=self.min_value, vmax=self.max_value)
-        cb = fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=self.color_scale), 
+        fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=self.color_scale), 
                           cax=ax, orientation='horizontal', label=f'{self.temp_type} Temperature (°F)')
         
         buf = io.BytesIO()
@@ -741,7 +745,7 @@ class ClimRRSeasonalTemperature(DataVisualizer):
         
         fig2 = px.line(table, title=f'Mean {self.temp_type} Temperature Values Across Seasons and Time Periods',
                        labels={'value': 'Temperature (°F)', 'index': 'Season'},
-                       color_discrete_map={'Hist': '#4CAF50', 'Midc': '#FFC107', 'Endc': '#FF9800'})
+                       color_discrete_map={'hist': '#4CAF50', 'midc': '#FFC107', 'endc': '#FF9800'})
         
         for fig in [fig1, fig2]:
             fig.update_layout(legend_title_text='', legend=dict(traceorder='normal'),
@@ -776,7 +780,8 @@ class ClimRRSeasonalTemperature(DataVisualizer):
             st.write(f"Maximum: {self.max_value:.2f}°F")
             st.write(f"This shows the range of {self.temp_type} Temperature in the dataset.")
 
-        return table, col3
+        messages = self.get_messages(display_table.transpose())
+        return col3, messages
 
     def analyze(self, crossmodels):
         st.title(self.data_info['title'])
@@ -803,7 +808,7 @@ class ClimRRSeasonalTemperature(DataVisualizer):
         
         mean, std = self.calculate_statistics(df)
         figs = self.create_plots(mean)
-        self.display_results(mean, std, figs)
+        return self.display_results(mean, std, figs)
 
     def calculate_statistics(self, df):
         df = df.drop(columns='Crossmodel')

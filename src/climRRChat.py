@@ -7,13 +7,13 @@ import pandas as pd
 from streamlit_folium import st_folium
 import plotly.express as px
 from src.data_vis import analyze_wildfire_perimeters, analyze_census_data
-from src.data_vis.climrr import ClimRRSeasonalTemperature
+from src.data_vis.climrr import ClimRRSeasonalProjectionsTemperature
 st.set_page_config(layout="wide")
 from src.llms import OpenSourceModels
 import re
 import json
 
-analyze_fwi = ClimRRSeasonalTemperature("Minimum").analyze
+analyze_fwi = ClimRRSeasonalProjectionsTemperature("Minimum").analyze
 get_response = OpenSourceModels(model='gemma2').get_response
 
 st.title("FWI Map Display")

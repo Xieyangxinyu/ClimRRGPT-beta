@@ -1,0 +1,33 @@
+prompt: |
+  Analyze the following census data for a specific region, focusing on wildfire risk and infrastructure resilience:
+
+  Regional Summary:
+  - Total Population: {total_population}
+  - Total Housing Units: {total_housing_units}
+  - Median Household Income: {median_household_income}
+  - Poverty Rate: {total_poverty_rate}
+  - Elderly Population Rate: {elderly_population_rate}
+  - Single Unit Housing Rate: {single_unit_housing_rate}
+  - New Housing Rate (built 2010 or later): {new_housing_rate}
+  - No Vehicle Available Rate: {no_vehicle_rate}
+  - Internet Access Rate: {internet_access_rate}
+
+  Based on this data, please provide an analysis tailored to my goals. You may start with the following points:
+
+  1. Vulnerability Assessment:
+     - How might the elderly population rate impact evacuation efforts in case of a wildfire?
+     - What challenges could arise from the proportion of households without vehicles in terms of evacuation?
+
+  2. Housing and Infrastructure:
+     - What implications does the single unit housing rate have for wildfire spread and firefighting efforts?
+     - How might the age of housing structures (new housing rate) affect their resilience to wildfires?
+     - How could internet access rates influence emergency communications and early warning systems?
+
+  3. Economic Factors:
+     - How might median household income relate to residents' ability to implement fire safety measures or recover from wildfire damage?
+
+  4. Overall Risk Profile:
+     - Based on these factors, assess the overall wildfire risk profile of this region.
+     - Identify which aspects make the region most vulnerable and which provide resilience.
+
+  Please provide a detailed analysis addressing these points and any other insights you can derive from the given information. Your analysis should be tailored to my goals. Your analysis should be within 150-200 words.

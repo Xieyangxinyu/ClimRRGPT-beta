@@ -1,4 +1,4 @@
-model: 'gemma2'
+model: gemma2
 
 init_questions:
   Profession: What is your profession?

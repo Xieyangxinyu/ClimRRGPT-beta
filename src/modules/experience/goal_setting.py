@@ -3,12 +3,13 @@ from src.llms import OpenSourceModels
 from src.utils import stream_static_text, load_config
 from st_pages import add_page_title
 import json
+from src.modules.experience.util import format_to_json
 import re
 
 add_page_title(initial_sidebar_state="collapsed", layout="wide")
 
-st.session_state.config = load_config("./src/modules/pages/goal_setting.yml")
-available_datasets = load_config("./src/modules/pages/dataset_description.yml")['available_datasets']
+st.session_state.config = load_config("./src/modules/experience/goal_setting.yml")
+available_datasets = load_config("./src/modules/experience/dataset_description.yml")['available_datasets']
 get_response = OpenSourceModels(model=st.session_state.config['model']).get_response
 
 def initialize_session_state():
@@ -28,7 +29,7 @@ def initialize_session_state():
 
 def stream_handler(stream):
     response = ''
-    keys=['Goal1', 'Goal2', 'Goal3']
+    keys=['Goal1', 'Goal2', 'Goal3', 'goal1', 'goal2', 'goal3', 'Goal 1', 'Goal 2', 'Goal 3']
     number_of_keys_hit = 0
     keys_hit = []
     progress_bar = st.progress(0)
@@ -38,7 +39,7 @@ def stream_handler(stream):
             if key in response and key not in keys_hit:
                 number_of_keys_hit += 1
                 keys_hit.append(key)
-                progress_bar.progress(number_of_keys_hit / len(keys))
+                progress_bar.progress(number_of_keys_hit / 3)
     return response
 
 def parse_goals(response):
@@ -60,7 +61,8 @@ def parse_goals(response):
 
     valid_entries = []
     for entry in parsed_data:
-        if entry in ["Goal1", "Goal2", "Goal3"]:
+        print(entry)
+        if entry in ["Goal1", "Goal2", "Goal3", "goal1", "goal2", "goal3", "Goal 1", "Goal 2", "Goal 3"]:
             valid_entries.append(parsed_data[entry])
     if len(valid_entries) < 3:
         return []
@@ -70,11 +72,11 @@ def parse_goals(response):
 if ("profile_done" not in st.session_state) or not st.session_state.profile_done:
     st.write(st.session_state.config["profile_not_complete_message"])
     if st.button("Complete My Profile"):
-        st.switch_page("pages/profile.py")
+        st.switch_page("experience/profile.py")
 elif not "questions_done" in st.session_state or not st.session_state.questions_done:
         st.write(st.session_state.config["questions_not_done_message"])
         if st.button("Identify Questions to Investigate From Scientific Literature"):
-            st.switch_page("pages/question_identification.py")
+            st.switch_page("experience/question_identification.py")
 else:
     initialize_session_state()
 
@@ -92,7 +94,7 @@ else:
                 st.rerun()
         with col2:
             if st.button("Let's Move On", use_container_width=True):
-                st.switch_page("pages/data_visualization.py")
+                st.switch_page("experience/data_visualization.py")
     if not st.session_state.goals_saved:
         st.write(st.session_state.config["welcome_message"])
         with st.expander("Instructions"):
@@ -114,13 +116,14 @@ else:
         with col2:
             # list the datasets to analyze
             st.write("### Datasets to Analyze")
-            dataset_text = ""
+            chosen_datasets = {}
             for dataset in st.session_state.selected_datasets:
                 with st.expander(dataset, expanded=False):
                     st.markdown(f"**Description:** {available_datasets[dataset]['description']}")
                     st.markdown(f"**Instruction:** {available_datasets[dataset]['instruction']}")
-                    dataset_text += f"{dataset}: {available_datasets[dataset]['description']}\n{available_datasets[dataset]['instruction']}\n\n"
-            messages.append({"role": "user", "content": "I have chosen the following datasets to analyze:\n" + dataset_text})
+                    
+                chosen_datasets[dataset] = {key: available_datasets[dataset][key] for key in ["description", "instruction"]}
+            messages.append({"role": "user", "content": f"I have chosen the following datasets to analyze:{format_to_json([chosen_datasets])}"})
             
             # list the questions
             st.write("### Questions to Investigate")
@@ -130,8 +133,14 @@ else:
                 questions_text += f"- {question}\n"
             messages.append({"role": "user", "content": "I have chosen the following questions to investigate from scientifi literature:\n" + questions_text})
 
-            messages.append({"role": "user", "content": "Suggest a list of 3 goals that I can work on to achieve my goal with the datasets and questions I have chosen. Focus on my profile. Each goal should be a specific task in one sentence. Because this is an exploratory project, I cannot make any projections or predictions. Please focus on delivering insights and recommendations. Output in a JSON format using this template:\n\n```json\n{\n  \"Goal1\": \"\",\n  \"Goal2\": \"\",\n  \"Goal3\": \"\"\n}\n```"})
+            template = format_to_json([{
+                "Goal1": "...",
+                "Goal2": "...",
+                "Goal3": "...",
+            }])
 
+            messages.append({"role": "user", "content": f"Suggest a list of 3 goals that I can work on to achieve my goal with the datasets and questions I have chosen. Focus on my profile. Each goal should be a specific task in one sentence. Because this is an exploratory project, I cannot make any projections or predictions. Please focus on delivering insights and recommendations. Output in a JSON format using this template:\n\n{template}"})
+        
         st.write("### Goals to Achieve")
 
         # Initialize session state for custom goals if not already present
@@ -160,12 +169,11 @@ else:
                             stream=True, 
                             options={"top_p": 0.95, "max_tokens": 256, "temperature": 0.7}
                         )
-
                     # parse the response into the introduction passage and the JSON list
                         
                     st.session_state.goals_recommendation = parse_goals(response)
                     while len(st.session_state.goals_recommendation) == 0:
-                        response = get_response(messages=messages, 
+                        response = get_response(messages=messages, stream_handler=stream_handler,
                             options={"top_p": 0.95, "max_tokens": 256, "temperature": 0.7}
                         )
                         st.session_state.goals_recommendation = parse_goals(response)

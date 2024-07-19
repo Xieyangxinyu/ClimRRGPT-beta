@@ -1,0 +1,22 @@
+model: gemma2
+
+welcome_message: |
+  ## Ignite Your Understanding of Wildfire Risks!
+
+  Ready to become a wildfire detective? You're in the right place! 🕵️‍♂️🔍
+
+  Click the Instructions below and let's embark on an fiery adventure through data!
+
+
+instruction_message: |
+  1. 🗺️ **Enter Location**: Type in the general area you want to analyze (e.g., "Los Angeles, California").
+  2. 🖌️ **Draw on Map**: Use the drawing tools to select specific areas of interest:
+      - Click the square icon to draw rectangles
+      - Click the circle icon to draw circles
+      - Click the polygon icon to draw custom shapes
+      - Click the circlemarker icon to draw points
+  3. 💥 **Save Your Drawing**: Double-click the "Double Click Me to Save Drawing and Update Grid Map" button to process your selection.
+  4. 🤖 **Analyze Data**: Once the grid cells turn green, click "Generate AI Analysis" to get insights about your dataset.
+  
+  Remember, you can draw multiple shapes to analyze different areas simultaneously!
+  

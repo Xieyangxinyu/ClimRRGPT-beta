@@ -1,5 +1,4 @@
 import pandas as pd
-import streamlit as st
 
 def categorize_fwi(value):
         """Categorize the FWI value into its corresponding class and return the value and category."""

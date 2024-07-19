@@ -1,0 +1,121 @@
+available_datasets:
+  Fire Weather Index (FWI) projections:
+    description: The Fire Weather Index (FWI) estimates wildfire danger using weather conditions that influence the spread of wildfires. The FWI is comprised of multiple components that are developed using daily readings of temperature, relative humidity, wind speed, and 24-hour precipitation. The FWI is useful for evaluating weather-based conditions that heighten the danger of wildfire spread once ignition has occurred; it does not account for sources of ignition, which can have both natural and human causes. The FWI is used to assess the potential trends fire danger towards the Mid-Century (2045 - 2054) and the end of the Century (2085 - 2094), and compare against the historical period (1995 - 2004). The climate scenario modeled in this data is RCP8.5,i.e. human GHG emissions continue to rise throughout the 21st century. 
+    instruction: |
+      Choose this dataset if you want to analyze the trends in fire danger and understand the potential changes in fire risk in these three time periods: historical(1995 - 2004), mid-century(2045 - 2054), and end of the century(2085 - 2094). It also allows you to understand seasonal variations in fire risks.
+    note: Climate scenarios are the set of conditions used to represent estimates of future greenhouse gas (GHG) concentrations in the atmosphere. Climate models then evaluate how these GHG concentrations affect future (projected) climate. RCPs stands for Representative Concentration Pathways.
+    links: 
+      - name: ClimRR data
+        url: https://climrr.anl.gov/
+      - name: Canadian Forest Fire Weather Index (FWI)
+        url: https://cfs.nrcan.gc.ca/pubwarehouse/pdfs/19927.pdf
+      - name: Download Source
+        url: https://anl.app.box.com/s/hmkkgkrkzxxocfe9kpgrzk2gfc4gizp8
+  Seasonal Temperature Maximum projections:
+    description: This dataset provides historical and projected seasonal maximum temperature values. It allows you to explore how the highest temperatures in each season may change over time, from the historical period (1995-2004) to the mid-century (2045-2054) and end-century (2085-2094) under the RCP 8.5 climate scenario. Higher values indicate higher maximum temperatures. Analyzing this data can help understand potential temperature extremes and their implications for wildfire risk, human health, agriculture, and more.
+    instruction: Choose this dataset if you want to investigate how the maximum temperatures in each season (winter, spring, summer, autumn) are projected to change from historical levels to mid-century and end-century periods. This can provide insights into potential heat extremes and their impacts across different seasons.
+    links:
+      - name: ClimRR data
+        url: https://climrr.anl.gov/
+       
+  Seasonal Temperature Minimum projections: 
+    description: |
+      This dataset provides historical and projected seasonal minimum temperature values. It allows you to explore how the lowest temperatures in each season may change over time, from the historical period (1995-2004) to the mid-century (2045-2054) and end-century (2085-2094) under the RCP 8.5 climate scenario. Higher values indicate higher minimum temperatures. Analyzing this data can help understand changes in cold extremes and their implications for ecosystems, agriculture, energy demand, and more.
+    instruction: |
+      Choose this dataset if you want to investigate how the minimum temperatures in each season (winter, spring, summer, autumn) are projected to change from historical levels to mid-century and end-century periods. This can provide insights into potential changes in cold extremes and their impacts across different seasons.
+    links:
+      - name: ClimRR data
+        url: https://climrr.anl.gov/
+        
+  Precipitation projections:
+    description: |
+      This dataset provides historical and projected annual total precipitation values. It allows you to explore how the total amount of precipitation over a year may change from the historical period (1995-2004) to the mid-century (2045-2054) and end-century (2085-2094) under the RCP 8.5 climate scenario. Higher values indicate higher total precipitation. Analyzing this data can help understand potential changes in water availability, flood risk, drought likelihood, and their implications for wildfire risk, agriculture, ecosystems, and more.
+    instruction: |
+      Choose this dataset if you want to investigate how the total annual precipitation is projected to change from historical levels to mid-century and end-century periods. This can provide insights into potential changes in water availability and related impacts.
+    links:
+      - name: ClimRR data
+        url: https://climrr.anl.gov/
+        
+  Consecutive Dry Days projections:
+    description: |
+      This dataset provides historical and projected values for the maximum number of consecutive days with no precipitation (dry days). It allows you to explore how the duration of dry periods may change from the historical period (1995-2004) to the mid-century (2045-2054) and end-century (2085-2094) under the RCP 8.5 climate scenario. Higher values indicate longer periods without precipitation. Analyzing this data can help understand potential changes in drought risk, wildfire danger, water stress for crops and ecosystems, and more.
+    instruction: |  
+      Choose this dataset if you want to investigate how the maximum number of consecutive dry days is projected to change from historical levels to mid-century and end-century periods. This can provide insights into potential changes in drought risk and related impacts.
+    links:
+      - name: ClimRR data
+        url: https://climrr.anl.gov/
+        
+  Wind Speed projections:
+    description: |
+      This dataset provides historical and projected average wind speed values. It allows you to explore how wind speeds may change from the historical period (1995-2004) to the mid-century (2045-2054) and end-century (2085-2094) under the RCP 8.5 climate scenario. Higher values indicate higher average wind speeds. Wind speed influences wildfire behavior, renewable energy potential, building design requirements, and more.
+    instruction: |
+      Choose this dataset if you want to investigate how average wind speeds are projected to change from historical levels to mid-century and end-century periods. This can provide insights into potential changes in wildfire behavior, wind energy resources, and other wind-related impacts.  
+    links:
+      - name: ClimRR data 
+        url: https://climrr.anl.gov/
+        
+  Cooling Degree Days projections:
+    description: |
+      This dataset provides historical and projected cooling degree days (CDD) values. CDD is a measure of how much (in degrees) and for how long (in days) the outside air temperature is above a certain level, indicating the need for air conditioning to maintain indoor comfort. It allows you to explore how cooling energy demands may change from the historical period (1995-2004) to the mid-century (2045-2054) under the RCP 8.5 climate scenario. Higher CDD values indicate higher cooling requirements. Analyzing this data can help understand potential changes in energy demand for space cooling, which has implications for energy planning, costs, and emissions.
+    instruction: |
+      Choose this dataset if you want to investigate how cooling degree days are projected to change from historical levels to mid-century. This can provide insights into potential changes in cooling energy demands and related impacts on energy systems and costs.
+    links:  
+      - name: ClimRR data
+        url: https://climrr.anl.gov/
+        
+  Heating Degree Days projections:
+    description: |  
+      This dataset provides historical and projected heating degree days (HDD) values. HDD is a measure of how much (in degrees) and for how long (in days) the outside air temperature is below a certain level, indicating the need for heating to maintain indoor comfort. It allows you to explore how heating energy demands may change from the historical period (1995-2004) to the mid-century (2045-2054) under the RCP 8.5 climate scenario. Higher HDD values indicate higher heating requirements. Analyzing this data can help understand potential changes in energy demand for space heating, which has implications for energy planning, costs, and emissions.
+    instruction: |
+      Choose this dataset if you want to investigate how heating degree days are projected to change from historical levels to mid-century. This can provide insights into potential changes in heating energy demands and related impacts on energy systems and costs.
+    links:
+      - name: ClimRR data  
+        url: https://climrr.anl.gov/
+    
+
+  Long term fire history records:
+    description: The metadata from the North American Tree-ring Fire Scar Synthesis (NAFSS) provides a rich dataset including scientific studies derived from the annually- to sub-annually-resolved tree-ring records of fire spanning centuries. The dataset covers a range from the year 0 AD up to the year 2019 AD, or 1950 to -69 in calendar years before present (BP). This dataset can be instrumental in analyzing wildfire risk by providing historical context and identifying interactions among fire, climate, topography, vegetation, and humans. 
+    instruction: Choose this dataset if you want to analyze the long-term historical wildfire patterns. Notice that the dataset is in the form of scientific publications, and you may need to extract the data from the publications for further analysis. Moreover, this dataset doesn't cover most of the regions in the United States.
+    links: 
+      - name: NAFSS
+        url: https://research.fs.usda.gov/treesearch/64527
+      - name: Download Source
+        url: https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=noaa-fire-34853
+  
+  Recent fire incident data: 
+    description: The Wildland Fire Interagency Geospatial Services (WFIGS) Group wildfire incidents record allows you to retrieve yearly and monthly wildfire incident counts between 2020 and 2024, as well as burned areas of each fire. 
+    instruction: Choose this dataset if you want to analyze the recent fire incidents in the area and make recommendations on immediate actions to mitigate the risks.
+    note: We only include wildfire (WF) incidents categorized in the IRWIN (Integrated Reporting of Wildland Fire Information) integration service (you may also find the prescribed fire (PF) incidents in the source dataset linked below).
+    links:
+      - name: National Interagency Fire Center
+        url: https://www.nifc.gov/
+      - name: Wildland Fire Interagency Geospatial Services (WFIGS)
+        url: https://data-nifc.opendata.arcgis.com/experience/wfigs-page
+      - name: Download Source
+        url: https://data-nifc.opendata.arcgis.com/datasets/nifc::wfigs-interagency-fire-perimeters/about
+
+  Census data: 
+    description: |
+      This dataset is a comprehensive subset of the 2022 American Community Survey 5-Year Data, focusing on factors relevant to wildfire risk and infrastructure resilience. It includes:
+      - Population demographics (total population, elderly population)
+      - Housing characteristics (total units, single-unit structures, new housing)
+      - Economic indicators (median household income, poverty rates)
+      - Infrastructure data (vehicle availability, internet access)
+      This data is provided at the census block group level for the analyzed region.
+
+    instruction: |
+      Use this dataset to conduct a multi-faceted analysis of the region's vulnerability to wildfires and its infrastructure resilience. Consider:
+      1. How demographic factors (e.g., elderly population, poverty rates) might affect evacuation capabilities and overall community resilience.
+      2. The implications of housing characteristics on wildfire spread and firefighting efforts.
+      3. How economic factors might influence residents' ability to prepare for, respond to, and recover from wildfires.
+      4. The role of infrastructure (e.g., vehicle availability, internet access) in emergency communications and evacuation planning.
+      5. Recommendations for improving the region's wildfire preparedness and response strategies based on these socioeconomic and infrastructure indicators.
+
+    links:
+      - name: US Census Bureau
+        url: https://www.census.gov/
+      - name: American Community Survey 5-Year Data
+        url: https://www.census.gov/data/developers/data-sets/acs-5year.html
+      - name: Python Package
+        url: https://pypi.org/project/census/
+

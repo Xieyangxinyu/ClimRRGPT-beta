@@ -1,4 +1,4 @@
-model: 'gemma2'
+model: gemma2
 
 profile_not_complete_message: |
   Welcome! It looks like you haven't completed your profile yet.

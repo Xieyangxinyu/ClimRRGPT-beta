@@ -5,7 +5,7 @@ from st_pages import add_page_title
 
 add_page_title(initial_sidebar_state="collapsed")
 
-st.session_state.config = load_config("./src/modules/pages/profile.yml")
+st.session_state.config = load_config("./src/modules/experience/profile.yml")
 
 @st.cache_data
 def load_config_wrapper():
@@ -127,7 +127,7 @@ else:
     
     st.markdown("Congratulations! You have successfully completed your profile!")
 
-    st.markdown("🚀 Now let's identify some deliverables we can achieve together today. 🚀")
+    st.markdown("🚀 Now let's identify some datasets we can analyze together today. 🚀")
     # Add a button to jump to the goals page
     col1, col2  = st.columns(2)
     with col1:
@@ -136,7 +136,7 @@ else:
             st.session_state.profile_done = False
             st.rerun()
     with col2:
-        if st.button("Set Deliverables", use_container_width=True):
+        if st.button("Next Step", use_container_width=True):
             # remove the instruction message key from the session state
             del st.session_state['instruction_message']
-            st.switch_page("pages/dataset_recommendations.py")
+            st.switch_page("experience/dataset_recommendations.py")
