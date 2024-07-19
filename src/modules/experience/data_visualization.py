@@ -164,6 +164,8 @@ elif not st.session_state.location_confirmed:
             if st.button("Confirm Location"):
                 if st.session_state.crossmodel is None:
                     st.warning("Please draw a shape on the map to confirm the location.")
+                elif output['zoom'] != st.session_state.zoom:
+                    st.warning("It seems like you've changed the zoom level. Please save the drawing again.")
                 else:
                     st.session_state.location_confirmed = True
                     st.rerun()
@@ -191,8 +193,8 @@ else:
             if dataset in st.session_state.analysis.keys():
                 st.write(st.session_state.analysis[dataset])
 
+    col1, col2, col3 = st.columns(3)
     if len(st.session_state.analysis) == len(st.session_state.selected_datasets):
-        col1, col2, col3 = st.columns(3)
         with col1:
             st.generate_summary = st.button("Generate Summary", use_container_width=True)
         if st.generate_summary:
@@ -213,11 +215,13 @@ else:
         if "data_analysis_summary" in st.session_state:
             with st.chat_message("assistant"):
                 st.write(st.session_state.data_analysis_summary)
-        with col2:
-            if st.button("Change Location", use_container_width=True):
-                st.session_state.location_confirmed = False
-                st.session_state.analysis = {}
-                st.rerun()
-        with col3:
-            if st.button("Move on to Literature Review", use_container_width=True):
-                st.switch_page("experience/literature_review.py")
+    with col2:
+        if st.button("Change Location", use_container_width=True):
+            st.session_state.location_confirmed = False
+            st.session_state.crossmodel = None
+            st.session_state.all_drawings = []
+            st.session_state.analysis = {}
+            st.rerun()
+    with col3:
+        if st.button("Move on to Literature Review", use_container_width=True):
+            st.switch_page("experience/literature_review.py")

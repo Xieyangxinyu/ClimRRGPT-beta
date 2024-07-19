@@ -45,10 +45,21 @@ class DataVisualizer(ABC):
             with cols[i]:
                 m = self.get_map(crossmodels, df, period, season)
                 st.caption(captions[i])
-                st_folium(m, width=450, height=350, key=f"{self.keyword}_{season}_{period}")
+                st_folium(m, width=450, height=450, key=f"{self.keyword}_{season}_{period}")
         self.add_legend()
 
     def map_comparing_period_by_choosing_season(self, crossmodels, df):
+        custom_css = """
+            <style>
+            div[role="radiogroup"] label:nth-child(1) span {color: #4CAF50;}  /* spring */
+            div[role="radiogroup"] label:nth-child(2) span {color: #FFC107;}  /* summer */
+            div[role="radiogroup"] label:nth-child(3) span {color: #FF9800;}  /* autumn */
+            div[role="radiogroup"] label:nth-child(4) span {color: #2196F3;}  /* winter */
+            </style>
+        """
+
+        # Inject custom CSS
+        st.markdown(custom_css, unsafe_allow_html=True)
         season = st.radio('Select Season:', ['spring', 'summer', 'autumn', 'winter'], horizontal=True, key = f"{self.keyword}_season")
         self.map_comparing_period(crossmodels, df, season)
 
@@ -60,7 +71,7 @@ class DataVisualizer(ABC):
             with cols[i]:
                 m = self.get_map(crossmodels, df, period, season)
                 st.caption(season)
-                st_folium(m, width=350, height=350, key=f"{self.keyword}_{season}_{period}_2")
+                st_folium(m, width=350, height=450, key=f"{self.keyword}_{season}_{period}_2")
         self.add_legend()
 
     def analyze(self, crossmodels):
@@ -227,7 +238,7 @@ class ClimRRAnnualProjectionsPrecipitation(DataVisualizer):
         super().__init__('Precipitation projections')
 
     def create_color_scale(self):
-        return plt.cm.get_cmap('YlOrRd')
+        return plt.cm.get_cmap('YlGnBu')
 
     def get_map(self, crossmodels, df, period, season='spring'):
         columns = [col for col in df.columns if period in col]

@@ -46,6 +46,7 @@ def get_us_states():
 
 def analyze_census_data(cross_model):
     st.title("Census Data")
+    st.write("This analysis, derived from the 2022 American Community Survey 5-Year Data, focuses on factors relevant to wildfire risk and infrastructure resilience. It includes population demographics, housing characteristics, economic indicators, and infrastructure data at the census block group level. You can view summary statistics, visualize data on a map, and get AI-generated insights about the region's characteristics. Use the dropdown menu to select different metrics and examine patterns across block groups.")
     c = Census("93c3297165ad8b5b6c81e0ed9e2e44a38e56224f")
 
     # Get all state-level census tracts that cross_model is intersecting
@@ -203,6 +204,7 @@ def analyze_census_data(cross_model):
         missing_data = combined_bg_df[['B01003_001E', 'B25001_001E', 'B19013_001E', 'elderly_population_rate', 
                                     'single_unit_housing_rate', 'new_housing_rate', 'no_vehicle_rate', 'internet_access_rate']].isnull().sum()
         missing_data.rename(index=rename_dict, inplace=True)
+        missing_data.columns = ['', 'Missing Data Count']
         if missing_data.sum() > 0:
             st.write("**Missing Data Information**")
             st.write(missing_data[missing_data > 0])

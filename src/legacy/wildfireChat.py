@@ -160,7 +160,7 @@ if st.session_state.location_confirmed == False:
     # Add a click listener to the map
     m.add_child(folium.ClickForMarker(popup='Clicked Location'))
     m.add_child(folium.LatLngPopup())
-    map = st_folium(m, height=350, width=700)
+    map = st_folium(m, height=450, width=700)
 
     try:
         data = (map['last_clicked']['lat'],map['last_clicked']['lng'])
@@ -176,7 +176,7 @@ if st.session_state.location_confirmed == False:
         ).add_to(m2)
         stream_static_text(f"Clicked Coordinates:{data}. The location, with radius 36km, has been shown on the map below. Please confirm the location by clicking the 'Confirm Location' button.")
         folium.Marker(location=[data[0], data[1]], popup='Initial Location').add_to(m2)
-        st_folium(m2, height=350, width=700)
+        st_folium(m2, height=450, width=700)
     except:
         data = [lat, lon]
         
