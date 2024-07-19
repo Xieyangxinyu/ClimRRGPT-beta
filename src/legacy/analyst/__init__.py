@@ -1,0 +1,1 @@
+from src.legacy.analyst.analyst_assistant import AnalystAssistant

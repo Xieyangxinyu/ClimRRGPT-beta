@@ -1,1 +1,0 @@
-from src.assistants.analyst.analyst_assistant import AnalystAssistant

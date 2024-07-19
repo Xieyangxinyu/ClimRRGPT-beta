@@ -5,7 +5,7 @@ import pydeck as pdk
 import plotly.graph_objects as go
 import pandas as pd
 from shapely.geometry import Point
-from src.assistants.analyst.utils import get_pin_layer, MapDisplay
+from src.legacy.analyst.utils import get_pin_layer, MapDisplay
 c = Census("93c3297165ad8b5b6c81e0ed9e2e44a38e56224f")
 
 def get_census_info(lon: float, lat: float) -> str:

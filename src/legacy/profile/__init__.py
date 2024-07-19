@@ -1,0 +1,1 @@
+from src.legacy.profile.checklist_assistant import ChecklistAssistant

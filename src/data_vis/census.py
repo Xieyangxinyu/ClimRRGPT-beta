@@ -28,13 +28,13 @@ def format_value(value, format_spec):
     except ValueError:
         return str(value)
     
-# Function to safely calculate and format rates
-def format_rate(series, total_series=None):
-    if total_series is not None:
-        rate = safe_sum(series) / safe_sum(total_series)
-    else:
-        rate = safe_mean(series)
-    return f"{rate:.2%}" if pd.notnull(rate) else "Data not available"
+def safe_rate(numerator, denominator):
+    if numerator is None or denominator is None or denominator == 0:
+        return None
+    return numerator / denominator
+
+def sum_rows_ignore_na(df, columns):
+    return df[columns].sum(axis=1, skipna=True)
 
 @st.cache_data
 def get_state_bg(state_code):
@@ -103,7 +103,6 @@ def analyze_census_data(cross_model):
     combined_bg_df = pd.concat(state_dfs, ignore_index=True)
     combined_bg_df['poverty_count'] = combined_bg_df['C17002_002E'] + combined_bg_df['C17002_003E'] 
     combined_bg_df['poverty_rate'] = combined_bg_df['poverty_count'] / combined_bg_df['B01003_001E']
-    combined_bg_df['poverty_rate'] = combined_bg_df['poverty_rate'].fillna(0)
     combined_bg_df['elderly_population'] = combined_bg_df['B01001_020E'] + combined_bg_df['B01001_021E'] + combined_bg_df['B01001_022E'] + combined_bg_df['B01001_023E'] + combined_bg_df['B01001_024E'] + combined_bg_df['B01001_025E']
     combined_bg_df['elderly_population_rate'] = combined_bg_df['elderly_population'] / combined_bg_df['B01003_001E']
     combined_bg_df['single_unit_housing_rate'] = (combined_bg_df['B25024_002E'] + combined_bg_df['B25024_003E']) / combined_bg_df['B25001_001E']
@@ -166,20 +165,29 @@ def analyze_census_data(cross_model):
     with col2:
         st.write("**Regional Summary**")
 
-        # Calculate total population and housing units
+        # Check for existence of columns and calculate sums
         total_population = safe_sum(combined_bg_df['B01003_001E'])
         total_housing_units = safe_sum(combined_bg_df['B25001_001E'])
-        total_poverty_rate = combined_bg_df['poverty_count'].sum() / total_population
-        total_poverty_rate = combined_bg_df['poverty_count'].sum() / total_population
-        elderly_population_rate = combined_bg_df['elderly_population'].sum() / total_population
-        single_unit_housing_rate = (combined_bg_df['B25024_002E'].sum() + combined_bg_df['B25024_003E'].sum()) / total_housing_units
-        new_housing_rate = (combined_bg_df['B25034_010E'].sum() + combined_bg_df['B25034_011E'].sum()) / total_housing_units
-        no_vehicle_rate = combined_bg_df['B08201_002E'].sum() / total_housing_units
-        internet_access_rate = (combined_bg_df['B28002_004E'].sum() + combined_bg_df['B28002_012E'].sum()) / total_housing_units
+        poverty_count = safe_sum(combined_bg_df['poverty_count'])
+        elderly_population = safe_sum(combined_bg_df['elderly_population'])
 
+        # Sum rows for multi-column calculations
+        single_unit_housing = safe_sum(sum_rows_ignore_na(combined_bg_df, ['B25024_002E', 'B25024_003E']))
+        new_housing = safe_sum(sum_rows_ignore_na(combined_bg_df, ['B25034_010E', 'B25034_011E']))
+        no_vehicle = safe_sum(combined_bg_df['B08201_002E'])
+        internet_access = safe_sum(sum_rows_ignore_na(combined_bg_df, ['B28002_004E', 'B28002_012E']))
 
-        # Calculate median household income, handling potential missing values
-        median_household_income = combined_bg_df['B19013_001E'].median(skipna=True)
+        # Calculate rates
+        total_poverty_rate = safe_rate(poverty_count, total_population)
+        elderly_population_rate = safe_rate(elderly_population, total_population)
+        single_unit_housing_rate = safe_rate(single_unit_housing, total_housing_units)
+        new_housing_rate = safe_rate(new_housing, total_housing_units)
+        no_vehicle_rate = safe_rate(no_vehicle, total_housing_units)
+        internet_access_rate = safe_rate(internet_access, total_housing_units)
+
+        # Calculate median household income
+        median_household_income = combined_bg_df['B19013_001E'].median() if 'B19013_001E' in combined_bg_df.columns else None
+
 
         st.write(f"Total Population: {format_value(total_population, '{:,}')}")
         st.write(f"Total Housing Units: {format_value(total_housing_units, '{:,}')}")

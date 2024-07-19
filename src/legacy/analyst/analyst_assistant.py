@@ -1,10 +1,10 @@
-from src.assistants.assistant import Assistant
-from src.assistants.analyst.FWI import FWI_retrieval
-from src.assistants.analyst.history import long_term_fire_history_records
-from src.assistants.analyst.incident import recent_fire_incident_data
-from src.assistants.analyst.literature import literature_search
-from src.assistants.analyst.census import get_census_info
-from src.assistants.analyst.utils import display_maps, display_plots
+from src.legacy.assistant import Assistant
+from src.legacy.analyst.FWI import FWI_retrieval
+from src.legacy.analyst.history import long_term_fire_history_records
+from src.legacy.analyst.incident import recent_fire_incident_data
+from src.legacy.analyst.literature import literature_search
+from src.legacy.analyst.census import get_census_info
+from src.legacy.analyst.utils import display_maps, display_plots
 from src.config import client
 import streamlit as st
 from src.utils import get_openai_response_with_retries, stream_static_text, get_conversation_summary, TEXT_CURSOR

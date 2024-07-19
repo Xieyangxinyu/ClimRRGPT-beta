@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 import pydeck as pdk
-from src.assistants.analyst.utils import get_pin_layer, MapDisplay
+from src.legacy.analyst.utils import get_pin_layer, MapDisplay
 
 class FWIMapDisplay(MapDisplay):
     def display(self):

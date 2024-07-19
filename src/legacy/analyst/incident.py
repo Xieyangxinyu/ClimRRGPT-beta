@@ -2,7 +2,7 @@ import pandas as pd
 import plotly.subplots as sp
 import plotly.graph_objects as go
 import pydeck as pdk
-from src.assistants.analyst.utils import get_pin_layer, MapDisplay
+from src.legacy.analyst.utils import get_pin_layer, MapDisplay
 
 
 def prune_data(source_file = "./data/Wildland_Fire_Incident_Locations.csv"):

@@ -1,6 +1,6 @@
 from src.utils import get_assistant, create_thread, load_config
 from src.config import client
-from src.assistants.stream import check_tool_call, manage_tool_call, check_message_delta, get_text_stream, get_text_delta
+from src.legacy.stream import check_tool_call, manage_tool_call, check_message_delta, get_text_stream, get_text_delta
 import json
 import streamlit as st
 from abc import ABC, abstractmethod

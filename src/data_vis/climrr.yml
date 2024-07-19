@@ -1,5 +1,5 @@
 Fire Weather Index (FWI) projections:
-  path: ./data/FireWeatherIndex_Wildfire.csv
+  path: data/climrr/FireWeatherIndex_Wildfire.csv
   values_of_interests: [
       'wildfire_spring_Hist', 'wildfire_spring_Midc', 'wildfire_spring_Endc', 
       'wildfire_summer_Hist', 'wildfire_summer_Midc', 'wildfire_summer_Endc',

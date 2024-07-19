@@ -2,7 +2,7 @@ from geopy.distance import geodesic
 import numpy as np
 import pandas as pd
 import requests
-from src.assistants.analyst.utils import get_pin_layer, MapDisplay
+from src.legacy.analyst.utils import get_pin_layer, MapDisplay
 import json
 import pydeck as pdk
 

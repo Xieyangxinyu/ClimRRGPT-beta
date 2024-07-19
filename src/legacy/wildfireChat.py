@@ -1,8 +1,8 @@
-from src.assistants.assistant_router import AssistantRouter
+from src.legacy.assistant_router import AssistantRouter
 import streamlit as st
 import clipboard
 import json
-from src.assistants.analyst.utils import display_maps, display_plots
+from src.legacy.analyst.utils import display_maps, display_plots
 import folium
 from streamlit_folium import st_folium
 import pickle

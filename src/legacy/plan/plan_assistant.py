@@ -1,4 +1,4 @@
-from src.assistants.assistant import Assistant
+from src.legacy.assistant import Assistant
 from src.config import client, model
 import streamlit as st
 from src.utils import stream_static_text, TEXT_CURSOR

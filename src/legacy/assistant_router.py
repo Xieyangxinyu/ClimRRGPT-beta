@@ -1,6 +1,6 @@
-from src.assistants.profile import ChecklistAssistant
-from src.assistants.plan import PlanAssistant
-from src.assistants.analyst import AnalystAssistant
+from src.legacy.profile import ChecklistAssistant
+from src.legacy.plan import PlanAssistant
+from src.legacy.analyst import AnalystAssistant
 from src.config import client
 
 class AssistantRouter:

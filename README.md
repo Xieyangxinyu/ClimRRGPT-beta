@@ -34,7 +34,7 @@ All data are available under the ``data`` folder. You can download all the data 
 ## Usage
 We use [Streamlit](https://streamlit.io) to create a web app. To run the web app, run
 ```
-streamlit run src/wildfireChat.py
+streamlit run src/modules/Welcome.py
 ```
 
 
