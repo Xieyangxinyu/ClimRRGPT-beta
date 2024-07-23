@@ -572,6 +572,9 @@ class ClimRRAnnualProjectionsCoolingDegreeDays(DataVisualizer):
             st.write(f"Minimum: {self.min_value:.2f}")
             st.write(f"Maximum: {self.max_value:.2f}")
             st.write("This shows the range of Cooling Degree Days in the dataset.")
+        
+        messages = self.get_messages(table)
+        return col3, messages
 
     def analyze(self, crossmodels):
         st.title(self.data_info['title'])
