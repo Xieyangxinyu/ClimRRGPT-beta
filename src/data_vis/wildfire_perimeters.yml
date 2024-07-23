@@ -1,0 +1,25 @@
+prompt: |
+  Analyze the following wildfire perimeter data and provide insights:
+
+  1. Burned Acres and Dates:
+  - Total acres burned per year: {yearly_acres}
+  - Number of incidents per year: {yearly_incidents}
+
+  2. Fire Cause Analysis:
+  - Top 5 specific fire causes: {top_specific_causes}
+
+  3. Fire Behavior:
+  - Top 5 specific fire behaviors: {top_specific_behaviors}
+
+  4. Fuels:
+  - Top 5 primary fuel models: {top_primary_fuels}
+  - Top 5 secondary fuel models: {top_secondary_fuels}
+
+  Based on this data:
+  1. What are the most significant trends in wildfire occurrences and severity over the years?
+  2. What are the primary causes of wildfires, and how might this information be used for prevention?
+  3. What patterns can be observed in fire behavior, and how might this inform firefighting strategies?
+  4. How do the primary and secondary fuel models contribute to wildfire spread, and what does this suggest for forest management?
+  5. Are there any correlations between fire causes, behaviors, and fuel models that stand out?
+
+  Please provide a detailed analysis with specific insights and actionable recommendations.

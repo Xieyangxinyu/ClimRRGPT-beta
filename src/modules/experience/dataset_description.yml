@@ -82,9 +82,9 @@ available_datasets:
       - name: Download Source
         url: https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=noaa-fire-34853
   
-  Recent fire incident data: 
-    description: The Wildland Fire Interagency Geospatial Services (WFIGS) Group wildfire incidents record allows you to retrieve yearly and monthly wildfire incident counts between 2020 and 2024, as well as burned areas of each fire. 
-    instruction: Choose this dataset if you want to analyze the recent fire incidents in the area and make recommendations on immediate actions to mitigate the risks.
+  Recent Fire Perimeters data: 
+    description: The Wildland Fire Incident Geospatial Information System (WFIGS) Interagency Perimeters dataset provides detailed information on wildfire incidents from 2020 to 2024. This comprehensive dataset includes fire perimeters, incident names, affected acreage, fire causes (broad, general, and specific), discovery and containment dates, fire behavior, and fuel models involved. The geospatial nature of this data allows for precise location-based analysis of wildfire patterns and characteristics.
+    instruction: Choose this dataset if you want to conduct an in-depth analysis of recent wildfire patterns, including their spatial distribution, causes, behavior, and fuel interactions. This data is particularly useful for understanding the progression of wildfires in recent time, identifying high-risk areas, and developing targeted strategies for fire management and prevention. It's ideal for insights into the complex dynamics of wildfires and their impacts on landscapes.
     note: We only include wildfire (WF) incidents categorized in the IRWIN (Integrated Reporting of Wildland Fire Information) integration service (you may also find the prescribed fire (PF) incidents in the source dataset linked below).
     links:
       - name: National Interagency Fire Center
