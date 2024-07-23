@@ -29,6 +29,11 @@ model=<your model name  # e.g. gpt-4-1106-preview>
 ```
 Please check [OpenAI Model Pricing](https://openai.com/pricing) before choosing a model.
 
+Add ``src`` to your path by 
+```
+export PYTHONPATH="${PYTHONPATH}:src/"
+```
+
 All data are available under the ``data`` folder. You can download all the data from this [Box Link](https://anl.box.com/s/wm888zovyapyou1txae7g75ghpc7sxre).
 
 ## Usage

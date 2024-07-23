@@ -7,7 +7,7 @@ import pandas as pd
 from streamlit_folium import st_folium
 from src.data_vis import dispatch_analyze_fn
 from src.utils import load_config
-from src.llms import OpenSourceModels
+from src.llms import OpenSourceModels, OpenSourceVisionModels, OpenSourceCodingModels
 import re
 import json
 from geopy.geocoders import Nominatim
@@ -16,6 +16,8 @@ add_page_title(layout="wide", initial_sidebar_state="collapsed")
 
 config = load_config("./src/modules/experience/data_visualization.yml")
 get_response = OpenSourceModels(model=config['model']).get_response
+get_vision_response = OpenSourceVisionModels(model=config['vision_model']).get_response
+get_coding_response = OpenSourceCodingModels(model=config['coding_model']).get_response
 st.session_state.config = config
 
 st.session_state.goals_saved = True
@@ -187,7 +189,7 @@ else:
     user_goals = st.session_state.custom_goals
     goals_text = "\n".join(f"{i+1}. {goal}" for i, goal in enumerate(user_goals))
     for dataset in st.session_state.selected_datasets:
-        col3, messages = st.session_state.analyze_fn_dict[dataset](st.session_state.crossmodel)
+        col3, messages, plots = st.session_state.analyze_fn_dict[dataset](st.session_state.crossmodel)
         
         messages.append({"role": "user", "content": f"Here is my profile:\n\nProfession: {st.session_state.responses['Profession']}\n\nConcern: {st.session_state.responses['Concern']}\n\nTimeline: {st.session_state.responses['Timeline']}\n\nScope: {st.session_state.responses['Scope']}"})
         messages.append({"role": "user", "content": f"I'd like to address these goals:\n{goals_text}\n\nPlease provide the analysis based on the prompt above."})

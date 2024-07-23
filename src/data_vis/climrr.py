@@ -11,6 +11,7 @@ import io
 import base64
 from src.utils import load_config
 from src.data_vis.climrr_utils import convert_to_dataframe, categorize_fwi, fwi_color
+import plotly.io as pio
 
 config = load_config('src/data_vis/climrr.yml')
 
@@ -24,6 +25,8 @@ class DataVisualizer(ABC):
         self.min_value = self.df[self.values_of_interests].min().min()
         self.max_value = self.df[self.values_of_interests].max().max()
         self.color_scale = self.create_color_scale()
+        # save visual data for multimodal analysis
+        self.plots = []
 
     def initialize_data(self):
         df = pd.read_csv(self.path)
@@ -133,6 +136,20 @@ class DataVisualizer(ABC):
                      {'role': 'user', 'content': prompt}]
         return messages
 
+    def plots_to_base64(self):
+        plots = []
+        for plot in self.plots:
+            # Convert the plot to an image in memory.
+            image_bytes = pio.to_image(plot, format='png')
+            print('image_bytes:', image_bytes[:10])
+
+            # Encode these bytes in base64
+            base64_bytes = base64.b64encode(image_bytes)
+            base64_string = base64_bytes.decode('utf8')
+            plots.append(base64_string)
+        self.plots = plots
+
+
 class ClimRRSeasonalProjectionsFWI(DataVisualizer):
     def __init__(self):
         super().__init__('Fire Weather Index (FWI) projections')
@@ -196,7 +213,9 @@ class ClimRRSeasonalProjectionsFWI(DataVisualizer):
         for fig in [fig1, fig2]:
             fig.update_layout(legend_title_text='', legend=dict(traceorder='normal'),
                               plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
-        
+
+        self.plots = [fig1, fig2]
+        self.plots_to_base64()
         return [fig1, fig2]
 
     def display_results(self, mean, std, figs):
@@ -231,8 +250,9 @@ class ClimRRSeasonalProjectionsFWI(DataVisualizer):
             display_table = display_table + ' ' + table.map(categorize_fwi)
 
         messages = self.get_messages(display_table.transpose())
-        return col3, messages
-    
+        return col3, messages, self.plots
+
+
 class ClimRRAnnualProjectionsPrecipitation(DataVisualizer):
     def __init__(self):
         super().__init__('Precipitation projections')
@@ -289,6 +309,8 @@ class ClimRRAnnualProjectionsPrecipitation(DataVisualizer):
                       color_discrete_sequence=['#FFA500'])
 
         fig.update_layout(showlegend=False, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+        self.plots = [fig]
+        self.plots_to_base64()
         return fig
 
     def display_results(self, mean, std, fig):
@@ -317,7 +339,8 @@ class ClimRRAnnualProjectionsPrecipitation(DataVisualizer):
             st.write("This shows the range of precipitation values in the dataset.")
 
         messages = self.get_messages(table)
-        return col3, messages
+        return col3, messages, self.plots
+
 
 class ClimRRAnnualProjectionsCDNP(DataVisualizer):
     def __init__(self):
@@ -375,6 +398,8 @@ class ClimRRAnnualProjectionsCDNP(DataVisualizer):
                       color_discrete_sequence=['#8B4513'])
 
         fig.update_layout(showlegend=False, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+        self.plots = [fig]
+        self.plots_to_base64()
         return fig
 
     def display_results(self, mean, std, fig):
@@ -403,7 +428,8 @@ class ClimRRAnnualProjectionsCDNP(DataVisualizer):
             st.write("This shows the range of Consecutive Days with No Precipitation in the dataset.")
 
         messages = self.get_messages(table)
-        return col3, messages
+        return col3, messages, self.plots
+
 
 class ClimRRAnnualProjectionsWindSpeed(DataVisualizer):
     def __init__(self):
@@ -461,6 +487,8 @@ class ClimRRAnnualProjectionsWindSpeed(DataVisualizer):
                       color_discrete_sequence=['#4682B4'])
 
         fig.update_layout(showlegend=False, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+        self.plots = [fig]
+        self.plots_to_base64()
         return fig
 
     def display_results(self, mean, std, fig):
@@ -488,7 +516,8 @@ class ClimRRAnnualProjectionsWindSpeed(DataVisualizer):
             st.write("This shows the range of Wind Speed values in the dataset.")
 
         messages = self.get_messages(table)
-        return col3, messages
+        return col3, messages, self.plots
+
 
 class ClimRRAnnualProjectionsCoolingDegreeDays(DataVisualizer):
     def __init__(self):
@@ -547,6 +576,8 @@ class ClimRRAnnualProjectionsCoolingDegreeDays(DataVisualizer):
                      color_discrete_sequence=['#FFA500', '#FF4500'])  # Orange for historical, Red-Orange for future
 
         fig.update_layout(showlegend=False, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+        self.plots = [fig]
+        self.plots_to_base64()
         return fig
 
     def display_results(self, mean, std, fig):
@@ -574,7 +605,7 @@ class ClimRRAnnualProjectionsCoolingDegreeDays(DataVisualizer):
             st.write("This shows the range of Cooling Degree Days in the dataset.")
         
         messages = self.get_messages(table)
-        return col3, messages
+        return col3, messages, self.plots
 
     def analyze(self, crossmodels):
         st.title(self.data_info['title'])
@@ -587,12 +618,13 @@ class ClimRRAnnualProjectionsCoolingDegreeDays(DataVisualizer):
         st.header("Cooling Degree Days Meta-Analysis")
         mean, std = self.calculate_statistics(df)
         fig = self.create_plot(mean)
-        self.display_results(mean, std, fig)
+        return self.display_results(mean, std, fig)
 
     def calculate_statistics(self, df):
         df = df.drop(columns='Crossmodel')
         return df.mean(), df.std()
-    
+
+
 class ClimRRAnnualProjectionsHeatingDegreeDays(DataVisualizer):
     def __init__(self):
         super().__init__('Heating Degree Days projections')
@@ -650,6 +682,8 @@ class ClimRRAnnualProjectionsHeatingDegreeDays(DataVisualizer):
                         color_discrete_sequence=['#4682B4', '#4682B4'])
 
         fig.update_layout(showlegend=False, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+        self.plots = [fig]
+        self.plots_to_base64()
         return fig
 
     def display_results(self, mean, std, fig):
@@ -677,7 +711,7 @@ class ClimRRAnnualProjectionsHeatingDegreeDays(DataVisualizer):
             st.write("This shows the range of Heating Degree Days in the dataset.")
 
         messages = self.get_messages(table)
-        return col3, messages
+        return col3, messages, self.plots
 
     def analyze(self, crossmodels):
         st.title(self.data_info['title'])
@@ -764,7 +798,9 @@ class ClimRRSeasonalProjectionsTemperature(DataVisualizer):
         for fig in [fig1, fig2]:
             fig.update_layout(legend_title_text='', legend=dict(traceorder='normal'),
                               plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
-        
+
+        self.plots = [fig1, fig2]
+        self.plots_to_base64()
         return [fig1, fig2]
 
     def display_results(self, mean, std, figs):
@@ -795,7 +831,7 @@ class ClimRRSeasonalProjectionsTemperature(DataVisualizer):
             st.write(f"This shows the range of {self.temp_type} Temperature in the dataset.")
 
         messages = self.get_messages(display_table.transpose())
-        return col3, messages
+        return col3, messages, self.plots
 
     def analyze(self, crossmodels):
         st.title(self.data_info['title'])
