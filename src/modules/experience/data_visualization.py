@@ -21,7 +21,8 @@ get_coding_response = OpenSourceCodingModels(model=config['coding_model']).get_r
 st.session_state.config = config
 
 st.session_state.goals_saved = True
-st.session_state.selected_datasets = ['Recent Fire Perimeters data']
+#st.session_state.selected_datasets = ['Recent Fire Perimeters data']
+st.session_state.selected_datasets = ['Fire Weather Index (FWI) projections', 'Seasonal Temperature Maximum projections']
 st.session_state.custom_goals = ["Analyze the historical trends of FWI in Denver, CO and identify areas with significant increases or decreases in fire risk.",
     "Investigate scientific literature to understand how changes in wildfire risk perception and public policy have affected property values in areas similar to Denver.",
     "Explore the relationship between changes in wildfire risk (as reflected by FWI projections) and current property value assessments and insurance premiums in different areas of Denver."]
@@ -174,13 +175,17 @@ elif not st.session_state.location_confirmed:
             if st.button("Click Me Twice to Save Drawing and Update Grid Map"):
                 if output['all_drawings'] != st.session_state.all_drawings:
                     st.session_state.all_drawings = output['all_drawings']
+                if st.session_state.center != [output['center']['lat'], output['center']['lng']]:
                     st.session_state.center = [output['center']['lat'], output['center']['lng']]
+                if output['zoom'] != st.session_state.zoom:
                     st.session_state.zoom = output['zoom']
             if st.button("Confirm Location"):
                 if st.session_state.crossmodel is None:
                     st.warning("Please draw a shape on the map to confirm the location.")
                 elif output['zoom'] != st.session_state.zoom:
                     st.warning("It seems like you've changed the zoom level. Please save the drawing again.")
+                elif output['center'] != st.session_state.center:
+                    st.warning("It seems like you've changed the center of the map. Please save the drawing again.")
                 else:
                     st.session_state.location_confirmed = True
                     st.rerun()
