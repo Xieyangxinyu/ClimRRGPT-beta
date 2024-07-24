@@ -20,19 +20,19 @@ get_vision_response = OpenSourceVisionModels(model=config['vision_model']).get_r
 get_coding_response = OpenSourceCodingModels(model=config['coding_model']).get_response
 st.session_state.config = config
 
-st.session_state.goals_saved = True
-#st.session_state.selected_datasets = ['Recent Fire Perimeters data']
-st.session_state.selected_datasets = ['Fire Weather Index (FWI) projections', 'Seasonal Temperature Maximum projections']
-st.session_state.custom_goals = ["Analyze the historical trends of FWI in Denver, CO and identify areas with significant increases or decreases in fire risk.",
-    "Investigate scientific literature to understand how changes in wildfire risk perception and public policy have affected property values in areas similar to Denver.",
-    "Explore the relationship between changes in wildfire risk (as reflected by FWI projections) and current property value assessments and insurance premiums in different areas of Denver."]
-st.session_state.responses= {
-    "Location": "Denver, CO",
-    "Profession": "Risk Manager",
-    "Concern": "Property values",
-    "Timeline": "30 - 50 years",
-    "Scope": "changes might affect property values in different areas based on their proximity to fire risk zones and existing infrastructure mitigation strategies."
-}
+# st.session_state.goals_saved = True
+# #st.session_state.selected_datasets = ['Recent Fire Perimeters data']
+# st.session_state.selected_datasets = ['Fire Weather Index (FWI) projections', 'Seasonal Temperature Maximum projections', 'Precipitation projections']
+# st.session_state.custom_goals = ["Analyze the historical trends of FWI in Denver, CO and identify areas with significant increases or decreases in fire risk.",
+#     "Investigate scientific literature to understand how changes in wildfire risk perception and public policy have affected property values in areas similar to Denver.",
+#     "Explore the relationship between changes in wildfire risk (as reflected by FWI projections) and current property value assessments and insurance premiums in different areas of Denver."]
+# st.session_state.responses= {
+#     "Location": "Denver, CO",
+#     "Profession": "Risk Manager",
+#     "Concern": "Property values",
+#     "Timeline": "30 - 50 years",
+#     "Scope": "changes might affect property values in different areas based on their proximity to fire risk zones and existing infrastructure mitigation strategies."
+# }
 
 @st.cache_data
 def parse_location(response):
@@ -100,8 +100,15 @@ def initialize_session_state():
         st.session_state.analyze_fn_dict = {}
     if "analysis" not in st.session_state:
         st.session_state.analysis = {}
+    if "center" not in st.session_state:
+        st.session_state.center = [0, 0]
+    if "zoom" not in st.session_state:
+        st.session_state.zoom = 10
 
 initialize_session_state()
+
+def same_location(lat_long, center):
+    return abs(lat_long[0] - center[0]) < 0.001 and abs(lat_long[1] - center[1]) < 0.001
 
 if ("goals_saved" not in st.session_state) or not st.session_state.goals_saved:
     #st.write(st.session_state.config[""])
@@ -175,7 +182,7 @@ elif not st.session_state.location_confirmed:
             if st.button("Click Me Twice to Save Drawing and Update Grid Map"):
                 if output['all_drawings'] != st.session_state.all_drawings:
                     st.session_state.all_drawings = output['all_drawings']
-                if st.session_state.center != [output['center']['lat'], output['center']['lng']]:
+                if not same_location([output['center']['lat'], output['center']['lng']], st.session_state.center):
                     st.session_state.center = [output['center']['lat'], output['center']['lng']]
                 if output['zoom'] != st.session_state.zoom:
                     st.session_state.zoom = output['zoom']
@@ -184,7 +191,7 @@ elif not st.session_state.location_confirmed:
                     st.warning("Please draw a shape on the map to confirm the location.")
                 elif output['zoom'] != st.session_state.zoom:
                     st.warning("It seems like you've changed the zoom level. Please save the drawing again.")
-                elif output['center'] != st.session_state.center:
+                elif not same_location([output['center']['lat'], output['center']['lng']], st.session_state.center):
                     st.warning("It seems like you've changed the center of the map. Please save the drawing again.")
                 else:
                     st.session_state.location_confirmed = True
@@ -211,7 +218,15 @@ else:
                 )
                 st.rerun()
             if dataset in st.session_state.analysis.keys():
-                st.write(st.session_state.analysis[dataset])
+                input_data = st.session_state.analysis[dataset]
+                allow_editing = st.radio("Edit Analysis", [True, False], horizontal=True, key = f'edit_{dataset}', index=1)
+
+                if allow_editing:
+                    num_rows = int((len(st.session_state.analysis[dataset]) // 50 + 1)  * 21)
+                    output = st.text_area("Analysis", value=st.session_state.analysis[dataset], height=num_rows)
+                    st.session_state.analysis[dataset] = output
+                else:
+                    st.write(st.session_state.analysis[dataset])
 
     col1, col2, col3 = st.columns(3)
     if len(st.session_state.analysis) == len(st.session_state.selected_datasets):

@@ -22,12 +22,12 @@ Fire Weather Index (FWI) projections:
     {table_json}
 
     Based on this data and my goals:
-    1. Describe the overall trend in FWI values from historical to end-century periods.
+    1. Describe the overall trend in FWI values from historical (1995-2005), mid-century (2045-2055), and end-century (2095-2105) periods.
     2. Identify which season(s) show the highest fire risk and how this changes over time.
     3. Highlight any significant changes or patterns across seasons or time periods.
     4. Contextualize the data: explaining how the FWI data and trends relate to me.
 
-    Provide your analysis in a concise yet comprehensive manner. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
+    Provide your analysis in a concise yet comprehensive manner. Write in the style of an official report. No need to write the title. Tailor your response to address my specific goals. Your analysis should be within 150-200 words. 
 
 
 Seasonal Temperature Maximum projections:
@@ -59,7 +59,7 @@ Seasonal Temperature Maximum projections:
     3. Highlight any significant changes or patterns across seasons or time periods.
     4. Contextualize the data: explaining how the temperature data and trends relate to me.
 
-    Provide your analysis in a concise yet comprehensive manner. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
+    Provide your analysis in a concise yet comprehensive manner. Write in the style of an official report. No need to write the title. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
 
 Seasonal Temperature Minimum projections:
   path: data/climrr/SeasonalTemperatureMinimum.csv
@@ -90,7 +90,7 @@ Seasonal Temperature Minimum projections:
     3. Highlight any significant changes or patterns across seasons or time periods.
     4. Contextualize the data: explaining how the temperature data and trends relate to me.
 
-    Provide your analysis in a concise yet comprehensive manner. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
+    Provide your analysis in a concise yet comprehensive manner. Write in the style of an official report. No need to write the title. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
   
 Precipitation projections:
   path: data/climrr/Precipitation_inches_AnnualTotal.csv
@@ -118,7 +118,7 @@ Precipitation projections:
     3. Discuss the implications of these changes in precipitation for wildfire risks and climate change.
     4. Contextualize the data: explaining how the precipitation data and trends relate to me.
 
-    Provide your analysis in a concise yet comprehensive manner. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
+    Provide your analysis in a concise yet comprehensive manner. Write in the style of an official report. No need to write the title. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
 
 Consecutive Dry Days projections:
   path: data/climrr/ConsecutiveDayswithNoPrecipitation.csv
@@ -146,7 +146,7 @@ Consecutive Dry Days projections:
     3. Discuss the implications of these changes in dry days for wildfire risks and climate change.
     4. Contextualize the data: explaining how the dry days data and trends relate to me.
 
-    Provide your analysis in a concise yet comprehensive manner. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
+    Provide your analysis in a concise yet comprehensive manner. Write in the style of an official report. No need to write the title. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
 
 Wind Speed projections:
   path: data/climrr/WindSpeed.csv
@@ -174,7 +174,7 @@ Wind Speed projections:
     3. Discuss the implications of these changes in wind speed for wildfire risks and climate change.
     4. Contextualize the data: explaining how the wind speed data and trends relate to me.
 
-    Provide your analysis in a concise yet comprehensive manner. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
+    Provide your analysis in a concise yet comprehensive manner. Write in the style of an official report. No need to write the title. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
 
 Cooling Degree Days projections:
   path: data/climrr/CoolingDegreeDays.csv
@@ -202,7 +202,7 @@ Cooling Degree Days projections:
     3. Discuss the implications of these changes in cooling requirements for wildfire risks and climate change.
     4. Contextualize the data: explaining how the cooling degree days data and trends relate to me.
 
-    Provide your analysis in a concise yet comprehensive manner. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
+    Provide your analysis in a concise yet comprehensive manner. Write in the style of an official report. No need to write the title. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
 
 Heating Degree Days projections:
   path: data/climrr/HeatingDegreeDays.csv
@@ -230,5 +230,5 @@ Heating Degree Days projections:
     3. Discuss the implications of these changes in heating requirements for wildfire risks and climate change.
     4. Contextualize the data: explaining how the heating degree days data and trends relate to me.
 
-    Provide your analysis in a concise yet comprehensive manner. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
+    Provide your analysis in a concise yet comprehensive manner. Write in the style of an official report. No need to write the title. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
 

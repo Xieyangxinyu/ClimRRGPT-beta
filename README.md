@@ -2,6 +2,14 @@
 Climate Action Through Large Language Models
 
 ## Pre-requisites
+
+Install [Ollama](https://github.com/ollama/ollama).
+
+Once you have installed Ollama, you can run the following command to install Gemma-2 language model:
+```
+ollama run gemma2
+```
+
 We use Python 3.11.6 and [Poetry](https://python-poetry.org/) to manage dependencies. 
 
 We recommend using [pyenv](https://github.com/pyenv/pyenv) to manage your python versions. To switch to Python 3.11.6, run 
@@ -41,14 +49,3 @@ We use [Streamlit](https://streamlit.io) to create a web app. To run the web app
 ```
 streamlit run src/modules/Welcome.py
 ```
-
-
-## Plans
-
-### Evaluation
-- @Xinyu: Leetcode Style Verification of Retrieval Functions
-- @Lauren: LLM Eval
-
-### Future Work
-- How to integrate FWI time series data
-- Drought Data

@@ -37,13 +37,13 @@ instruction_message: |
 dataset_recommendation_instructions:
   - role: system
     content: |
-      You are a helpful assistant. Your user is hoping to address their concern about wildfire risks and climate change with data analysis. They are interested in exploring the dataset: {keywords}. Please help the user by explaining how relevant this specific dataset is to their concern. Provide a JSON object with your explanation. Your JSON object should only contain three keys: 'dataset', 'explanation', and 'relevance'. In your explanation, include a brief description of the dataset as well. **Remember, you explanation should be at most 100 words.** For relevance, you can choose from 'High', 'Medium', or 'Low'. 
+      You are a helpful assistant. Your user is hoping to address their concern about wildfire risks and climate change with data analysis. They are interested in exploring the dataset: {keywords}. Please help the user by explaining how relevant this specific dataset is to their concern. Provide a JSON list with your explanation. Your JSON list should only contain three keys: 'dataset', 'explanation', and 'relevance'. In your explanation, include a brief description of the dataset as well. **Remember, you explanation should be at most 100 words.** For relevance, you can choose from 'High', 'Medium', or 'Low'. 
   - role: assistant
     content: |
       Here is the available dataset: {keywords}. The details of this dataset are as follows: {dataset_details}. 
   - role: user
     content: |
-      Could you explain how relevant this dataset is to my concern? Provide a JSON object with your explanation. Your JSON object should only contain three keys: 'dataset', 'relevance', and 'explanation'. Your explanation should contain a brief description of the dataset as well. **Remember, you explanation should be at most 100 words.** For relevance, you can choose from 'High', 'Medium', or 'Low'. Here is the template for your response:
+      Could you explain how relevant this dataset is to my concern? Provide a JSON list with your explanation. Your JSON list should only contain three keys: 'dataset', 'relevance', and 'explanation'. Your explanation should contain a brief description of the dataset as well. **Remember, you explanation should be at most 100 words.** For relevance, you can choose from 'High', 'Medium', or 'Low'. Here is the template for your response:
       ```json
       [{
         "dataset": "...",
@@ -51,3 +51,7 @@ dataset_recommendation_instructions:
         "explanation": "..."
       }]
       ```
+  - role: assistant
+    content: |
+      Let me review my recommendations for the other datasets so I can compare them with this one in terms of relevance. Here is what I have considered so far:
+      {dataset_recommendations}

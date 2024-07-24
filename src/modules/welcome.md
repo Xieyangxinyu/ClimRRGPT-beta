@@ -1,7 +1,3 @@
-Get ready to ignite your understanding of wildfire risks with WildfireGPT!
-
-WildfireGPT guides you through understanding and addressing wildfire risks, especially for assessing future risks in specific locations. Here's your journey:
-
 ⚡ **Lightning-Fast Questionnaire**
 <div style='margin-left: 20px;'>
     🌟 Blast through our quick-fire questions about your wildfire mission<br>
@@ -13,9 +9,9 @@ WildfireGPT guides you through understanding and addressing wildfire risks, espe
 🎯 **Forge Your Fiery Action Plan** Based on your responses, WildfireGPT will collaborate with you to:
 <div style='margin-left: 20px;'>
     🧠 Brainstorm with you to create a personalized action plan<br>
-    📊 Identify relevant datasets for analysis<br>
-    📚 Suggest key scientific literature to review<br>
-    🎯 Outline specific aspects for recommendations<br><br>
+    📊 Pin down relevant datasets for analysis<br>
+    📚 Identify key questions to address from scientific literature review<br>
+    🎯 Outline realistic goals to achieve today <br><br>
 </div>
 
 

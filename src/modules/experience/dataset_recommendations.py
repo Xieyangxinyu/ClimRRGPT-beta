@@ -43,7 +43,8 @@ def parse_dataset_recommendation(response, valid_keywords=available_datasets.key
     
     for entry in parsed_data:
         if all(key in entry for key in ["dataset", "relevance", "explanation"]):
-            if entry["dataset"] in valid_keywords:
+            if entry["dataset"] in valid_keywords and entry["relevance"].lower() in ["high", "medium", "low"]:
+                entry["relevance"] = entry["relevance"].capitalize()
                 valid_entries.append(entry)
             else:
                 # look to see if any of the keywords are in the dataset name
@@ -73,11 +74,17 @@ def stream_handler(stream):
                     st.markdown(f"**Instruction:** {details['instruction']}")
     return response
 
-def get_single_dataset_recommendation(dataset_name, dataset_details):
+def get_single_dataset_recommendation(dataset_name, dataset_details, recommendations):
     messages = deepcopy(st.session_state.messages)
     dataset_recommendation_instructions = st.session_state.config['dataset_recommendation_instructions']
     
     messages[0]['content'] = dataset_recommendation_instructions[0]['content'].format(keywords=dataset_name)
+    if len(recommendations) > 0:
+        messages.append(
+            {"role": "assistant",
+                "content": dataset_recommendation_instructions[3]['content'].format(keywords=dataset_name, 
+                                                                                    dataset_recommendations=format_to_json(recommendations))}
+        )
     messages.append(
         {"role": "assistant", 
          "content": dataset_recommendation_instructions[1]['content'].format(keywords=dataset_name, 
@@ -118,11 +125,15 @@ def get_dataset_recommendations():
         
         # dataset_details = dataset_info with only description and instruction
         dataset_details = {key: dataset_info[key] for key in ["description", "instruction"]}
-        recommendation = get_single_dataset_recommendation(dataset_name, dataset_details)
+        recommendation = get_single_dataset_recommendation(dataset_name, dataset_details, recommendations)
         
         recommendations.extend(recommendation)
         
         progress_bar.progress((i + 1) / len(available_datasets))
+
+    # order the recommendations by relevance: From "High" to "Medium" to "Low"
+
+    recommendations = sorted(recommendations, key=lambda x: ["High", "Medium", "Low"].index(x["relevance"]))
 
     st.session_state.dataset_recommendation = recommendations
     st.success("AI Analysis Complete!")
