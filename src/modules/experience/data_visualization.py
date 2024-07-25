@@ -212,18 +212,23 @@ else:
                 messages = [messages[0]] + [{"role": "system", "content": f"Previous analysis for {prev_dataset}:\n{prev_analysis}"}] + messages[1:]
         
         with col3:
-            if st.button("Generate AI Analysis", key=f'analysis_{dataset}'):
-                st.session_state.analysis[dataset] = get_response(messages=messages, stream = True,
+            col1, col2 = st.columns(2)
+            with col1:
+                get_ai_analysis = st.button("Generate AI Analysis", key=f'get_ai_analysis_{dataset}')
+            if get_ai_analysis:
+                response = get_response(messages=messages, stream = True,
                     options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.7}
                 )
+                st.session_state.analysis[dataset] = response
                 st.rerun()
             if dataset in st.session_state.analysis.keys():
                 input_data = st.session_state.analysis[dataset]
-                allow_editing = st.radio("Edit Analysis", [True, False], horizontal=True, key = f'edit_{dataset}', index=1)
+                with col2:
+                    allow_editing = st.radio("Edit Analysis", ['Edit', 'Save'], horizontal=True, key = f'edit_{dataset}', index=1, label_visibility="collapsed")
 
-                if allow_editing:
+                if allow_editing == 'Edit':
                     num_rows = int((len(st.session_state.analysis[dataset]) // 50 + 1)  * 21)
-                    output = st.text_area("Analysis", value=st.session_state.analysis[dataset], height=num_rows)
+                    output = st.text_area("Analysis", value=st.session_state.analysis[dataset], height=num_rows, label_visibility="collapsed")
                     st.session_state.analysis[dataset] = output
                 else:
                     st.write(st.session_state.analysis[dataset])

@@ -34,7 +34,7 @@ instruction_message: |
 question_recommendation_instructions:
   - role: system
     content: |
-      You are a helpful assistant. Your user is hoping to address their concern about wildfire risks and climate change by surveying existing scientific literatures. Please help with the user by brainstorming two specific questions that they might be interested in exploring by surveying the scientific literature. **Focus on the user's scope of interest.**
+      You are a helpful assistant. Your user is hoping to address their concern about wildfire risks and climate change by surveying existing scientific literatures. Please help with the user by brainstorming two specific questions that they might be interested in exploring by surveying the scientific literature. **Focus on the user's scope of interest.** Only output the question for each step.
   - role: user
     content: |
       Please identify the first question that I should explore from the scientific literature based on my concern. Ideally, this question cannot be directly answered by the datasets I have chosen. Because this is literature review, I cannot make any projections or predictions, I can at best hope for some deeper understanding. Only output the question. **Focus on my scope of interest.**

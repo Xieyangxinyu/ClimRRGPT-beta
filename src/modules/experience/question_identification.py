@@ -45,12 +45,15 @@ def get_question_suggestion(messages):
     response = parse_question(get_response(messages=messages, stream=True,
         options={"top_p": 0.95, "max_tokens": 256, "temperature": 1, "stop": ["\n"]}
     ))
-    while not response:
-        stream_static_text("Sorry that wasn't a good question. Let me try again!")
-        response = parse_question(get_response(messages=messages, stream=True,
-            options={"top_p": 0.95, "max_tokens": 256, "temperature": 1, "stop": ["\n"]}
-        ))
-        
+    # retry at most 3 times
+    for i in range(3):
+        while not response:
+            stream_static_text("Sorry that wasn't a good question. Let me try again!")
+            response = parse_question(get_response(messages=messages, stream=True,
+                options={"top_p": 0.95, "max_tokens": 256, "temperature": 1, "stop": ["\n"]}
+            ))
+    if not response:
+        response = "I'm sorry, I couldn't generate a question for you. Please try again later."
     return response
 
 if ("profile_done" not in st.session_state) or not st.session_state.profile_done:

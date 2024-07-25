@@ -863,4 +863,4 @@ class ClimRRSeasonalProjectionsTemperature(DataVisualizer):
     def calculate_statistics(self, df):
         df = df.drop(columns='Crossmodel')
         return df.mean(), df.std()
-    
+
