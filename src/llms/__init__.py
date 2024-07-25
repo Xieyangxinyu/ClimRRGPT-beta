@@ -26,7 +26,7 @@ class OpenSourceModels(ChatCompletion):
 
     def get_response(self, messages, options, content = True, stream = False, stream_handler = None):
         if stream:
-            stream = ollama.chat(model=self.model, messages=messages, stream = stream, options=options)
+            stream = ollama.chat(model=self.model, messages=messages, stream=stream, options=options)
             response = ''
             if stream_handler:
                 response = stream_handler(stream)
@@ -50,7 +50,7 @@ class OpenSourceVisionModels(ChatCompletion):
 
     def get_response(self, messages, options, content = True, stream = False, stream_handler = None):
         if stream:
-            stream = ollama.chat(model=self.model, messages=messages, stream = stream, options=options)
+            stream = ollama.chat(model=self.model, messages=messages, stream=stream, options=options)
             response = ''
             if stream_handler:
                 response = stream_handler(stream)

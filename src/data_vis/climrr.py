@@ -141,7 +141,6 @@ class DataVisualizer(ABC):
         for plot in self.plots:
             # Convert the plot to an image in memory.
             image_bytes = pio.to_image(plot, format='png')
-            print('image_bytes:', image_bytes[:10])
 
             # Encode these bytes in base64
             base64_bytes = base64.b64encode(image_bytes)

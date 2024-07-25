@@ -21,7 +21,9 @@ get_coding_response = OpenSourceCodingModels(model=config['coding_model']).get_r
 st.session_state.config = config
 
 st.session_state.goals_saved = True
-st.session_state.selected_datasets = ['Recent Fire Perimeters data']
+st.session_state.selected_datasets = ['Fire Weather Index (FWI) projections']
+st.session_state.questions = ["How have historical wildfire events and subsequent property value changes in similar metropolitan areas influenced policy decisions regarding infrastructure mitigation strategies?",
+                              "How do changes in wildfire risk perception and public policy influence property values in areas susceptible to wildfires?"]
 st.session_state.custom_goals = ["Analyze the historical trends of FWI in Denver, CO and identify areas with significant increases or decreases in fire risk.",
     "Investigate scientific literature to understand how changes in wildfire risk perception and public policy have affected property values in areas similar to Denver.",
     "Explore the relationship between changes in wildfire risk (as reflected by FWI projections) and current property value assessments and insurance premiums in different areas of Denver."]
@@ -32,6 +34,7 @@ st.session_state.responses= {
     "Timeline": "30 - 50 years",
     "Scope": "changes might affect property values in different areas based on their proximity to fire risk zones and existing infrastructure mitigation strategies."
 }
+
 
 @st.cache_data
 def parse_location(response):
@@ -192,8 +195,8 @@ else:
         col3, messages, plots = st.session_state.analyze_fn_dict[dataset](st.session_state.crossmodel)
         
         messages.append({"role": "user", "content": f"Here is my profile:\n\nProfession: {st.session_state.responses['Profession']}\n\nConcern: {st.session_state.responses['Concern']}\n\nTimeline: {st.session_state.responses['Timeline']}\n\nScope: {st.session_state.responses['Scope']}"})
-        messages.append({"role": "user", "content": f"I'd like to address these goals:\n{goals_text}\n\nPlease provide the analysis based on the prompt above."})
-        
+        messages.append({"role": "user", "content": f"I'd like to address these goals:\n{goals_text}\n\nPlease provide the analysis based on the prompt above. "})
+
         # Attach previous analyses
         for prev_dataset, prev_analysis in st.session_state.analysis.items():
             if prev_dataset != dataset:
@@ -201,9 +204,35 @@ else:
         
         with col3:
             if st.button("Generate AI Analysis", key=f'analysis_{dataset}'):
-                st.session_state.analysis[dataset] = get_response(messages=messages, stream = True,
+                print('Querying LLM')
+                llm_response = get_response(messages=messages, stream=True,
                     options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.7}
                 )
+                st.session_state.analysis[dataset] = llm_response
+                print('llm_response', llm_response)
+
+                st.write("We're double-checking this analysis in the backend with additional visual data to ensure accuracy......")
+                print('Querying VLM')
+                vlm_messages = [{"role": "user",
+                                 "content": "Below is the initial analysis of the data. Please look at this plot, verify if an initial analysis is aligned with this plot or not, and if necessary, add additional details that only the plot shows:\n\n"
+                                            + llm_response + "\n\nKeep your answer short and to the point.",
+                                 'images': plots}]
+                vlm_response = get_vision_response(messages=vlm_messages, stream=False,
+                                                   options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.7}
+                                                   )
+                print('vlm_response', vlm_response)
+                st.write('If needed, an updated analysis will be shown here automatically......')
+
+                print('Querying LLM')
+                messages.append({"role": "user",
+                                 "content": "Update your original analysis given this additional feedback:" + vlm_response + "\n\nPlease keep your original analysis unchanged except for the parts that need to be updated. "
+                                            "If the additional feedback says there is nothing incorrect and provides no new information, simply keep your original analysis. Here is the original analysis:\n" + llm_response})
+                final_response = get_response(messages=messages, stream=False,
+                                              options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.7}
+                                              )
+                print('final_response', final_response)
+                st.session_state.analysis[dataset] = final_response
+
                 st.rerun()
             if dataset in st.session_state.analysis.keys():
                 st.write(st.session_state.analysis[dataset])
