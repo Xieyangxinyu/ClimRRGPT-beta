@@ -20,8 +20,9 @@ get_vision_response = OpenSourceVisionModels(model=config['vision_model']).get_r
 get_coding_response = OpenSourceCodingModels(model=config['coding_model']).get_response
 st.session_state.config = config
 
+
 st.session_state.goals_saved = True
-st.session_state.selected_datasets = ['Fire Weather Index (FWI) projections']
+st.session_state.selected_datasets = ['Fire Weather Index (FWI) projections', 'Seasonal Temperature Maximum projections', 'Precipitation projections']
 st.session_state.questions = ["How have historical wildfire events and subsequent property value changes in similar metropolitan areas influenced policy decisions regarding infrastructure mitigation strategies?",
                               "How do changes in wildfire risk perception and public policy influence property values in areas susceptible to wildfires?"]
 st.session_state.custom_goals = ["Analyze the historical trends of FWI in Denver, CO and identify areas with significant increases or decreases in fire risk.",
@@ -102,8 +103,15 @@ def initialize_session_state():
         st.session_state.analyze_fn_dict = {}
     if "analysis" not in st.session_state:
         st.session_state.analysis = {}
+    if "center" not in st.session_state:
+        st.session_state.center = [0, 0]
+    if "zoom" not in st.session_state:
+        st.session_state.zoom = 10
 
 initialize_session_state()
+
+def same_location(lat_long, center):
+    return abs(lat_long[0] - center[0]) < 0.001 and abs(lat_long[1] - center[1]) < 0.001
 
 if ("goals_saved" not in st.session_state) or not st.session_state.goals_saved:
     #st.write(st.session_state.config[""])
@@ -177,13 +185,17 @@ elif not st.session_state.location_confirmed:
             if st.button("Click Me Twice to Save Drawing and Update Grid Map"):
                 if output['all_drawings'] != st.session_state.all_drawings:
                     st.session_state.all_drawings = output['all_drawings']
+                if not same_location([output['center']['lat'], output['center']['lng']], st.session_state.center):
                     st.session_state.center = [output['center']['lat'], output['center']['lng']]
+                if output['zoom'] != st.session_state.zoom:
                     st.session_state.zoom = output['zoom']
             if st.button("Confirm Location"):
                 if st.session_state.crossmodel is None:
                     st.warning("Please draw a shape on the map to confirm the location.")
                 elif output['zoom'] != st.session_state.zoom:
                     st.warning("It seems like you've changed the zoom level. Please save the drawing again.")
+                elif not same_location([output['center']['lat'], output['center']['lng']], st.session_state.center):
+                    st.warning("It seems like you've changed the center of the map. Please save the drawing again.")
                 else:
                     st.session_state.location_confirmed = True
                     st.rerun()
@@ -201,9 +213,11 @@ else:
         for prev_dataset, prev_analysis in st.session_state.analysis.items():
             if prev_dataset != dataset:
                 messages = [messages[0]] + [{"role": "system", "content": f"Previous analysis for {prev_dataset}:\n{prev_analysis}"}] + messages[1:]
-        
-        with col3:
-            if st.button("Generate AI Analysis", key=f'analysis_{dataset}'):
+
+        col1, col2 = st.columns(2)
+        with col1:
+            get_ai_analysis = st.button("Generate AI Analysis", key=f'get_ai_analysis_{dataset}')
+            if get_ai_analysis:
                 print('Querying LLM')
                 llm_response = get_response(messages=messages, stream=True,
                     options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.7}
@@ -232,10 +246,19 @@ else:
                                               )
                 print('final_response', final_response)
                 st.session_state.analysis[dataset] = final_response
-
                 st.rerun()
+
             if dataset in st.session_state.analysis.keys():
-                st.write(st.session_state.analysis[dataset])
+                input_data = st.session_state.analysis[dataset]
+                with col2:
+                    allow_editing = st.radio("Edit Analysis", ['Edit', 'Save'], horizontal=True, key = f'edit_{dataset}', index=1, label_visibility="collapsed")
+
+                if allow_editing == 'Edit':
+                    num_rows = int((len(st.session_state.analysis[dataset]) // 50 + 1)  * 21)
+                    output = st.text_area("Analysis", value=st.session_state.analysis[dataset], height=num_rows, label_visibility="collapsed")
+                    st.session_state.analysis[dataset] = output
+                else:
+                    st.write(st.session_state.analysis[dataset])
 
     col1, col2, col3 = st.columns(3)
     if len(st.session_state.analysis) == len(st.session_state.selected_datasets):

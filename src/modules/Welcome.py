@@ -23,10 +23,13 @@ show_pages(
 
 # read welcome message from `welcome.md`
 with open("src/modules/welcome.md", "r") as f:
-    welcome_message = f.read()
+    instruction_message = f.read()
 
 # Display welcome message
-st.markdown(welcome_message, unsafe_allow_html=True)
+
+st.markdown("Get ready to ignite your understanding of wildfire risks with WildfireGPT!\n\nWildfireGPT guides you through understanding and addressing wildfire risks, especially for assessing future risks in specific locations. ", unsafe_allow_html=True)
+with st.expander("Here's your journey:"):
+        st.markdown(instruction_message, unsafe_allow_html=True)
 
 # Display the start button
 col1, col2, col3 = st.columns([1,2,1])
