@@ -22,7 +22,7 @@ st.session_state.config = config
 
 
 st.session_state.goals_saved = True
-st.session_state.selected_datasets = ['Fire Weather Index (FWI) projections', 'Seasonal Temperature Maximum projections', 'Precipitation projections']
+st.session_state.selected_datasets = ['Fire Weather Index (FWI) projections']
 st.session_state.questions = ["How have historical wildfire events and subsequent property value changes in similar metropolitan areas influenced policy decisions regarding infrastructure mitigation strategies?",
                               "How do changes in wildfire risk perception and public policy influence property values in areas susceptible to wildfires?"]
 st.session_state.custom_goals = ["Analyze the historical trends of FWI in Denver, CO and identify areas with significant increases or decreases in fire risk.",
@@ -225,7 +225,10 @@ else:
                 st.session_state.analysis[dataset] = llm_response
                 print('llm_response', llm_response)
 
-                st.write("We're double-checking this analysis in the backend with additional visual data to ensure accuracy......")
+                st.markdown(
+                    "<p style='font-size:small; font-style:italic;'>Feel free to read now! We will also double-check it in the backend with the visual data to ensure better accuracy...</p>",
+                    unsafe_allow_html=True
+                )
                 print('Querying VLM')
                 vlm_messages = [{"role": "user",
                                  "content": "Below is the initial analysis of the data. Please look at this plot, verify if an initial analysis is aligned with this plot or not, and if necessary, add additional details that only the plot shows:\n\n"
@@ -235,7 +238,10 @@ else:
                                                    options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.7}
                                                    )
                 print('vlm_response', vlm_response)
-                st.write('If needed, an updated analysis will be shown here automatically......')
+                st.markdown(
+                    "<p style='font-size:small; font-style:italic;'>If needed, an updated analysis will be shown here automatically......</p>",
+                    unsafe_allow_html=True
+                )
 
                 print('Querying LLM')
                 messages.append({"role": "user",
