@@ -104,7 +104,6 @@ else:
                             st.session_state.questions.append(question)
                         st.session_state.questions_done = True
                         st.session_state.instruction_message = ""
-                        st.session_state.suggested_question[st.session_state.current_brainstorm_index] = [None, None]
                     st.rerun()
         
         with col3:
