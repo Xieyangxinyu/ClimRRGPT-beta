@@ -40,7 +40,7 @@ index = faiss.read_index("./data/wildfire_index.bin")
 # Load a sentence transformer model
 model = SentenceTransformer('all-MiniLM-L6-v2', device='mps')
 
-def search(query, k=3):
+def search(query, k=10):
     query_vector = model.encode([query]).astype(np.float32)
     _, indices = index.search(query_vector, k)
     return df.iloc[indices[0]].reset_index(drop=True)
@@ -56,7 +56,7 @@ def get_author(authors_str):
         formatted = ', '.join(f"{author['first']} {author['last']}" for author in authors)
     return formatted
 
-def literature_search(query):
+def literature_search(query, messages = None):
     '''
     input: 
         query: the query to search for. For example, 'What is the relationship between climate change and wildfire?'
@@ -97,13 +97,13 @@ def literature_search(query):
             else:
                 result['doi'] = 'Failed to fetch data'
     
-    message = f"Here are the 3 most relevant papers for your query '{query}':\n\n"
+    message = f"Here are the 10 most relevant papers for your query '{query}':\n\n"
     for i, result in enumerate(results):
-        message += f"{i+1}. Title: {result['title']}\n"
-        message += f"Authors: {get_author(result['authors'])}\n"
-        message += f"Year: {result['year']}\n"
+        message += f"{i+1}. Title: {result['title']}\n\n"
+        message += f"Authors: {get_author(result['authors'])}\n\n"
+        message += f"Year: {result['year']}\n\n"
         if result['doi'] != 'No results found' and result['doi'] != 'Failed to fetch data':
-            message += f"DOI: {result['doi']}\n"
+            message += f"DOI: {result['doi']}\n\n"
         message += f"Abstract: {result['abstract']}\n\n"
         
     return message

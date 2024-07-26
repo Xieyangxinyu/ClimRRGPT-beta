@@ -35,6 +35,7 @@ def initialize_session_state():
 
 def parse_question(response):
     if "?" not in response:
+        st.write(f"debug message: {response}")
         return None
     response = re.sub(r"^\d+[.)]?\s*", "", response)
     return response
