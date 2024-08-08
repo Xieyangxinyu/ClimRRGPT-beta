@@ -1,6 +1,6 @@
 model: gemma2
 vision_model: llava
-coding_model: codegemma
+coding_model: codegemma:instruct
 
 welcome_message: |
   ## Ignite Your Understanding of Wildfire Risks!

@@ -10,6 +10,8 @@ from src.utils import load_config
 from src.llms import OpenSourceModels, OpenSourceVisionModels, OpenSourceCodingModels
 import re
 import json
+import io
+import contextlib
 from geopy.geocoders import Nominatim
 from st_pages import add_page_title
 add_page_title(layout="wide", initial_sidebar_state="collapsed")
@@ -22,8 +24,8 @@ st.session_state.config = config
 
 
 st.session_state.goals_saved = True
-# st.session_state.selected_datasets = ['Fire Weather Index (FWI) projections']
-st.session_state.selected_datasets = ['Fire Weather Index (FWI) projections', 'Seasonal Temperature Maximum projections', 'Precipitation projections']
+st.session_state.selected_datasets = ['Fire Weather Index (FWI) projections']
+# st.session_state.selected_datasets = ['Fire Weather Index (FWI) projections', 'Seasonal Temperature Maximum projections', 'Precipitation projections']
 st.session_state.questions = ["How have historical wildfire events and subsequent property value changes in similar metropolitan areas influenced policy decisions regarding infrastructure mitigation strategies?",
                               "How do changes in wildfire risk perception and public policy influence property values in areas susceptible to wildfires?"]
 st.session_state.custom_goals = ["Analyze the historical trends of FWI in Denver, CO and identify areas with significant increases or decreases in fire risk.",
@@ -108,6 +110,18 @@ def initialize_session_state():
         st.session_state.center = [0, 0]
     if "zoom" not in st.session_state:
         st.session_state.zoom = 10
+
+# Function to execute code and save results
+def execute_code(code):
+    output_buffer = io.StringIO()
+    exec_locals = {}
+    try:
+        with contextlib.redirect_stdout(output_buffer):
+            exec(code, {}, exec_locals)
+    except Exception as e:
+        st.error(f"Error executing code: {e}")
+        return None
+    return output_buffer.getvalue()
 
 initialize_session_state()
 
@@ -205,7 +219,7 @@ else:
     user_goals = st.session_state.custom_goals
     goals_text = "\n".join(f"{i+1}. {goal}" for i, goal in enumerate(user_goals))
     for dataset in st.session_state.selected_datasets:
-        col3, messages, plots = st.session_state.analyze_fn_dict[dataset](st.session_state.crossmodel)
+        col3, messages, code_messages, plots = st.session_state.analyze_fn_dict[dataset](st.session_state.crossmodel)
         
         messages.append({"role": "user", "content": f"Here is my profile:\n\nProfession: {st.session_state.responses['Profession']}\n\nConcern: {st.session_state.responses['Concern']}\n\nTimeline: {st.session_state.responses['Timeline']}\n\nScope: {st.session_state.responses['Scope']}"})
         messages.append({"role": "user", "content": f"I'd like to address these goals:\n{goals_text}\n\nPlease provide the analysis based on the prompt above. "})
@@ -227,27 +241,37 @@ else:
                 print('llm_response', llm_response)
 
                 st.markdown(
-                    "<p style='font-size:small; font-style:italic;'>Feel free to read now! We will also double-check it in the backend with the visual data to ensure better accuracy...</p>",
-                    unsafe_allow_html=True
-                )
-                print('Querying VLM')
-                vlm_messages = [{"role": "user",
-                                 "content": "Below is the initial analysis of the data. Please look at this plot, verify if an initial analysis is aligned with this plot or not, and if necessary, add additional details that only the plot shows:\n\n"
-                                            + llm_response + "\n\nKeep your answer short and to the point.",
-                                 'images': plots}]
-                vlm_response = get_vision_response(messages=vlm_messages, stream=False,
-                                                   options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.7}
-                                                   )
-                print('vlm_response', vlm_response)
-                st.markdown(
-                    "<p style='font-size:small; font-style:italic;'>If needed, an updated analysis will be shown here automatically......</p>",
+                    "<p style='font-size:small; font-style:italic;'>Feel free to read now! We will double-check it in the backend with data analysis tools for better accuracy...</p>",
                     unsafe_allow_html=True
                 )
 
+                print('Querying CodingLLM')
+                code_from_llm = get_coding_response(messages=code_messages, stream=False,
+                                                    options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.7}
+                                                   )
+                code_from_llm = code_from_llm[9:-3]
+                print('code_from_llm', code_from_llm)
+                execution_results = execute_code(code_from_llm)
+                print('execution results', execution_results)
+
+                # print('Querying VLM')
+                # vlm_messages = [{"role": "user",
+                #                  "content": vision_messages,
+                #                  'images': plots}]
+                # vlm_response = get_vision_response(messages=vlm_messages, stream=False,
+                #                                    options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.7}
+                #                                    )
+                # print('vlm_response', vlm_response)
+                # st.markdown(
+                #     "<p style='font-size:small; font-style:italic;'>If needed, an updated analysis will be shown here automatically......</p>",
+                #     unsafe_allow_html=True
+                # )
+
                 print('Querying LLM')
                 messages.append({"role": "user",
-                                 "content": "Update your original analysis given this additional feedback:" + vlm_response + "\n\nPlease keep your original analysis unchanged except for the parts that need to be updated. "
-                                            "If the additional feedback says there is nothing incorrect and provides no new information, simply keep your original analysis. Here is the original analysis:\n" + llm_response})
+                                 "content": "Update your original analysis given this additional feedback:" + execution_results +
+                                            "\n\nPlease keep your original analysis unchanged except for the parts that need to be updated or corrected, and add additional information when needed. "
+                                            "Here is the original analysis:\n" + llm_response})
                 final_response = get_response(messages=messages, stream=False,
                                               options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.7}
                                               )

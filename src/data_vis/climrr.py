@@ -136,6 +136,13 @@ class DataVisualizer(ABC):
                      {'role': 'user', 'content': prompt}]
         return messages
 
+    def get_coding_messages(self, table):
+        table = pd.DataFrame(table)
+        prompt = self.data_info['coding_prompt'].format(table_markdown = table.to_markdown())
+        messages = [{'role': 'system', 'content': "You are a helpful assistant that interprets climate data and relates it to specific user goals."},
+                     {'role': 'user', 'content': prompt}]
+        return messages
+
     def plots_to_base64(self):
         plots = []
         for plot in self.plots:
@@ -249,7 +256,8 @@ class ClimRRSeasonalProjectionsFWI(DataVisualizer):
             display_table = display_table + ' ' + table.map(categorize_fwi)
 
         messages = self.get_messages(display_table.transpose())
-        return col3, messages, self.plots
+        code_messages = self.get_coding_messages(display_table.transpose())
+        return col3, messages, code_messages, self.plots
 
 
 class ClimRRAnnualProjectionsPrecipitation(DataVisualizer):
@@ -338,7 +346,8 @@ class ClimRRAnnualProjectionsPrecipitation(DataVisualizer):
             st.write("This shows the range of precipitation values in the dataset.")
 
         messages = self.get_messages(table)
-        return col3, messages, self.plots
+
+        return col3, messages, code_messages, self.plots
 
 
 class ClimRRAnnualProjectionsCDNP(DataVisualizer):

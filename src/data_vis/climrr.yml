@@ -29,6 +29,18 @@ Fire Weather Index (FWI) projections:
 
     Provide your analysis in a concise yet comprehensive manner. Write in the style of an official report. No need to write the title. Tailor your response to address my specific goals. Your analysis should be within 150-200 words. 
 
+  coding_prompt: |
+    Write code in python to analyze this Fire Weather Index (FWI) table:
+
+    Mean FWI Values (with Standard Deviation) in Markdown Table format:
+
+    {table_markdown}
+
+    The code should be able to answer the following questions:
+    Which season(s) show the highest fire risk at historical (1995-2004), mid-century (2045-2054), and end-century (2085-2094) periods, respectively, and how this changes over time.
+
+    Your 'print' functions in the code should explain what are being printed out and guide the readers without knowing your code to understand your answers to the question above. 
+    Please only provide your code and nothing else. Do NOT answer the question in text format or give any explanations.
 
 Seasonal Temperature Maximum projections:
   path: data/climrr/SeasonalTemperatureMaximum.csv

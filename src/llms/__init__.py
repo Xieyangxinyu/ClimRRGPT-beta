@@ -68,7 +68,6 @@ class OpenSourceVisionModels(ChatCompletion):
 
 
 class OpenSourceCodingModels(ChatCompletion):
-    # TODO
     def __init__(self, model, **args):
         super().__init__(**args)
         self.model = model
