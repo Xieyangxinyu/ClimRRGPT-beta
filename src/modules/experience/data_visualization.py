@@ -120,6 +120,7 @@ def execute_code(code):
             exec(code, {}, exec_locals)
     except Exception as e:
         st.error(f"Error executing code: {e}")
+        print(f"Error executing code: {e}")
         return None
     return output_buffer.getvalue()
 
@@ -231,17 +232,27 @@ else:
 
         col1, col2 = st.columns(2)
         with col1:
+            # Define a toggle in session state if it doesn't exist
+            if f'response_view_{dataset}' not in st.session_state:
+                st.session_state[f'response_view_{dataset}'] = 'init'  # start by showing the new response
+
             get_ai_analysis = st.button("Generate AI Analysis", key=f'get_ai_analysis_{dataset}')
             if get_ai_analysis:
+                st.markdown('**Querying the LLM at the backend...**')
                 print('Querying LLM')
                 llm_response = get_response(messages=messages, stream=True,
                     options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.7}
                 )
-                st.session_state.analysis[dataset] = llm_response
+                # st.session_state.analysis[dataset] = llm_response
+                st.session_state[f'old_response_{dataset}'] = llm_response  # Save the old response immediately
+                print('llm_response', llm_response)
+
+                # Display the old response as soon as it's available
+                # st.markdown(st.session_state[f'old_response_{dataset}'])
                 print('llm_response', llm_response)
 
                 st.markdown(
-                    "<p style='font-size:small; font-style:italic;'>Feel free to read now! We will double-check it in the backend with data analysis tools for better accuracy...</p>",
+                    "<p style='font-size:small; font-style:italic;'>Feel free to read now! We will double-check it in the backend with data analysis model for better accuracy...</p>",
                     unsafe_allow_html=True
                 )
 
@@ -267,17 +278,42 @@ else:
                 #     unsafe_allow_html=True
                 # )
 
-                print('Querying LLM')
-                messages.append({"role": "user",
-                                 "content": "Update your original analysis given this additional feedback:" + execution_results +
-                                            "\n\nPlease keep your original analysis unchanged except for the parts that need to be updated or corrected, and add additional information when needed. "
-                                            "Here is the original analysis:\n" + llm_response})
-                final_response = get_response(messages=messages, stream=False,
-                                              options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.7}
-                                              )
-                print('final_response', final_response)
-                st.session_state.analysis[dataset] = final_response
+                if execution_results is not None:
+                    print('Querying LLM')
+                    messages.append({"role": "user",
+                                     "content": "Update your original analysis given this additional information:" + execution_results +
+                                                "\n\nCheck if there is any contradictory information and if any, fix the original ones. "
+                                                "Please keep your original analysis unchanged except for the parts that need to be updated or corrected."
+                                                "You must mention everything mentioned in this additional information. "
+                                                "Use bold fonts to highlight the updated parts. Here is the original analysis:\n" + llm_response})
+                    final_response = get_response(messages=messages, stream=False,
+                                                  options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.7}
+                                                  )
+                    print('final_response', final_response)
+                    # st.session_state.analysis[dataset] = final_response
+                    st.session_state[f'new_response_{dataset}'] = final_response  # Save the final response
+
+                st.session_state[f'response_view_{dataset}'] = 'final'  # Set to show final response after processing
                 st.rerun()
+
+            # Handle the toggling and display of responses
+            if f'old_response_{dataset}' in st.session_state and f'new_response_{dataset}' in st.session_state:
+                # Toggle between responses
+                if st.session_state[f'response_view_{dataset}'] == 'final':
+                    show_init_response = st.button("Switch response", key=f'toggle_old_{dataset}')
+                    if show_init_response:
+                        st.session_state[f'response_view_{dataset}'] = 'prev'
+                elif st.session_state[f'response_view_{dataset}'] == 'prev':
+                    show_final_response = st.button("Switch response", key=f'toggle_old_{dataset}')
+                    if show_final_response:
+                        st.session_state[f'response_view_{dataset}'] = 'final'
+
+                # Display the appropriate response
+                if st.session_state[f'response_view_{dataset}'] == 'final':
+                    st.markdown(st.session_state[f'new_response_{dataset}'])
+                elif st.session_state[f'response_view_{dataset}'] == 'prev':
+                    st.markdown('**Original Analysis**')
+                    st.markdown(st.session_state[f'old_response_{dataset}'])
 
             if dataset in st.session_state.analysis.keys():
                 input_data = st.session_state.analysis[dataset]

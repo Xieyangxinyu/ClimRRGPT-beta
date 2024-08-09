@@ -12,6 +12,7 @@ import base64
 from src.utils import load_config
 from src.data_vis.climrr_utils import convert_to_dataframe, categorize_fwi, fwi_color
 import plotly.io as pio
+import contextily as ctx
 
 config = load_config('src/data_vis/climrr.yml')
 
@@ -164,6 +165,18 @@ class ClimRRSeasonalProjectionsFWI(DataVisualizer):
         # FWI uses a custom color scale, so we'll return None here
         return None
 
+    @staticmethod
+    def fwi_color_plt(value):
+        fwi_class_colors = {
+            'Low': (1.0, 1.0, 0.0, 0.5),  # Yellow with 50% transparency
+            'Medium': (1.0, 0.8, 0.0, 0.5),  # Orange with 50% transparency
+            'High': (1.0, 0.6, 0.0, 0.5),  # Darker orange with 50% transparency
+            'Very High': (1.0, 0.4, 0.0, 0.5),  # Even darker orange with 50% transparency
+            'Extreme': (1.0, 0.2, 0.0, 0.5),  # Red with 50% transparency
+            'Very Extreme': (1.0, 0.0, 0.0, 0.5)  # Dark red with 50% transparency
+        }
+        return fwi_class_colors[categorize_fwi(value)]
+
     def get_map(self, crossmodels, df, period, season='spring'):
         season_columns = [col for col in df.columns if season in col and period in col]
         season_fwi_df = df[['Crossmodel'] + season_columns]
@@ -174,11 +187,32 @@ class ClimRRSeasonalProjectionsFWI(DataVisualizer):
 
         m = folium.Map(location=st.session_state.center, zoom_start=st.session_state.zoom)
         m.add_child(
-            folium.features.GeoJson(fwi_df_geo, 
+            folium.features.GeoJson(fwi_df_geo,
                 tooltip=folium.features.GeoJsonTooltip(fields=['Crossmodel', col_name, 'class'], aliases=['Crossmodel', 'FWI', 'class']),
-                style_function=lambda x: {'fillColor': fwi_color(x['properties'][col_name]), 
+                style_function=lambda x: {'fillColor': fwi_color(x['properties'][col_name]),
                                           'color': fwi_color(x['properties'][col_name])})
         )
+
+        # fwi_df_geo['color'] = fwi_df_geo[col_name].apply(self.fwi_color_plt)
+        # fig, ax = plt.subplots(1, 1, figsize=(12, 8))
+        #
+        # # set alpha channels from 0.5 to 1 for all colors in fwi_df_geo['color']
+        # color4llava = fwi_df_geo['color'].apply(lambda x: (x[0], x[1], x[2], 1.0))
+        # # increase color contrast
+        # color4llava = color4llava.apply(lambda x: (x[0] * 0.8, x[1] * 0.8, x[2] * 0.8, x[3]))
+        # fwi_df_geo.plot(
+        #     ax=ax,
+        #     color=color4llava,  # Use the computed colors
+        #     edgecolor='black',  # Outline color for the polygons
+        #     legend=True  # Optional: Add a legend if needed
+        # )
+        #
+        # # optionally, add background map
+        # # ctx.add_basemap(ax, crs=fwi_df_geo.crs.to_string(), source=ctx.providers.OpenStreetMap.Mapnik)
+        #
+        # # capitalize the first letter of the season
+        # ax.set_title('FWI Map ' + period.capitalize() + ' ' + season.capitalize())
+        # fig.savefig('spatial_plots/fwi_map_' + period + '_' + season + '.png', dpi=300, bbox_inches='tight')
         return m
 
     def add_legend(self):
@@ -347,7 +381,7 @@ class ClimRRAnnualProjectionsPrecipitation(DataVisualizer):
 
         messages = self.get_messages(table)
 
-        return col3, messages, code_messages, self.plots
+        return col3, messages, self.plots
 
 
 class ClimRRAnnualProjectionsCDNP(DataVisualizer):
