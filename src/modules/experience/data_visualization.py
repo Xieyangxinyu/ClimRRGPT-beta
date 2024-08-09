@@ -247,10 +247,6 @@ else:
                 st.session_state[f'old_response_{dataset}'] = llm_response  # Save the old response immediately
                 print('llm_response', llm_response)
 
-                # Display the old response as soon as it's available
-                # st.markdown(st.session_state[f'old_response_{dataset}'])
-                print('llm_response', llm_response)
-
                 st.markdown(
                     "<p style='font-size:small; font-style:italic;'>Feel free to read now! We will double-check it in the backend with data analysis model for better accuracy...</p>",
                     unsafe_allow_html=True
