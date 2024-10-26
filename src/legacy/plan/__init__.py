@@ -1,1 +1,0 @@
-from src.legacy.plan.plan_assistant import PlanAssistant
