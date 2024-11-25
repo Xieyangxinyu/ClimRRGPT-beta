@@ -53,7 +53,7 @@ class DataVisualizer(ABC):
         if add_legend:
             self.add_legend()
 
-    def map_comparing_period_by_choosing_season(self, crossmodels, df, scenario='45'):
+    def map_comparing_period_by_choosing_season(self, crossmodels, df, scenario='45', add_legend=True):
         custom_css = """
             <style>
             div[role="radiogroup"] label:nth-child(1) span {color: #4CAF50;}  /* spring */
@@ -66,7 +66,7 @@ class DataVisualizer(ABC):
         # Inject custom CSS
         st.markdown(custom_css, unsafe_allow_html=True)
         season = st.radio('Select Season:', ['spring', 'summer', 'autumn', 'winter'], horizontal=True, key = f"{self.keyword}_season")
-        self.map_comparing_period(crossmodels, df, season, scenario=scenario)
+        self.map_comparing_period(crossmodels, df, season, scenario=scenario, add_legend=add_legend)
 
     def map_comparing_season_by_choosing_period(self, crossmodels, df):
         period = st.radio('Select Time Period:', self.data_info['periods'], horizontal=True, key = f"{self.keyword}_period")
@@ -916,7 +916,7 @@ class ClimRRSeasonalProjections(DataVisualizer):
             historical, mid-century, and end-century.
             Use the radio buttons below to select a season and observe how {label} is projected to change over time.
         """)
-        self.map_comparing_period_by_choosing_season(crossmodels, df)
+        self.map_comparing_period_by_choosing_season(crossmodels, df, add_legend=False)
         st.write(f"""
             Use the radio buttons to select a time period and observe how {label} varies by season.
             """)
