@@ -49,3 +49,15 @@ We use [Streamlit](https://streamlit.io) to create a web app. To run the web app
 ```
 streamlit run src/modules/Welcome.py
 ```
+
+
+## TODO
+- [ ] Add Heat Index Data
+  - unlike the other data, this data comes with 3 variables
+    - Summer daily maximum heat index
+    - Summer seasonal maximum heat index
+    - Number of summer days with daily max heat index above 95 / 105 / 115 / 125 F
+- [ ] Add Drought Data
+  - unlike the other data, this data is in the form of a time series
+  - which will be visualized as a line chart
+  - and analyzed using time series analysis
