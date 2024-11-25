@@ -24,8 +24,7 @@ st.session_state.config = config
 
 
 st.session_state.goals_saved = True
-st.session_state.selected_datasets = ['Fire Weather Index (FWI) projections']
-# st.session_state.selected_datasets = ['Fire Weather Index (FWI) projections', 'Seasonal Temperature Maximum projections', 'Precipitation projections']
+st.session_state.selected_datasets = ['Daily Precipitation Mean projections', 'Daily Precipitation Max projections']
 st.session_state.questions = ["How have historical wildfire events and subsequent property value changes in similar metropolitan areas influenced policy decisions regarding infrastructure mitigation strategies?",
                               "How do changes in wildfire risk perception and public policy influence property values in areas susceptible to wildfires?"]
 st.session_state.custom_goals = ["Analyze the historical trends of FWI in Denver, CO and identify areas with significant increases or decreases in fire risk.",
@@ -220,7 +219,11 @@ else:
     user_goals = st.session_state.custom_goals
     goals_text = "\n".join(f"{i+1}. {goal}" for i, goal in enumerate(user_goals))
     for dataset in st.session_state.selected_datasets:
-        col3, messages, code_messages, plots = st.session_state.analyze_fn_dict[dataset](st.session_state.crossmodel)
+        results = st.session_state.analyze_fn_dict[dataset](st.session_state.crossmodel)
+        try:
+            col3, messages, code_messages, plots = results
+        except ValueError:
+            col3, messages, plots = results
         
         messages.append({"role": "user", "content": f"Here is my profile:\n\nProfession: {st.session_state.responses['Profession']}\n\nConcern: {st.session_state.responses['Concern']}\n\nTimeline: {st.session_state.responses['Timeline']}\n\nScope: {st.session_state.responses['Scope']}"})
         messages.append({"role": "user", "content": f"I'd like to address these goals:\n{goals_text}\n\nPlease provide the analysis based on the prompt above. "})
@@ -231,7 +234,7 @@ else:
                 messages = [messages[0]] + [{"role": "system", "content": f"Previous analysis for {prev_dataset}:\n{prev_analysis}"}] + messages[1:]
 
         col1, col2 = st.columns(2)
-        with col1:
+        with col3:
             # Define a toggle in session state if it doesn't exist
             if f'response_view_{dataset}' not in st.session_state:
                 st.session_state[f'response_view_{dataset}'] = 'init'  # start by showing the new response

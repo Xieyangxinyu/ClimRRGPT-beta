@@ -40,7 +40,7 @@ index = faiss.read_index("./data/wildfire_index.bin")
 # Load a sentence transformer model
 model = SentenceTransformer('all-MiniLM-L6-v2', device='mps')
 
-def search(query, k=10):
+def search(query, k=5):
     query_vector = model.encode([query]).astype(np.float32)
     _, indices = index.search(query_vector, k)
     return df.iloc[indices[0]].reset_index(drop=True)
@@ -97,7 +97,7 @@ def literature_search(query, messages = None):
             else:
                 result['doi'] = 'Failed to fetch data'
     
-    message = f"Here are the 10 most relevant papers for your query '{query}':\n\n"
+    message = f"Here are the 5 most relevant papers retrieved:\n\n"
     for i, result in enumerate(results):
         message += f"{i+1}. Title: {result['title']}\n\n"
         message += f"Authors: {get_author(result['authors'])}\n\n"

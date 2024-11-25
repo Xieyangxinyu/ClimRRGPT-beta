@@ -5,9 +5,9 @@ Climate Action Through Large Language Models
 
 Install [Ollama](https://github.com/ollama/ollama).
 
-Once you have installed Ollama, you can run the following command to install Gemma-2 language model:
+Once you have installed Ollama, you can run the following command to install Llama 3 language model:
 ```
-ollama run gemma2
+ollama run llama3.1:8b-instruct-q4_0
 ```
 
 We use Python 3.11.6 and [Poetry](https://python-poetry.org/) to manage dependencies. 

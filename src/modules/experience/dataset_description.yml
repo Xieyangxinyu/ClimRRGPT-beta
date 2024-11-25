@@ -29,16 +29,53 @@ available_datasets:
         
   Precipitation projections:
     description: |
-      This dataset provides historical and projected annual total precipitation values. It allows you to explore how the total amount of precipitation over a year may change from the historical period (1995-2004) to the mid-century (2045-2054) and end-century (2085-2094) under the RCP 8.5 climate scenario. Higher values indicate higher total precipitation. Analyzing this data can help understand potential changes in water availability, flood risk, drought likelihood, and their implications for wildfire risk, agriculture, ecosystems, and more.
+      This dataset provides historical and projected annual total precipitation values. It allows you to explore how the total amount of precipitation over a year may change from the historical period (1995-2004) to the mid-century (2045-2054) and end-century (2085-2094) under the RCP 4.5 and RCP 8.5 climate scenarios. Higher values indicate higher total precipitation. Analyzing this data can help understand potential changes in water availability, flood risk, drought likelihood, and their implications for wildfire risk, agriculture, ecosystems, and more.
     instruction: |
       Choose this dataset if you want to investigate how the total annual precipitation is projected to change from historical levels to mid-century and end-century periods. This can provide insights into potential changes in water availability and related impacts.
     links:
       - name: ClimRR data
         url: https://climrr.anl.gov/
-        
+
+  Daily Precipitation Max projections:
+    description: |
+      This dataset provides historical and projected daily precipitation values, reporting the maximum daily precipitation record for each season (winter, spring, summer, autumn). It allows you to explore how the maximum daily precipitation may change over time, from the historical period (1995-2004) to the mid-century (2045-2054) and end-century (2085-2094) under the RCP 8.5 climate scenarios. Higher values indicate higher maximum daily precipitation. Analyzing this data can help understand potential changes in extreme precipitation events, flood risks, and their implications for various sectors, including agriculture, water management, infrastructure, and ecosystem sustainability.
+    instruction: |
+      Choose this dataset if you want to investigate how the maximum daily precipitation is projected to change from historical levels to mid-century and end-century periods. This can provide insights into potential changes in extreme precipitation events and related impacts.
+    links:
+      - name: ClimRR data
+        url: https://climrr.anl.gov/
+  
+  Daily Precipitation Mean projections:
+    description: |
+      This dataset provides historical and projected daily precipitation values, reporting the mean daily precipitation record for each season (winter, spring, summer, autumn). It allows you to explore how the mean daily precipitation may change over time, from the historical period (1995-2004) to the mid-century (2045-2054) and end-century (2085-2094) under the RCP 8.5 climate scenarios. Higher values indicate higher mean daily precipitation. Analyzing this data can help understand potential changes in average precipitation patterns, water availability, and their implications for various sectors, including agriculture, water management, infrastructure, and ecosystem sustainability.
+    instruction: |
+      Choose this dataset if you want to investigate how the mean daily precipitation is projected to change from historical levels to mid-century and end-century periods. This can provide insights into potential changes in average precipitation patterns and related impacts.
+    links:
+      - name: ClimRR data
+        url: https://climrr.anl.gov/
+
+  Annual Temperature Maximum projections:
+    description: |
+      This dataset provides historical and projected annual maximum temperature values. It allows you to explore how the highest temperatures in a year may change over time, from the historical period (1995-2004) to the mid-century (2045-2054) and end-century (2085-2094) under the RCP 4.5 and RCP 8.5 climate scenarios. Higher values indicate higher maximum temperatures. Analyzing this data can help understand potential temperature extremes and their implications for various sectors, including agriculture, public health, infrastructure, and ecosystem sustainability, by identifying regions that may face increased risks due to extreme heat events and informing climate adaptation and mitigation strategies.
+    instruction: |
+      Choose this dataset if you want to investigate how the maximum temperatures in a year are projected to change from historical levels to mid-century and end-century periods. This can provide insights into potential heat extremes and their impacts on various sectors.
+    links:
+      - name: ClimRR data
+        url: https://climrr.anl.gov/
+  
+  Annual Temperature Minimum projections:
+    description: |
+      This dataset provides historical and projected annual minimum temperature values. It allows you to explore how the lowest temperatures in a year may change over time, from the historical period (1995-2004) to the mid-century (2045-2054) and end-century (2085-2094) under the RCP 4.5 and RCP 8.5 climate scenarios. Higher values indicate higher minimum temperatures. Analyzing this data can help understand changes in cold extremes and their implications for various sectors, including agriculture, public health, infrastructure, and ecosystem sustainability, by identifying regions that may face increased risks due to extreme cold events and informing climate adaptation and mitigation strategies.
+    instruction: |
+      Choose this dataset if you want to investigate how the minimum temperatures in a year are projected to change from historical levels to mid-century and end-century periods. This can provide insights into potential cold extremes and their impacts on various sectors.
+    links:
+      - name: ClimRR data
+        url: https://climrr.anl.gov/
+
+
   Consecutive Dry Days projections:
     description: |
-      This dataset provides historical and projected values for the maximum number of consecutive days with no precipitation (dry days). It allows you to explore how the duration of dry periods may change from the historical period (1995-2004) to the mid-century (2045-2054) and end-century (2085-2094) under the RCP 8.5 climate scenario. Higher values indicate longer periods without precipitation. Analyzing this data can help understand potential changes in drought risk, wildfire danger, water stress for crops and ecosystems, and more.
+      This dataset provides historical and projected values for the maximum number of consecutive days with no precipitation (dry days). It allows you to explore how the duration of dry periods may change from the historical period (1995-2004) to the mid-century (2045-2054) and end-century (2085-2094) under the RCP 4.5 and RCP 8.5 climate scenario. Higher values indicate longer periods without precipitation. Analyzing this data can help understand potential changes in drought risk, wildfire danger, water stress for crops and ecosystems, and more.
     instruction: |  
       Choose this dataset if you want to investigate how the maximum number of consecutive dry days is projected to change from historical levels to mid-century and end-century periods. This can provide insights into potential changes in drought risk and related impacts.
     links:
@@ -47,7 +84,7 @@ available_datasets:
         
   Wind Speed projections:
     description: |
-      This dataset provides historical and projected average wind speed values. It allows you to explore how wind speeds may change from the historical period (1995-2004) to the mid-century (2045-2054) and end-century (2085-2094) under the RCP 8.5 climate scenario. Higher values indicate higher average wind speeds. Wind speed influences wildfire behavior, renewable energy potential, building design requirements, and more.
+      This dataset provides historical and projected average wind speed values. It allows you to explore how wind speeds may change from the historical period (1995-2004) to the mid-century (2045-2054) and end-century (2085-2094) under the RCP 4.5 and RCP 8.5 climate scenario. Higher values indicate higher average wind speeds. Wind speed influences wildfire behavior, renewable energy potential, building design requirements, and more.
     instruction: |
       Choose this dataset if you want to investigate how average wind speeds are projected to change from historical levels to mid-century and end-century periods. This can provide insights into potential changes in wildfire behavior, wind energy resources, and other wind-related impacts.  
     links:
@@ -72,6 +109,15 @@ available_datasets:
       - name: ClimRR data  
         url: https://climrr.anl.gov/
     
+  Heat Index projections:
+    description: |
+      This dataset provides historical and projected heat index values. Heat index is calculated using temperature and relative humidity as its two key inputs, with the output measure providing a better picture of how hot the outside weather feels to humans. The heat index information provided in ClimRR is calculated using an extended heat index5 formula that better captures extreme heat conditions. Using this heat index method is important for understanding how future climate change will produce extremes beyond those typically experienced under historical conditions. It allows you to explore how heat stress conditions may change from the historical period (1995-2004) to the mid-century (2045-2054) under the RCP 8.5 climate scenario. Higher values indicate higher heat stress. Analyzing this data can help understand potential changes in extreme heat conditions and their implications for human health, labor productivity, and cooling energy demand.
+    instruction: |
+      Choose this dataset if you want to investigate how heat index values are projected to change from historical levels to mid-century. This can provide insights into potential changes in heat stress conditions and related impacts.
+    links:
+      - name: ClimRR data
+        url: https://climrr.anl.gov/
+
 
   Long term fire history records:
     description: The metadata from the North American Tree-ring Fire Scar Synthesis (NAFSS) provides a rich dataset including scientific studies derived from the annually- to sub-annually-resolved tree-ring records of fire spanning centuries. The dataset covers a range from the year 0 AD up to the year 2019 AD, or 1950 to -69 in calendar years before present (BP). This dataset can be instrumental in analyzing wildfire risk by providing historical context and identifying interactions among fire, climate, topography, vegetation, and humans. 

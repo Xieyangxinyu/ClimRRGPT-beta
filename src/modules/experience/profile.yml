@@ -1,4 +1,4 @@
-model: gemma2
+model: llama3.1:8b-instruct-q4_0
 
 init_questions:
   Profession: What is your profession?

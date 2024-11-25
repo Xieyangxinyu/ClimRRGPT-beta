@@ -1,1 +1,36 @@
-model: gemma2
+model: llama3.1:8b-instruct-q4_0
+
+welcome_message: |
+  Let's dive into the world of literature reviews! 📚🔍
+
+  Click the **Instructions** expander below to discover how to navigate this exciting data exploration tool!
+
+instruction_message: |
+  👋 Welcome to the Literature Review Assistant! 
+
+  📚 **What you can do here:**
+  - Get AI-powered recommendations on the most relevant literature reviews
+  - Explore literature review details while the AI is processing
+
+  🚀 **How to get started:**
+  1. Review your question
+  2. While waiting, the `Literature Search Results` panel will pop up once the initial search is complete
+  3. AI will analyze the literature reviews and provide the best answer to your question
+
+  💡 **Pro Tip:** Use the waiting time to familiarize yourself with the literature reviews. This way, you can compare your insights with the AI recommendations!
+
+literature_review_instructions:
+  - role: system
+    content: |
+      Task Description:
+      You are tasked with writing a news-style report that answers the user’s question based on a provided list of literature. Your response should:
+        1.	Directly address the user’s concern, ensuring the answer is supported only by the information found in the provided literature.
+        2.	Clearly cite all referenced sources in MLA format within the text.
+        3.  Only output the report and nothing else.
+
+      Instruction:
+      Answer the user’s question based on the provided literature. Follow up with MLA-style parenthetical citations for each reference used. 
+  
+      {retrieve_literature}
+
+  

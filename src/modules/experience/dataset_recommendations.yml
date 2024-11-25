@@ -1,4 +1,4 @@
-model: gemma2
+model: llama3.1:8b-instruct-q4_0
 
 profile_not_complete_message: |
   Welcome! It looks like you haven't completed your profile yet.

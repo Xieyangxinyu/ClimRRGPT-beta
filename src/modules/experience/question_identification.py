@@ -42,13 +42,14 @@ def parse_question(response):
 
 def get_question_suggestion(messages):
     for i in range(st.session_state.current_brainstorm_index):
-        messages.append({"role": "assistant", "content": question_recommendation_instructions[i + 1]['content']})
+        messages.append({"role": "assistant", "content": st.session_state.questions[i]})
+        messages.append({"role": "user", "content": question_recommendation_instructions[i + 2]['content']})
     response = parse_question(get_response(messages=messages, stream=True,
         options={"top_p": 0.95, "max_tokens": 256, "temperature": 1, "stop": ["\n"]}
     ))
     # retry at most 3 times
     for i in range(3):
-        while not response:
+        if not response:
             stream_static_text("Sorry that wasn't a good question. Let me try again!")
             response = parse_question(get_response(messages=messages, stream=True,
                 options={"top_p": 0.95, "max_tokens": 256, "temperature": 1, "stop": ["\n"]}

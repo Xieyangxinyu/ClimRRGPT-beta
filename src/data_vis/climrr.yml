@@ -106,15 +106,74 @@ Seasonal Temperature Minimum projections:
 
     Provide your analysis in a concise yet comprehensive manner. Write in the style of an official report. No need to write the title. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
   
+Annual Temperature Maximum projections:
+  path: data/climrr/AnnualTemperatureMaximum.csv
+  values_of_interests: [
+    'hist', 'rcp45_midc', 'rcp85_midc', 'rcp45_endc', 'rcp85_endc'
+  ]
+  periods: ['hist', 'midc', 'endc']
+  title: Annual Maximum Temperature Analysis
+  subtitle: Explore historical, mid-century, and end-century annual maximum temperature values. Higher values indicate higher temperatures.
+  season: False
+  scenarios: True
+  prompt: |
+    Analyze the following Annual Maximum Temperature data and provide a comprehensive interpretation:
+
+    Mean Annual Maximum Temperature Values (with Standard Deviation) in Markdown Table format:
+
+    {table_markdown}
+
+    Mean Annual Maximum Temperature Values (with Standard Deviation) in JSON format:
+
+    {table_json}
+
+    Based on this data and my goals:
+    1. Describe the overall trend in annual maximum temperature values from historical to end-century periods.
+    2. Identify any significant changes or patterns in temperature levels over time.
+    3. Discuss the implications of these changes in temperature for wildfire risks and climate change.
+    4. Contextualize the data: explaining how the temperature data and trends relate to me.
+
+    Provide your analysis in a concise yet comprehensive manner. Write in the style of an official report. No need to write the title. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
+
+Annual Temperature Minimum projections:
+  path: data/climrr/AnnualTemperatureMinimum.csv
+  values_of_interests: [
+    'hist', 'rcp45_midc', 'rcp85_midc', 'rcp45_endc', 'rcp85_endc'
+  ]
+  periods: ['hist', 'midc', 'endc']
+  title: Annual Minimum Temperature Analysis
+  subtitle: Explore historical, mid-century, and end-century annual minimum temperature values. Higher values indicate higher temperatures.
+  season: False
+  scenarios: True
+  prompt: |
+    Analyze the following Annual Minimum Temperature data and provide a comprehensive interpretation:
+
+    Mean Annual Minimum Temperature Values (with Standard Deviation) in Markdown Table format:
+
+    {table_markdown}
+
+    Mean Annual Minimum Temperature Values (with Standard Deviation) in JSON format:
+
+    {table_json}
+
+    Based on this data and my goals:
+    1. Describe the overall trend in annual minimum temperature values from historical to end-century periods.
+    2. Identify any significant changes or patterns in temperature levels over time.
+    3. Discuss the implications of these changes in temperature for wildfire risks and climate change.
+    4. Contextualize the data: explaining how the temperature data and trends relate to me.
+
+    Provide your analysis in a concise yet comprehensive manner. Write in the style of an official report. No need to write the title. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
+  
 Precipitation projections:
   path: data/climrr/Precipitation_inches_AnnualTotal.csv
   values_of_interests: [
-    'hist', 'rcp85_midc', 'rcp85_endc'
+    'hist', 'rcp45_midc', 'rcp85_midc', 'rcp45_endc', 'rcp85_endc'
   ]
   periods: ['hist', 'midc', 'endc']
   title: Annual Total Precipitation Analysis
   subtitle: Explore historical, mid-century, and end-century annual total precipitation values. Higher values indicate higher precipitation.
   season: False
+  scenarios: True
   prompt: |
     Analyze the following Annual Total Precipitation data and provide a comprehensive interpretation:
 
@@ -137,12 +196,13 @@ Precipitation projections:
 Consecutive Dry Days projections:
   path: data/climrr/ConsecutiveDayswithNoPrecipitation.csv
   values_of_interests: [
-    'hist', 'rcp85_midc', 'rcp85_endc'
+    'hist', 'rcp45_midc', 'rcp85_midc', 'rcp45_endc', 'rcp85_endc'
   ]
   periods: ['hist', 'midc', 'endc']
   title: Consecutive Dry Days Analysis
   subtitle: Explore historical, mid-century, and end-century consecutive dry days. Higher values indicate longer periods without precipitation.
   season: False
+  scenarios: True
   prompt: |
     Analyze the following Consecutive Dry Days data and provide a comprehensive interpretation:
 
@@ -165,7 +225,7 @@ Consecutive Dry Days projections:
 Wind Speed projections:
   path: data/climrr/WindSpeed.csv
   values_of_interests: [
-    'hist', 'rcp85_midc', 'rcp85_endc'
+    'hist', 'rcp45_midc', 'rcp85_midc', 'rcp45_endc', 'rcp85_endc'
   ]
   periods: ['hist', 'midc', 'endc']
   title: Wind Speed Analysis
@@ -246,3 +306,65 @@ Heating Degree Days projections:
 
     Provide your analysis in a concise yet comprehensive manner. Write in the style of an official report. No need to write the title. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
 
+Daily Precipitation Max projections:
+  path: data/climrr/DailyPrecipitationMax.csv
+  values_of_interests: [
+    'hist_winter', 'rcp85_midc_winter', 'rcp85_endc_winter',
+    'hist_spring', 'rcp85_midc_spring', 'rcp85_endc_spring',
+    'hist_summer', 'rcp85_midc_summer', 'rcp85_endc_summer',
+    'hist_autumn', 'rcp85_midc_autumn', 'rcp85_endc_autumn'
+  ]
+  periods: ['hist', 'midc', 'endc']
+  title: Daily Maximum Precipitation Analysis
+  subtitle: Explore historical, mid-century, and end-century daily maximum precipitation values. Higher values indicate higher precipitation levels.
+  season: True
+  prompt: |
+    Analyze the following Daily Maximum Precipitation data and provide a comprehensive interpretation:
+
+    Mean Daily Maximum Precipitation Values (with Standard Deviation) in Markdown Table format:
+
+    {table_markdown}
+
+    Mean Daily Maximum Precipitation Values (with Standard Deviation) in JSON format:
+
+    {table_json}
+
+    Based on this data and my goals:
+    1. Describe the overall trend in daily maximum precipitation values from historical to end-century periods.
+    2. Identify which season(s) show the highest precipitation levels and how this changes over time.
+    3. Highlight any significant changes or patterns across seasons or time periods.
+    4. Contextualize the data: explaining how the precipitation data and trends relate to me.
+
+    Provide your analysis in a concise yet comprehensive manner. Write in the style of an official report. No need to write the title. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
+
+Daily Precipitation Mean projections:
+  path: data/climrr/DailyPrecipitationMean.csv
+  values_of_interests: [
+    'hist_winter', 'rcp85_midc_winter', 'rcp85_endc_winter',
+    'hist_spring', 'rcp85_midc_spring', 'rcp85_endc_spring',
+    'hist_summer', 'rcp85_midc_summer', 'rcp85_endc_summer',
+    'hist_autumn', 'rcp85_midc_autumn', 'rcp85_endc_autumn'
+  ]
+  periods: ['hist', 'midc', 'endc']
+  title: Daily Mean Precipitation Analysis
+  subtitle: Explore historical, mid-century, and end-century daily mean precipitation values. Higher values indicate higher precipitation levels.
+  season: True
+  prompt: |
+    Analyze the following Daily Mean Precipitation data and provide a comprehensive interpretation:
+
+    Mean Daily Mean Precipitation Values (with Standard Deviation) in Markdown Table format:
+
+    {table_markdown}
+
+    Mean Daily Mean Precipitation Values (with Standard Deviation) in JSON format:
+
+    {table_json}
+
+    Based on this data and my goals:
+    1. Describe the overall trend in daily mean precipitation values from historical to end-century periods.
+    2. Identify which season(s) show the highest precipitation levels and how this changes over time.
+    3. Highlight any significant changes or patterns across seasons or time periods.
+    4. Contextualize the data: explaining how the precipitation data and trends relate to me.
+
+    Provide your analysis in a concise yet comprehensive manner. Write in the style of an official report. No need to write the title. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
+  
