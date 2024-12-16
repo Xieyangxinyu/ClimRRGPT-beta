@@ -17,6 +17,7 @@ def dispatch_analyze_fn(keywords):
         'Wind Speed projections': ClimRRAnnualProjectionsWindSpeed,
         'Cooling Degree Days projections': ClimRRAnnualProjectionsCoolingDegreeDays,
         'Heating Degree Days projections': ClimRRAnnualProjectionsHeatingDegreeDays,
+        'Heat Index projections': ClimRRAnnualProjectionsHeatIndex,
         'Census data': analyze_census_data,
         'Recent Fire Perimeters data': analyze_wildfire_perimeters
     }

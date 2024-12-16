@@ -367,4 +367,31 @@ Daily Precipitation Mean projections:
     4. Contextualize the data: explaining how the precipitation data and trends relate to me.
 
     Provide your analysis in a concise yet comprehensive manner. Write in the style of an official report. No need to write the title. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.
-  
+
+Heat Index projections:
+  path: data/climrr/heatindex.csv
+  values_of_interests: [
+    'heatindex_HIS_DayMax', 'heatindex_HIS_SeaMax', 'heatindex_HIS_Day95', 'heatindex_HIS_Day105', 'heatindex_HIS_Day115', 'heatindex_HIS_Day125', 'heatindex_M85_DayMax', 'heatindex_M85_SeaMax', 'heatindex_M85_Day95', 'heatindex_M85_Day105', 'heatindex_M85_Day115', 'heatindex_M85_Day125', 'heatindex_E85_DayMax', 'heatindex_E85_SeaMax', 'heatindex_E85_Day95', 'heatindex_E85_Day105', 'heatindex_E85_Day115', 'heatindex_E85_Day125',
+  ]
+  periods: ['HIS', 'M85', 'E85']
+  title: Heat Index Analysis
+  subtitle: Explore historical, mid-century, and end-century heat index values. Higher values indicate higher heat stress.
+  season: False
+  prompt: |
+    Analyze the following Heat Index data and provide a comprehensive interpretation:
+
+    Mean Heat Index Values (with Standard Deviation) in Markdown Table format:
+
+    {table_markdown}
+
+    Mean Heat Index Values (with Standard Deviation) in JSON format:
+
+    {table_json}
+
+    Based on this data and my goals:
+    1. Describe the overall trend in heat index values from historical to end-century periods.
+    2. Identify any significant changes or patterns in heat stress levels over time.
+    3. Discuss the implications of these changes in heat stress for human health and climate change.
+    4. Contextualize the data: explaining how the heat index data and trends relate to me.
+
+    Provide your analysis in a concise yet comprehensive manner. Write in the style of an official report. No need to write the title. Tailor your response to address my specific goals. Your analysis should be within 150-200 words.

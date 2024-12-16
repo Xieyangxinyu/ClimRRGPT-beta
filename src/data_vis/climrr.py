@@ -979,3 +979,205 @@ class ClimRRDailyProjectionsPrecipitation(ClimRRSeasonalProjections):
 
     def analyze(self, crossmodels):
         return super().analyze(crossmodels, f'{self.agg_type} Daily Precipitation')
+    
+
+class ClimRRAnnualProjectionsHeatIndex(ClimRRAnnualClimateScenarios):
+    def __init__(self):
+        super().__init__('Heat Index projections')
+
+    def create_color_scale(self):
+        return plt.cm.get_cmap('RdYlBu_r')  # Red (hot) to Blue (cold) color scale
+    
+    def analyze_annual(self, crossmodels, df):
+        # check if there are two climate scenarios in the df.columns
+        
+        st.header("Time Period Comparison")
+
+        columns_daily = [col for col in df.columns if 'DayMax' in col]
+        st.header("Summer Daily Max Heat Index")
+        self.map_comparing_period(crossmodels, df[['Crossmodel'] + columns_daily], scenario='daily', add_legend=False)
+        st.header("Summer Seasonal Max Heat Index")
+        columns_seasonal = [col for col in df.columns if 'SeaMax' in col]
+        self.map_comparing_period(crossmodels, df[['Crossmodel'] + columns_seasonal], scenario='seasonal')
+        st.header("# of Summer Days Above Threshold")
+        threshold = st.radio("Select a threshold (in °F) for the number of summer days above", ['95', '105', '115', '125'], horizontal=True)
+        columns_daily = [col for col in df.columns if f'Day{threshold}' in col]
+        self.map_comparing_period(crossmodels, df[['Crossmodel'] + columns_daily], scenario='daily', add_legend=False)
+        
+        fig, ax = plt.subplots(figsize=(6, 1))
+        fig.subplots_adjust(bottom=0.5)
+        max_value = df[columns_daily].max().max()
+
+        norm = mcolors.Normalize(vmin=0, vmax=max_value)
+        fig.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=self.color_scale), 
+                          cax=ax, orientation='horizontal', label='# of Summer Days Above Threshold')
+        
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png', bbox_inches='tight')
+        plt.close(fig)
+        
+        data = base64.b64encode(buf.getbuffer()).decode("utf8")
+        
+        legend_html = f"""
+        <div style="text-align:center;">
+            <img src="data:image/png;base64,{data}" style="max-width:100%">
+        </div>
+        """
+        st.markdown(legend_html, unsafe_allow_html=True)
+
+
+        st.header(f"{self.keyword} Meta-Analysis")
+        mean, std = self.calculate_statistics(df)
+        fig = self.create_plot(mean)
+        return self.display_results(mean, std, fig)
+
+    def get_map(self, crossmodels, df, period, season='spring'):
+        if 'DayMax' in df.columns:
+            return super().get_map(crossmodels, df, period, season, label='Summer Daily Max Heat Index')
+        elif 'SeaMax' in df.columns:
+            return super().get_map(crossmodels, df, period, season, label='Summer Seasonal Max Heat Index')
+        else:
+            return super().get_map(crossmodels, df, period, season, label='# of Summer Days Above Threshold')
+    
+    def add_legend(self, lable='Heat Index'):
+        return super().add_legend(lable)
+    
+    def create_plot(self, mean, col_label='Heat Index', label_with_metric='Heat Index', title='Mean Heat Index'):
+        mean = mean.reset_index()
+
+        mean.columns = ['Time Period', col_label]
+
+        # Add a Scenario column based on the 'Time Period' values
+        def determine_scenario(period):
+            if 'DayMax' in period:
+                return 'Daily'
+            elif 'SeaMax' in period:
+                return 'Seasonal'
+            
+        def determine_period(period):
+            if 'HIS' in period:
+                return 'Historical'
+            elif 'M85' in period:
+                return 'Mid-Century'
+            elif 'E85' in period:
+                return 'End-Century'
+            
+        def determine_threshold(period):
+            if 'Day95' in period:
+                return '# of summer days above 95 F'
+            elif 'Day105' in period:
+                return '# of summer days above 105 F'
+            elif 'Day115' in period:
+                return '# of summer days above 115 F'
+            else:
+                return '# of summer days above 125 F'
+
+        mean_max = mean[mean['Time Period'].str.contains('Max')]
+        mean_above = mean.drop(mean_max.index)
+        mean_above.columns = ['Time Period', '# of Summer Days Above Threshold']
+        
+        mean_max['Scenario'] = mean_max['Time Period'].apply(determine_scenario)
+        mean_above['Threshold'] = mean_above['Time Period'].apply(determine_threshold)
+
+        mean_max['Time Period'] = mean_max['Time Period'].apply(determine_period)
+        mean_above['Time Period'] = mean_above['Time Period'].apply(determine_period)        
+
+        # Explicitly set the order of the x-axis (Time Period)
+        time_order = ['Historical', 'Mid-Century', 'End-Century']
+        mean_max['Time Period'] = pd.Categorical(mean_max['Time Period'], categories=time_order, ordered=True)
+        mean_above['Time Period'] = pd.Categorical(mean_above['Time Period'], categories=time_order, ordered=True)
+
+        # Create the line plot
+        fig = px.line(
+            # only keep the rows with 'Max' in the 'Time Period' column
+            mean_max,
+            x='Time Period',
+            y=col_label,
+            color='Scenario',
+            title=f'{title} Across Time Periods',
+            labels={col_label: label_with_metric, 'Time Period': 'Time Period'},
+            color_discrete_map={'Historical': '#000000', 'Daily': '#FFA500', 'Seasonal': '#FF0000'}
+        )
+
+        # Update layout for better visualization
+        fig.update_layout(
+            plot_bgcolor='rgba(0,0,0,0)', 
+            paper_bgcolor='rgba(0,0,0,0)',
+            xaxis_title='Time Period',
+            yaxis_title=label_with_metric,
+            xaxis=dict(tickangle=-45)  # Rotate x-axis labels for better readability
+        )
+
+        fig2 = px.bar(
+            mean_above,
+            x='Time Period',
+            y='# of Summer Days Above Threshold',
+            color='Threshold',
+            title=f'{title} Across Time Periods',
+            labels={'# of Summer Days Above Threshold': '# of Summer Days Above Threshold', 'Time Period': 'Time Period'},
+            barmode='overlay',
+            color_discrete_map={
+                '# of summer days above 95 F': '#FFA500',
+                '# of summer days above 105 F': '#FF4500',
+                '# of summer days above 115 F': '#FF0000',
+                '# of summer days above 125 F': '#8B0000'
+            }
+        )
+
+        # Update layout for better visualization
+        fig2.update_layout(
+            plot_bgcolor='rgba(0,0,0,0)', 
+            paper_bgcolor='rgba(0,0,0,0)',
+            xaxis_title='Time Period',
+            yaxis_title=label_with_metric,
+            xaxis=dict(tickangle=-45)  # Rotate x-axis labels for better readability
+        )
+
+        return [fig, fig2]
+    
+    def display_results_helper(self, table, std_table, scenarios, indices):
+        display_tables = []
+        for scenario in scenarios:
+            table_scenario = table.loc[:, table.columns.str.contains(scenario)]
+            std_table_scenario = std_table.loc[:, std_table.columns.str.contains(scenario)]
+            display_table_scenario = table_scenario.map(lambda x: f"{x:.2f}") + ' (' + std_table_scenario.map(lambda x: f"{x:.2f}") + ')'
+            display_table_scenario.columns = ['Historical', 'Mid-Century', 'End-Century']
+            display_tables.append(display_table_scenario)
+        
+        final_display_table = pd.concat(display_tables, axis=0)
+        final_display_table.index = indices
+        return final_display_table
+
+    
+    def display_results(self, mean, std, figs, label = 'Heat Index', label_with_metric = 'Heat Index', metric = ''):
+        col1, col2, col3 = st.columns([1, 1, 1])
+        
+        with col2:
+            for fig in figs:
+                st.plotly_chart(fig, use_container_width=True)
+            st.write(f"This chart illustrates the trends in {label} across the three time periods.")
+
+        with col1:
+            table = pd.DataFrame(mean).T
+            std_table = pd.DataFrame(std).T
+
+            display_table_heat_index = self.display_results_helper(table, std_table, ['DayMax', 'SeaMax'], ['Daily Max', 'Seasonal Max'])
+
+            # Display the tables using Streamlit
+            st.caption(f"{label_with_metric} (Std Dev) - Summer Max Heat Index")
+            st.dataframe(display_table_heat_index, use_container_width=True)
+
+            st.write(f"These tables present the {label} values for each time period and scenario, with standard deviations in parentheses.")
+
+            st.caption(f"{label_with_metric} Range")
+            st.write(f"Minimum: {self.min_value:.2f} {metric}")
+            st.write(f"Maximum: {self.max_value:.2f} {metric}")
+            st.write(f"This shows the range of {label} values in the dataset.")
+
+            display_table_days_above = self.display_results_helper(table, std_table, ['Day95', 'Day105', 'Day115', 'Day125'], ['95 F', '105 F', '115 F', '125 F'])
+            st.caption(f"Number of Summer Days Above Threshold")
+            st.dataframe(display_table_days_above, use_container_width=True)
+
+            
+        messages = self.get_messages(table)
+        return col3, messages, self.plots

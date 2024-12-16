@@ -24,7 +24,7 @@ st.session_state.config = config
 
 
 st.session_state.goals_saved = True
-st.session_state.selected_datasets = ['Daily Precipitation Mean projections', 'Daily Precipitation Max projections']
+st.session_state.selected_datasets = ['Heat Index projections']
 st.session_state.questions = ["How have historical wildfire events and subsequent property value changes in similar metropolitan areas influenced policy decisions regarding infrastructure mitigation strategies?",
                               "How do changes in wildfire risk perception and public policy influence property values in areas susceptible to wildfires?"]
 st.session_state.custom_goals = ["Analyze the historical trends of FWI in Denver, CO and identify areas with significant increases or decreases in fire risk.",
