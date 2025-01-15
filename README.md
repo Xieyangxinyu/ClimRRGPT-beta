@@ -52,7 +52,7 @@ streamlit run src/modules/Welcome.py
 
 
 ## TODO
-- [ ] Add Heat Index Data
+- [x] Add Heat Index Data
   - unlike the other data, this data comes with 3 variables
     - Summer daily maximum heat index
     - Summer seasonal maximum heat index

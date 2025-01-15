@@ -1,4 +1,4 @@
-model: llama3.1:8b-instruct-q4_0
+model: llama3:instruct
 
 profile_not_complete_message: |
   Welcome! It looks like you haven't completed your profile yet.
@@ -11,17 +11,7 @@ questions_not_done_message: |
   To select questions, please click the button below to set up your questions. This will help us tailor our recommendations to your specific needs.
 
 welcome_message: |
-  You're just ONE STEP AWAY from epic wildfire analysis! 🔥🌟
-  
-  But first, let's set clear goals! Why? 🤔
-
-  - Goals guide your analysis 🧭
-  - They save time and resources ⏳💰
-  - They ensure meaningful results 🎯🏆
-
-  Clear goals turn raw data into powerful insights! 💡💪
-  
-  Click the Instructions below and let's set some fire-hot goals! 🔥💪
+  You're just ONE STEP AWAY from epic wildfire analysis! 🔥🌟 Click the Instructions below and let's set some fire-hot goals! 🔥💪
 
 instruction_message: |
   You've made it to goal-setting! 🏆 Let's make this wildfire project sizzle! 🌋

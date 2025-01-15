@@ -1,5 +1,4 @@
 import ollama
-from src.config import model, client
 from abc import ABC, abstractmethod
 import streamlit as st
 
@@ -17,6 +16,7 @@ class OpenAI(ChatCompletion):
         super().__init__(**args)
 
     def get_response(self, **args):
+        raise NotImplementedError("OpenAI is not implemented yet")
         pass
 
 class OpenSourceModels(ChatCompletion):

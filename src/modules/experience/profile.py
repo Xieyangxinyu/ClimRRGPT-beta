@@ -109,7 +109,7 @@ if not st.session_state.profile_done:
                     messages.append({"role": "assistant", "content": questions[last_question]})
                     messages.append({"role": "user", "content": "Could you provide some suggestions? Respond within a paragraph of at most 2 sentences."})
                     response = get_response(messages=messages, stream=True,
-                        options={"top_p": 0.95, "max_tokens": 64, "temperature": 0.7, "stop": ["\n", "?"]}
+                        options={"top_p": 0.95, "max_tokens": 64, "temperature": 0.7, "stop": ["?"]}
                     )
 
 else:

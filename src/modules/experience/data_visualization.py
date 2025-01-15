@@ -23,20 +23,20 @@ get_coding_response = OpenSourceCodingModels(model=config['coding_model']).get_r
 st.session_state.config = config
 
 
-st.session_state.goals_saved = True
-st.session_state.selected_datasets = ['Heat Index projections']
-st.session_state.questions = ["How have historical wildfire events and subsequent property value changes in similar metropolitan areas influenced policy decisions regarding infrastructure mitigation strategies?",
-                              "How do changes in wildfire risk perception and public policy influence property values in areas susceptible to wildfires?"]
-st.session_state.custom_goals = ["Analyze the historical trends of FWI in Denver, CO and identify areas with significant increases or decreases in fire risk.",
-    "Investigate scientific literature to understand how changes in wildfire risk perception and public policy have affected property values in areas similar to Denver.",
-    "Explore the relationship between changes in wildfire risk (as reflected by FWI projections) and current property value assessments and insurance premiums in different areas of Denver."]
-st.session_state.responses= {
-    "Location": "Denver, CO",
-    "Profession": "Risk Manager",
-    "Concern": "Property values",
-    "Timeline": "30 - 50 years",
-    "Scope": "changes might affect property values in different areas based on their proximity to fire risk zones and existing infrastructure mitigation strategies."
-}
+# st.session_state.goals_saved = True
+# st.session_state.selected_datasets = ['Recent Fire Perimeters data']
+# st.session_state.questions = ["How have historical wildfire events and subsequent property value changes in similar metropolitan areas influenced policy decisions regarding infrastructure mitigation strategies?",
+#                               "How do changes in wildfire risk perception and public policy influence property values in areas susceptible to wildfires?"]
+# st.session_state.custom_goals = ["Analyze the historical trends of FWI in Denver, CO and identify areas with significant increases or decreases in fire risk.",
+#     "Investigate scientific literature to understand how changes in wildfire risk perception and public policy have affected property values in areas similar to Denver.",
+#     "Explore the relationship between changes in wildfire risk (as reflected by FWI projections) and current property value assessments and insurance premiums in different areas of Denver."]
+# st.session_state.responses= {
+#     "Location": "Denver, CO",
+#     "Profession": "Risk Manager",
+#     "Concern": "Property values",
+#     "Timeline": "30 - 50 years",
+#     "Scope": "changes might affect property values in different areas based on their proximity to fire risk zones and existing infrastructure mitigation strategies."
+# }
 
 
 @st.cache_data
@@ -223,10 +223,15 @@ else:
         try:
             col3, messages, code_messages, plots = results
         except ValueError:
-            col3, messages, plots = results
+            try:
+                col3, messages, plots = results
+                code_messages = None
+            except ValueError:
+                col3, messages = results
+                code_messages = None
         
         messages.append({"role": "user", "content": f"Here is my profile:\n\nProfession: {st.session_state.responses['Profession']}\n\nConcern: {st.session_state.responses['Concern']}\n\nTimeline: {st.session_state.responses['Timeline']}\n\nScope: {st.session_state.responses['Scope']}"})
-        messages.append({"role": "user", "content": f"I'd like to address these goals:\n{goals_text}\n\nPlease provide the analysis based on the prompt above. "})
+        messages.append({"role": "user", "content": f"Please provide the analysis of the data based on the prompt above, ensuring the discussion aligns with and reflects the goals outlined here: \n\n{goals_text}"})
 
         # Attach previous analyses
         for prev_dataset, prev_analysis in st.session_state.analysis.items():
@@ -241,78 +246,80 @@ else:
 
             get_ai_analysis = st.button("Generate AI Analysis", key=f'get_ai_analysis_{dataset}')
             if get_ai_analysis:
-                st.markdown('**Querying the LLM at the backend...**')
+                #st.markdown('**Querying the LLM at the backend...**')
                 print('Querying LLM')
+                print('messages', messages)
                 llm_response = get_response(messages=messages, stream=True,
-                    options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.7}
+                    options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.2}
                 )
                 # st.session_state.analysis[dataset] = llm_response
                 st.session_state[f'old_response_{dataset}'] = llm_response  # Save the old response immediately
                 print('llm_response', llm_response)
 
-                st.markdown(
-                    "<p style='font-size:small; font-style:italic;'>Feel free to read now! We will double-check it in the backend with data analysis model for better accuracy...</p>",
-                    unsafe_allow_html=True
-                )
+                if code_messages is not None:
+                    st.markdown(
+                        "<p style='font-size:small; font-style:italic;'>Feel free to read now! We will double-check it in the backend with data analysis model for better accuracy...</p>",
+                        unsafe_allow_html=True
+                    )
 
-                print('Querying CodingLLM')
-                code_from_llm = get_coding_response(messages=code_messages, stream=False,
-                                                    options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.7}
-                                                   )
-                code_from_llm = code_from_llm[9:-3]
-                print('code_from_llm', code_from_llm)
-                execution_results = execute_code(code_from_llm)
-                print('execution results', execution_results)
+                    print('Querying CodingLLM')
+                    code_from_llm = get_coding_response(messages=code_messages, stream=False,
+                                                        options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.2}
+                                                    )
+                    code_from_llm = code_from_llm[9:-3]
+                    print('code_from_llm', code_from_llm)
+                    execution_results = execute_code(code_from_llm)
+                    print('execution results', execution_results)
 
-                # print('Querying VLM')
-                # vlm_messages = [{"role": "user",
-                #                  "content": vision_messages,
-                #                  'images': plots}]
-                # vlm_response = get_vision_response(messages=vlm_messages, stream=False,
-                #                                    options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.7}
-                #                                    )
-                # print('vlm_response', vlm_response)
-                # st.markdown(
-                #     "<p style='font-size:small; font-style:italic;'>If needed, an updated analysis will be shown here automatically......</p>",
-                #     unsafe_allow_html=True
-                # )
+                    # print('Querying VLM')
+                    # vlm_messages = [{"role": "user",
+                    #                  "content": vision_messages,
+                    #                  'images': plots}]
+                    # vlm_response = get_vision_response(messages=vlm_messages, stream=False,
+                    #                                    options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.2}
+                    #                                    )
+                    # print('vlm_response', vlm_response)
+                    # st.markdown(
+                    #     "<p style='font-size:small; font-style:italic;'>If needed, an updated analysis will be shown here automatically......</p>",
+                    #     unsafe_allow_html=True
+                    # )
 
-                if execution_results is not None:
-                    print('Querying LLM')
-                    messages.append({"role": "user",
-                                     "content": "Update your original analysis given this additional information:" + execution_results +
-                                                "\n\nCheck if there is any contradictory information and if any, fix the original ones. "
-                                                "Please keep your original analysis unchanged except for the parts that need to be updated or corrected."
-                                                "You must mention everything mentioned in this additional information. "
-                                                "Use bold fonts to highlight the updated parts. Here is the original analysis:\n" + llm_response})
-                    final_response = get_response(messages=messages, stream=False,
-                                                  options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.7}
-                                                  )
-                    print('final_response', final_response)
-                    # st.session_state.analysis[dataset] = final_response
-                    st.session_state[f'new_response_{dataset}'] = final_response  # Save the final response
+                    if execution_results is not None:
+                        print('Querying LLM')
+                        messages.append({"role": "user",
+                                        "content": "Update your original analysis given this additional information:" + execution_results +
+                                                    "\n\nCheck if there is any contradictory information and if any, fix the original ones. "
+                                                    "Please keep your original analysis unchanged except for the parts that need to be updated or corrected."
+                                                    "You must mention everything mentioned in this additional information. "
+                                                    "Use bold fonts to highlight the updated parts. Here is the original analysis:\n" + llm_response})
+                        final_response = get_response(messages=messages, stream=False,
+                                                    options={"top_p": 0.95, "max_tokens": 512, "temperature": 0.2}
+                                                    )
+                        print('final_response', final_response)
+                        # st.session_state.analysis[dataset] = final_response
+                        st.session_state[f'new_response_{dataset}'] = final_response  # Save the final response
 
-                st.session_state[f'response_view_{dataset}'] = 'final'  # Set to show final response after processing
-                st.rerun()
+                    st.session_state[f'response_view_{dataset}'] = 'final'  # Set to show final response after processing
+                    st.rerun()
 
-            # Handle the toggling and display of responses
-            if f'old_response_{dataset}' in st.session_state and f'new_response_{dataset}' in st.session_state:
-                # Toggle between responses
-                if st.session_state[f'response_view_{dataset}'] == 'final':
-                    show_init_response = st.button("Switch response", key=f'toggle_old_{dataset}')
-                    if show_init_response:
-                        st.session_state[f'response_view_{dataset}'] = 'prev'
-                elif st.session_state[f'response_view_{dataset}'] == 'prev':
-                    show_final_response = st.button("Switch response", key=f'toggle_old_{dataset}')
-                    if show_final_response:
-                        st.session_state[f'response_view_{dataset}'] = 'final'
+                # Handle the toggling and display of responses
+                if f'old_response_{dataset}' in st.session_state and f'new_response_{dataset}' in st.session_state:
+                    # Toggle between responses
+                    if st.session_state[f'response_view_{dataset}'] == 'final':
+                        show_init_response = st.button("Switch response", key=f'toggle_old_{dataset}')
+                        if show_init_response:
+                            st.session_state[f'response_view_{dataset}'] = 'prev'
+                    elif st.session_state[f'response_view_{dataset}'] == 'prev':
+                        show_final_response = st.button("Switch response", key=f'toggle_old_{dataset}')
+                        if show_final_response:
+                            st.session_state[f'response_view_{dataset}'] = 'final'
 
-                # Display the appropriate response
-                if st.session_state[f'response_view_{dataset}'] == 'final':
-                    st.markdown(st.session_state[f'new_response_{dataset}'])
-                elif st.session_state[f'response_view_{dataset}'] == 'prev':
-                    st.markdown('**Original Analysis**')
-                    st.markdown(st.session_state[f'old_response_{dataset}'])
+                    # Display the appropriate response
+                    if st.session_state[f'response_view_{dataset}'] == 'final':
+                        st.markdown(st.session_state[f'new_response_{dataset}'])
+                    elif st.session_state[f'response_view_{dataset}'] == 'prev':
+                        st.markdown('**Original Analysis**')
+                        st.markdown(st.session_state[f'old_response_{dataset}'])
 
             if dataset in st.session_state.analysis.keys():
                 input_data = st.session_state.analysis[dataset]
@@ -342,7 +349,7 @@ else:
             
             with st.chat_message("assistant"):
                 st.session_state.data_analysis_summary = get_response(messages=messages, stream=True,
-                    options={"top_p": 0.95, "max_tokens": 1024, "temperature": 0.7}
+                    options={"top_p": 0.95, "max_tokens": 1024, "temperature": 0.2}
                 )
                 st.rerun()
         if "data_analysis_summary" in st.session_state:

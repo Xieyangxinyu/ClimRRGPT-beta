@@ -13,8 +13,15 @@ def get_perimeters_data():
     perimeters = perimeters[perimeters['attr_Inc_4'] == 'WF']
     return perimeters
 
-def load_prompt(report, yearly_acres, fire_causes, fire_behaviors, fuels):
+def load_prompt(report, tabs_content):
+
+    # TODO: This formatted prompt kept outputing errors; need to fix it
+
     config = load_config('src/data_vis/wildfire_perimeters.yml')
+    yearly_acres = tabs_content.get('Burned Acres and Dates', pd.DataFrame())
+    fire_causes = tabs_content.get('Fire Cause Analysis', pd.DataFrame())
+    fire_behaviors = tabs_content.get('Fire Behavior', pd.DataFrame())
+    fuels = tabs_content.get('Fuels')
     
     prompt = config['prompt']
 
@@ -23,10 +30,10 @@ def load_prompt(report, yearly_acres, fire_causes, fire_behaviors, fuels):
         'yearly_acres': yearly_acres[['Year', 'Total Acres']],
         'yearly_incidents': yearly_acres[['Year', 'Number of Incidents']],
         'avg_containment_time': report.groupby('Year')['Containment Time'].mean(),
-        'top_specific_causes': fire_causes.head(),
-        'top_specific_behaviors': fire_behaviors.head(),
-        'top_primary_fuels': fuels[0].head(),
-        'top_secondary_fuels': fuels[1].head()
+        'top_specific_causes': fire_causes.head().to_dict(),
+        'top_specific_behaviors': fire_behaviors.head().to_dict(),
+        'top_primary_fuels': fuels[0].head().to_dict(),
+        'top_secondary_fuels': fuels[1].head().to_dict(),
     }
 
     # Format the prompt with the data
@@ -140,19 +147,20 @@ def analyze_wildfire_perimeters(cross_model):
         tabs.append("Fuels")
         tab_contents.append(lambda: fuels_tab(report))
 
+    tabs_content = {}
     # Create tabs
     if tabs:
         tab_objects = st.tabs(tabs)
-        for tab, content in zip(tab_objects, tab_contents):
-            with tab:
-                content()
+        for tab, tab_obj, content in zip(tabs, tab_objects, tab_contents):
+            with tab_obj:
+                tabs_content[tab] = content()
     else:
         st.warning("No data available for analysis.")
 
-    col1, col2 = st.columns([1, 2])
-    messages = []
-    #messages = load_prompt(report)
-    return col2, messages
+    col1, col2 = st.columns([5,1])
+    messages = load_prompt(report, tabs_content)
+    #messages = []
+    return col1, messages
 
 def burned_acres_and_dates_tab(report):
     st.header("Burned Acres and Dates")
@@ -240,9 +248,9 @@ def fuels_tab(report):
 
     with col2:
         # List top 5 (or fewer) primary fuel models
-        top_items = primary_fuel.head(5)
-        st.write(f"Top {len(top_items)} Primary Fuel Model{'s' if len(top_items) > 1 else ''}:")
-        for i, (fuel, count) in enumerate(zip(top_items['Primary Fuel Model'], top_items['count']), 1):
+        primary_top_items = primary_fuel.head(5)
+        st.write(f"Top {len(primary_top_items)} Primary Fuel Model{'s' if len(primary_top_items) > 1 else ''}:")
+        for i, (fuel, count) in enumerate(zip(primary_top_items['Primary Fuel Model'], primary_top_items['count']), 1):
             st.write(f"{i}. {fuel}: {count}")
 
     with col3:
@@ -253,8 +261,8 @@ def fuels_tab(report):
 
     with col4:
         # List top 5 (or fewer) secondary fuel models
-        top_items = secondary_fuel.head(5)
-        st.write(f"Top {len(top_items)} Secondary Fuel Model{'s' if len(top_items) > 1 else ''}:")
-        for i, (fuel, count) in enumerate(zip(top_items['Secondary Fuel Model'], top_items['count']), 1):
+        secondary_top_items = secondary_fuel.head(5)
+        st.write(f"Top {len(secondary_top_items)} Secondary Fuel Model{'s' if len(secondary_top_items) > 1 else ''}:")
+        for i, (fuel, count) in enumerate(zip(secondary_top_items['Secondary Fuel Model'], secondary_top_items['count']), 1):
             st.write(f"{i}. {fuel}: {count}")
-    return top_items
+    return [primary_top_items, secondary_top_items]

@@ -43,8 +43,11 @@ def stream_handler(stream):
     return response
 
 def parse_goals(response):
+    print(response)
     try:
         json_match = re.search(r'```json\s*([\s\S]*?)\s*```', response)
+        if not json_match:
+            json_match = re.search(r'```\s*([\s\S]*?)\s*```', response)
         if json_match:
             json_string = json_match.group(1)
             parsed_data = json.loads(json_string)
@@ -61,7 +64,6 @@ def parse_goals(response):
 
     valid_entries = []
     for entry in parsed_data:
-        print(entry)
         if entry in ["Goal1", "Goal2", "Goal3", "goal1", "goal2", "goal3", "Goal 1", "Goal 2", "Goal 3"]:
             valid_entries.append(parsed_data[entry])
     if len(valid_entries) < 3:
@@ -183,4 +185,10 @@ else:
                 st.write("#### AI Recommendations")
                 if st.session_state.goals_recommendation:
                     for goal in st.session_state.goals_recommendation:
-                        st.markdown(f"- {goal}")
+                        col_1, col_2 = st.columns([5, 1])
+                        with col_1:
+                            st.markdown(f"- {goal}")
+                        with col_2:
+                            if st.button("Use Suggested Goal", key=f"use_suggested_{st.session_state.goals_recommendation.index(goal)}", use_container_width=False):
+                                st.session_state.custom_goals[st.session_state.goals_recommendation.index(goal)] = goal
+                                st.rerun()

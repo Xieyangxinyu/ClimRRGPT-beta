@@ -96,7 +96,7 @@ def get_single_dataset_recommendation(dataset_name, dataset_details, recommendat
     for attempt in range(max_retries):
         try:
             response = get_response(messages=messages, 
-                options={"top_p": 0.8, "max_tokens": 256, "temperature": 0.7}
+                options={"top_p": 0.8, "max_tokens": 256, "temperature": 0.5}
             )
             recommendation = parse_dataset_recommendation(response, valid_keywords=[dataset_name])
             if recommendation:

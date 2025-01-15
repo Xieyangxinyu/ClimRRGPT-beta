@@ -123,6 +123,13 @@ else:
             with st.chat_message("assistant"):
                 st.write("Here is a question suggestion for you:")
                 st.write(st.session_state.suggested_question[st.session_state.current_brainstorm_index])
+                if st.button("Use Suggested Question", key=f"use_suggested_{st.session_state.current_brainstorm_index}", use_container_width=True):
+                    try:
+                        st.session_state.questions[st.session_state.current_brainstorm_index] = st.session_state.suggested_question[st.session_state.current_brainstorm_index]
+                    except:
+                        st.session_state.questions.append(st.session_state.suggested_question[st.session_state.current_brainstorm_index])
+                    st.rerun()
+                    
 
     if st.session_state.questions_done:
         st.write("## Questions to Investigate:")

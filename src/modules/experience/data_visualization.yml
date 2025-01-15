@@ -1,4 +1,4 @@
-model: llama3.1:8b-instruct-q4_0
+model: llama3:instruct
 vision_model: llava
 coding_model: codegemma:instruct
 

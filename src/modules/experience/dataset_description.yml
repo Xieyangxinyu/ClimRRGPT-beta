@@ -118,15 +118,6 @@ available_datasets:
       - name: ClimRR data
         url: https://climrr.anl.gov/
 
-
-  Long term fire history records:
-    description: The metadata from the North American Tree-ring Fire Scar Synthesis (NAFSS) provides a rich dataset including scientific studies derived from the annually- to sub-annually-resolved tree-ring records of fire spanning centuries. The dataset covers a range from the year 0 AD up to the year 2019 AD, or 1950 to -69 in calendar years before present (BP). This dataset can be instrumental in analyzing wildfire risk by providing historical context and identifying interactions among fire, climate, topography, vegetation, and humans. 
-    instruction: Choose this dataset if you want to analyze the long-term historical wildfire patterns. Notice that the dataset is in the form of scientific publications, and you may need to extract the data from the publications for further analysis. Moreover, this dataset doesn't cover most of the regions in the United States.
-    links: 
-      - name: NAFSS
-        url: https://research.fs.usda.gov/treesearch/64527
-      - name: Download Source
-        url: https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=noaa-fire-34853
   
   Recent Fire Perimeters data: 
     description: The Wildland Fire Incident Geospatial Information System (WFIGS) Interagency Perimeters dataset provides detailed information on wildfire incidents from 2020 to 2024. This comprehensive dataset includes fire perimeters, incident names, affected acreage, fire causes (broad, general, and specific), discovery and containment dates, fire behavior, and fuel models involved. The geospatial nature of this data allows for precise location-based analysis of wildfire patterns and characteristics.
