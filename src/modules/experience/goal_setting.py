@@ -83,7 +83,6 @@ else:
     initialize_session_state()
 
     if st.session_state.goals_saved:
-        st.balloons()
         st.write(st.session_state.config['goal_saved_message'])
         for i, goal in enumerate(st.session_state.custom_goals):
             if goal:
