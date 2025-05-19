@@ -1,7 +1,7 @@
 
 **Quick Questionnaire**
 <div style='margin-left: 20px;'>
-    Answer a concise set of questions to define your wildfire objectives.<br>
+    Answer a concise set of questions to define your hazard objectives.<br>
     Provide detailed responses to ensure highly tailored results.<br>
     We will inquire about your profession, primary concern, location, timeline, and scope of interest.<br><br>
 </div>
@@ -26,6 +26,6 @@
 </div>
 
 
-**Result**: A comprehensive and scientifically informed assessment of your wildfire risk concerns, providing practical, personalized insights.
+**Result**: A comprehensive and scientifically informed assessment of your hazard risk concerns, providing practical, personalized insights.
 
 *Note: Providing detailed responses throughout the process will significantly improve the accuracy and usefulness of your ClimRRGPT experience.* 

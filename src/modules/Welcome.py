@@ -27,7 +27,7 @@ with open("src/modules/welcome.md", "r") as f:
 
 # Display welcome message
 
-st.markdown("Get ready to ignite your understanding of wildfire risks with ClimRRGPT!\n\nClimRRGPT guides you through understanding and addressing wildfire risks, especially for assessing future risks in specific locations. ", unsafe_allow_html=True)
+st.markdown("Get ready to ignite your understanding of hazard risks with ClimRRGPT!\n\nClimRRGPT guides you through understanding and addressing hazard risks, especially for assessing future risks in specific locations. ", unsafe_allow_html=True)
 with st.expander("Here's your journey:"):
         st.markdown(instruction_message, unsafe_allow_html=True)
 

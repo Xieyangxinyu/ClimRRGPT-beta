@@ -12,24 +12,24 @@ datasets_not_selected_message: |
   To select datasets, please click the button below to view the available datasets and select the ones you're interested in.
 
 welcome_message: |
-  You've just unlocked the gateway to wildfire insights! 🔥🔍 
+  Welcome to ClimRRGPT.
 
-  Before we set our goals, let's identify two concrete questions that you'd like to explore in the scientific literature. 
-  
-  These questions will help you think more deeply about what you want to learn with the help of ClimRRGPT today. The more specific and intriguing your questions, the more exciting your journey will be! 🚀
+  Before setting your goals, please identify two specific questions that you would like to explore in the scientific literature. 
 
-  Click the **Instructions** expander below to discover how to navigate this exciting goal setting tool! 🚀
+  These questions will help guide your inquiry and ensure that your exploration with ClimRRGPT is focused and meaningful.
+
+  Click the **Instructions** section below for guidance on using the goal setting tool.
 
 instruction_message: |
-  🔍 Your ClimRRGPT Question Identification Adventure:
+  Using ClimRRGPT to Identify Key Questions:
 
-  1. 🧠 Brainstorm: Think beyond the chosen datasets. What do you want to learn about wildfires that requires deeper research? Review your profile if needed for inspiration.
+  1. Brainstorm: Consider what you would like to learn about hazard risks that may not be directly addressed by your selected datasets. You can review your profile for inspiration.
 
-  2. 💡 Click "Generate Question Suggestion" for AI-inspired ideas
+  2. Click "Generate Question Suggestion" for AI-generated ideas.
 
-  3. ➡️ Use "Next," "Previous," or "Finish" to navigate. 🚀 Hit "Finish" when you're ready!
+  3. Use "Next," "Previous," or "Finish" to navigate. Click "Finish" when you're ready.
 
-  Remember, your questions are the compass for your wildfire exploration. Make them as specific and intriguing as you can! 🔥📚🌟
+  Your questions will guide your hazard exploration. Aim to make them specific, thoughtful, and well-aligned with your interests.
 
 question_recommendation_instructions:
   - role: system
