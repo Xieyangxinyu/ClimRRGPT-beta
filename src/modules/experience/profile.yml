@@ -9,23 +9,23 @@ init_questions:
 
 
 instruction_message: |
-  🔍 How to Navigate Your WildfireGPT Journey:
+  How to Navigate Your ClimRRGPT Journey:
 
-  1. 📝 Answer the questions: Start by responding to the question about your primary wildfire and climate change concerns in the text box provided.
+  1. Answer the questions: Begin by responding to the question about your primary wildfire and climate change concerns in the text box provided.
 
-  2. ➡️ Use navigation buttons: 
-    - Click "Next" to proceed to the following question
-    - Use "Previous" if you need to go back and modify an answer
+  2. Use the navigation buttons: 
+    - Click "Next" to proceed to the following question.
+    - Click "Previous" to return and modify an earlier answer.
 
-  3. 💡 Need inspiration? Click "Give me suggestions!" for helpful prompts if you're unsure how to respond.
+  3. Need help? Click "Give me suggestions!" if you're unsure how to respond.
 
-  4. 📚 Expand "Instructions": Click this dropdown anytime for a refresher on how to use the interface.
+  4. Refer to Instructions: Click the "Instructions" dropdown at any time for a refresher on how to use the interface.
 
-  5. 🎯 Be specific: The more detailed your answers, the better we can tailor your action plan!
+  5. Be specific: The more detailed your answers, the more accurately we can tailor your action plan.
 
-  6. 🔄 Review and refine: You can always go back to previous questions to adjust your responses.
+  6. Review and refine: You may revisit and update previous responses at any point.
 
-  Remember, each answer shapes your custom wildfire action plan. Let's make every response count! 🌟🔥
+  Each answer helps customize your wildfire action plan. Please provide thoughtful and detailed responses.
 
 dataset_selection_message:
   init_message: |

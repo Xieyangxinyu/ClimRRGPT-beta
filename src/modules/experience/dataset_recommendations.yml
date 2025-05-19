@@ -6,33 +6,30 @@ profile_not_complete_message: |
   To get started, please click the button below to set up your profile. This will help us tailor our recommendations to your specific needs.
 
 welcome_message: |
-  You've just unlocked the gateway to wildfire insights! 🔥🔍
+  Welcome to the the data exploration module.
 
-  Click the **Instructions** expander below to discover how to navigate this exciting data exploration tool!
-  Let's turn data into action. 
+  Click the **Instructions** section below to learn how to navigate the tool and make the most of its features.
 
 instruction_message: |
-  👋 Fantastic job completing your profile! Your responses have primed our AI for some truly tailored recommendations. 
-  
-  🚀 Let's embark on an exhilarating journey through datasets that could revolutionize our understanding of wildfires.
+  Thank you for completing your profile. Your responses have helped tailor dataset recommendations to your needs.
 
-  This tool is designed to help you navigate through various datasets related to wildfires and their impact on air quality in Las Vegas, NM. We combine AI-powered recommendations with an interactive exploration feature to give you a comprehensive understanding of available data.
+  This tool is designed to help you explore datasets related to wildfires and their impact on air quality in Las Vegas, NM. It combines AI-powered recommendations with an interactive exploration interface to provide a comprehensive view of available data.
 
-  🔥 **What you can do here:**
-  - Get AI-powered recommendations on the most relevant datasets
-  - Explore dataset details while the AI is processing
+  **Features:**
+  - Receive AI-generated recommendations for relevant datasets
+  - Review dataset details while the AI is processing
   - Select datasets for further in-depth analysis
 
-  🚀 **How to get started:**
-  1. Click the "Get AI Recommendations" button to start the analysis
-  2. While waiting, use the Dataset Explorer in the sidebar to learn about available datasets
-  3. Once the AI finishes, review its recommendations in the main panel
-  4. Select the datasets you're interested in using the panel on the right
-  5. Click 'Proceed to Analysis' when you're ready to dive deeper!
+  **Getting Started:**
+  1. Click the "Get AI Recommendations" button to initiate the analysis.
+  2. While the analysis is running, use the Dataset Explorer in the sidebar to browse available datasets.
+  3. When the recommendations are ready, review them in the main panel.
+  4. Select the datasets you are interested in using the panel on the right.
+  5. Click 'Proceed to Analysis' to begin a more detailed review.
 
-  💡 **Pro Tip:** Use the waiting time to familiarize yourself with the datasets. This way, you can compare your insights with the AI recommendations!
+  **Tip:** Take advantage of the waiting time to familiarize yourself with the datasets. This will allow you to better evaluate the AI's recommendations.
 
-  Whether you're a researcher, policy maker, or concerned citizen, we're here to help you make informed decisions about air quality and wildfire risks. Let's explore the data together!
+  Whether you are a researcher, policymaker, or concerned citizen, this tool is here to support informed decision-making about air quality and wildfire risks.
 
 dataset_recommendation_instructions:
   - role: system

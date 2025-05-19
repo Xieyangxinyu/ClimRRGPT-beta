@@ -1,27 +1,31 @@
-⚡ **Lightning-Fast Questionnaire**
+
+**Quick Questionnaire**
 <div style='margin-left: 20px;'>
-    🌟 Blast through our quick-fire questions about your wildfire mission<br>
-    🔍 Be specific to get the most tailored results!<br>
-    📝 We'll probe your profession, primary concern, location, timeline, and scope of interest<br><br>
+    Answer a concise set of questions to define your wildfire objectives.<br>
+    Provide detailed responses to ensure highly tailored results.<br>
+    We will inquire about your profession, primary concern, location, timeline, and scope of interest.<br><br>
 </div>
 
 
-🎯 **Forge Your Fiery Action Plan** Based on your responses, WildfireGPT will collaborate with you to:
+
+**Develop Your Customized Action Plan** Based on your responses, ClimRRGPT will assist you in:
 <div style='margin-left: 20px;'>
-    🧠 Brainstorm with you to create a personalized action plan<br>
-    📊 Pin down relevant datasets for analysis<br>
-    📚 Identify key questions to address from scientific literature review<br>
-    🎯 Outline realistic goals to achieve today <br><br>
+    Collaborating to create a personalized action plan<br>
+    Identifying relevant datasets for analysis<br>
+    Highlighting key questions based on scientific literature<br>
+    Defining achievable goals for the current session<br><br>
 </div>
 
 
-🔬 **Step-by-Step Delivery**: Work through each deliverable one by one with WildfireGPT!
+
+**Step-by-Step Delivery**: Progress through each deliverable systematically with ClimRRGPT.
 <div style='margin-left: 20px;'>
-    📈 Analyze datasets and review scientific literature together<br>
-    💡 Receive tailored recommendations and insights<br>
-    🌋 Transform complex data into actionable knowledge for your situation<br><br>
+    Analyze datasets and review relevant literature collaboratively<br>
+    Receive recommendations and insights tailored to your needs<br>
+    Convert complex data into actionable information for your specific situation<br><br>
 </div>
 
-👨‍🚒👩‍🚒 **Result**: A comprehensive, scientifically-grounded exploration of your wildfire risk concerns, providing practical insights for your specific needs.
 
-🔍🔎 *Remember: Your detailed responses throughout the process will enhance the precision and value of your WildfireGPT experience!* 
+**Result**: A comprehensive and scientifically informed assessment of your wildfire risk concerns, providing practical, personalized insights.
+
+*Note: Providing detailed responses throughout the process will significantly improve the accuracy and usefulness of your ClimRRGPT experience.* 
