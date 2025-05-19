@@ -190,7 +190,7 @@ else:
             )
             if selected_datasets:
                 st.success(f"You've selected {len(selected_datasets)} dataset(s).")
-                if st.button("Proceed to Goal Setting", type="primary"):
+                if st.button("Proceed", type="primary"):
                     st.session_state.selected_datasets = selected_datasets
                     st.switch_page("experience/question_identification.py")
             else:
