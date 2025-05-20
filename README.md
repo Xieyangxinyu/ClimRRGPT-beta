@@ -50,6 +50,12 @@ We use [Streamlit](https://streamlit.io) to create a web app. To run the web app
 streamlit run src/modules/Welcome.py
 ```
 
+## Usage with Docker
+
+1. `docker compose build`
+2. `docker compose run --service-ports --rm callm /bin/bash`
+4. `nohup ollama serve > ollama.log 2>&1 &`
+3. `streamlit run src/modules/Welcome.py --server.port=8501 --server.address=0.0.0.0`
 
 ## TODO
 - [x] Add Heat Index Data
