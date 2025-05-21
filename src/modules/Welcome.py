@@ -12,7 +12,7 @@ show_pages(
         Section("Deliverables", icon="📝"),
         Page("src/modules/experience/dataset_recommendations.py", "Dataset Recommendations", "📈"),
         Page("src/modules/experience/question_identification.py", "Question Identification", "🎯"),
-        Page("src/modules/experience/goal_setting.py", "Goal Setting", "🎯"),
+        #Page("src/modules/experience/goal_setting.py", "Goal Setting", "🎯"),
         Section("Resouces", icon="🌐"),
         Page("src/modules/experience/available_datasets.py", "Available Datasets", "📈"),
         Section("Analysis", icon="🔍"),

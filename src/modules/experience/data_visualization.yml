@@ -2,6 +2,17 @@ model: llama3:instruct
 vision_model: llava
 coding_model: codegemma:instruct
 
+profile_not_complete_message: |
+  Welcome! It looks like you haven't completed your profile yet.
+
+  To get started, please click the button below to set up your profile. This will help us tailor our recommendations to your specific needs.
+
+datasets_not_selected_message: |
+  Welcome! It looks like you haven't selected any datasets yet. Are you sure you want to proceed without selecting any datasets?
+
+  To select datasets, please click the button below to view the available datasets and select the ones you're interested in.
+
+
 welcome_message: |
   ## Understand Wildfire Risks Through Data
 

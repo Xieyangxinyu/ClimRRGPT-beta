@@ -128,12 +128,15 @@ initialize_session_state()
 def same_location(lat_long, center):
     return abs(lat_long[0] - center[0]) < 0.001 and abs(lat_long[1] - center[1]) < 0.001
 
-# if ("goals_saved" not in st.session_state) or not st.session_state.goals_saved:
-#     #st.write(st.session_state.config[""])
-#     if st.button("Set Goals"):
-#         st.switch_page("experience/goal_setting.py")
-# el
-if not st.session_state.location_confirmed:
+if ("profile_done" not in st.session_state) or not st.session_state.profile_done:
+    st.write(st.session_state.config["profile_not_complete_message"])
+    if st.button("Complete My Profile"):
+        st.switch_page("experience/profile.py")
+elif not "selected_datasets" in st.session_state or len(st.session_state.selected_datasets) == 0:
+        st.write(st.session_state.config["datasets_not_selected_message"])
+        if st.button("Select Datasets"):
+            st.switch_page("experience/dataset_recommendations.py")
+elif not st.session_state.location_confirmed:
     st.write(st.session_state.config["welcome_message"])
     with st.expander("Instructions"):
         st.write(st.session_state.config["instruction_message"])
@@ -288,7 +291,7 @@ else:
                     if execution_results is not None:
                         print('Querying LLM')
                         messages.append({"role": "user",
-                                        "content": "Update your original analysis given this additional information:" + execution_results +
+                                        "content": f"Update your original analysis given this additional information: {execution_results} "
                                                     "\n\nCheck if there is any contradictory information and if any, fix the original ones. "
                                                     "Please keep your original analysis unchanged except for the parts that need to be updated or corrected."
                                                     "You must mention everything mentioned in this additional information. "
