@@ -14,11 +14,9 @@ services:
       - "11435:11434"    # Ollama (optional)
     volumes:
       - .:/callm         # Mount working dir
-      #- ~/ollama-data:/home/developer/.ollama
     environment:
       - PYTHONPATH=${PYTHONPATH}:src/
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - model=gpt-4o
     stdin_open: true
-    tty: true
-    #command: streamlit run src/modules/Welcome.py
+    tty: true 

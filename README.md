@@ -53,10 +53,7 @@ streamlit run src/modules/Welcome.py
 ## Usage with Docker
 
 1. `docker compose build`
-2. `docker compose run --service-ports --rm callm /bin/bash`
-3. `nohup ollama serve > ollama.log 2>&1 &`
-4. `ollama pull llama3.1:8b-instruct-q4_0`
-5. `streamlit run src/modules/Welcome.py --server.port=8501 --server.address=0.0.0.0`
+2. `docker compose up`
 
 ## TODO
 - [x] Add Heat Index Data
