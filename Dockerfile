@@ -69,4 +69,5 @@ CMD bash -c "ollama serve > /tmp/ollama.log 2>&1 & \
              else \
                 echo 'Model already present, skipping pull.'; \
              fi; \
+             echo 'Starting server at: http://localhost:8501'; \
              streamlit run src/modules/Welcome.py --server.port=8501 --server.address=0.0.0.0"
