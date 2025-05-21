@@ -32,10 +32,6 @@ st.session_state.config = load_config("src/modules/experience/literature_review.
 if ('questions_done' not in st.session_state) or (not st.session_state.questions_done):
     if st.button("Identify Questions"):
         st.switch_page("experience/question_identification.py")
-elif ("goals_saved" not in st.session_state) or not st.session_state.goals_saved:
-    #st.write(st.session_state.config[""])
-    if st.button("Set Goals"):
-        st.switch_page("experience/goal_setting.py")
 else:
     st.write(st.session_state.config["welcome_message"])
     with st.expander("Instructions"):

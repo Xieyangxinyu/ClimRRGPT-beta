@@ -24,6 +24,7 @@ def initialize_session_state():
     st.session_state.setdefault('instruction_message', instruction_message)
     st.session_state.setdefault('profile_done', False)
     st.session_state.setdefault('responses', {})
+    st.session_state.setdefault('suggestions_needed', False)
 
 initialize_session_state()
 

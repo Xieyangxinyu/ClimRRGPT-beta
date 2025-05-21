@@ -128,11 +128,12 @@ initialize_session_state()
 def same_location(lat_long, center):
     return abs(lat_long[0] - center[0]) < 0.001 and abs(lat_long[1] - center[1]) < 0.001
 
-if ("goals_saved" not in st.session_state) or not st.session_state.goals_saved:
-    #st.write(st.session_state.config[""])
-    if st.button("Set Goals"):
-        st.switch_page("experience/goal_setting.py")
-elif not st.session_state.location_confirmed:
+# if ("goals_saved" not in st.session_state) or not st.session_state.goals_saved:
+#     #st.write(st.session_state.config[""])
+#     if st.button("Set Goals"):
+#         st.switch_page("experience/goal_setting.py")
+# el
+if not st.session_state.location_confirmed:
     st.write(st.session_state.config["welcome_message"])
     with st.expander("Instructions"):
         st.write(st.session_state.config["instruction_message"])
@@ -216,8 +217,8 @@ elif not st.session_state.location_confirmed:
                     st.rerun()
 else:
     st.session_state.analyze_fn_dict = dispatch_analyze_fn(st.session_state.selected_datasets)
-    user_goals = st.session_state.custom_goals
-    goals_text = "\n".join(f"{i+1}. {goal}" for i, goal in enumerate(user_goals))
+    # user_goals = st.session_state.custom_goals
+    # goals_text = "\n".join(f"{i+1}. {goal}" for i, goal in enumerate(user_goals))
     for dataset in st.session_state.selected_datasets:
         results = st.session_state.analyze_fn_dict[dataset](st.session_state.crossmodel)
         try:
@@ -231,7 +232,7 @@ else:
                 code_messages = None
         
         messages.append({"role": "user", "content": f"Here is my profile:\n\nProfession: {st.session_state.responses['Profession']}\n\nConcern: {st.session_state.responses['Concern']}\n\nTimeline: {st.session_state.responses['Timeline']}\n\nScope: {st.session_state.responses['Scope']}"})
-        messages.append({"role": "user", "content": f"Please provide the analysis of the data based on the prompt above, ensuring the discussion aligns with and reflects the goals outlined here: \n\n{goals_text}"})
+        messages.append({"role": "user", "content": f"Please provide the analysis of the data based on the prompt above."})
 
         # Attach previous analyses
         for prev_dataset, prev_analysis in st.session_state.analysis.items():
@@ -336,14 +337,13 @@ else:
     col1, col2, col3 = st.columns(3)
     if len(st.session_state.analysis) == len(st.session_state.selected_datasets):
         with col1:
-            st.generate_summary = st.button("Generate Summary", use_container_width=True)
-        if st.generate_summary:
+            st.session_state.generate_summary = st.button("Generate Summary", use_container_width=True)
+        if st.session_state.generate_summary:
             combined_analysis = "\n\n".join(st.session_state.analysis.values())
             summary_prompt = f"Summarize the following analyses, focusing on the key insights related to the user's goals:\n\n{combined_analysis}"
             
             messages = [
                 {"role": "system", "content": "You are a helpful assistant summarizing climate data analyses."},
-                {"role": "user", "content": f"I'd like a summary of the analyses, focusing on the key insights related to my goals:\n\n{goals_text}"},
                 {"role": "user", "content": summary_prompt}
             ]
             
