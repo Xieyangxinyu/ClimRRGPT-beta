@@ -145,7 +145,7 @@ else:
                 st.rerun()
         
         with col2:
-            if st.button("Proceed to Goal Setting", use_container_width=True):
+            if st.button("Proceed", use_container_width=True):
                 # Add code here to move to the next step (e.g., literature review)
                 del st.session_state['instruction_message']
-                st.switch_page("experience/goal_setting.py")
+                st.switch_page("experience/data_visualization.py")
