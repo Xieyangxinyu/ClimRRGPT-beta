@@ -61,8 +61,11 @@ ENV PATH="~/.local/bin:$PATH"
 COPY --chown=${user}:${user} requirements.txt .
 RUN pip3 install --upgrade pip && pip3 install -r requirements.txt
 
-# Set default command
-CMD bash -c "nohup ollama serve > ollama.log 2>&1 & \
-    sleep 2 && \
-    ollama pull llama3:instruct || true && \
-    streamlit run src/modules/Welcome.py --server.port=8501 --server.address=0.0.0.0"
+CMD bash -c "\
+ollama serve > /tmp/ollama.log 2>&1 & \
+echo 'Started ollama serve'; \
+sleep 2; \
+echo 'Pulling model...'; \
+ollama pull llama3:instruct 2>&1 | tee /dev/stdout; \
+echo 'Launching Streamlit...'; \
+streamlit run src/modules/Welcome.py --server.port=8501 --server.address=0.0.0.0"
