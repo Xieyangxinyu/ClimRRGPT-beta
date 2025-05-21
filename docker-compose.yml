@@ -14,9 +14,13 @@ services:
       - "11435:11434"    # Ollama (optional)
     volumes:
       - .:/callm         # Mount working dir
+      - ./ollama-data:/home/${USER}/.ollama
     environment:
       - PYTHONPATH=${PYTHONPATH}:src/
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - model=gpt-4o
     stdin_open: true
-    tty: true 
+    tty: true
+
+volumes:
+  ollama-data: {}
