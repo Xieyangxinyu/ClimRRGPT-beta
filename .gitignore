@@ -1,6 +1,7 @@
 # data files
 data/
 temp_images/
+ollama-data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

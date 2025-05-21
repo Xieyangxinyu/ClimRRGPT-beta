@@ -50,6 +50,10 @@ We use [Streamlit](https://streamlit.io) to create a web app. To run the web app
 streamlit run src/modules/Welcome.py
 ```
 
+## Usage with Docker
+
+1. `docker compose build`
+2. `docker compose up`
 
 ## TODO
 - [x] Add Heat Index Data

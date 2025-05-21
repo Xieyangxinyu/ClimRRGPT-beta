@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  callm:
+    build:
+      context: .
+      args:
+        uid: 1000
+        gid: 1000
+        user: "${USER}"
+    container_name: callm-container
+    ports:
+      - "8501:8501"      # Streamlit
+      - "11435:11434"    # Ollama (optional)
+    volumes:
+      - .:/callm         # Mount working dir
+      - ./ollama-data:/home/${USER}/.ollama
+    environment:
+      - PYTHONPATH=${PYTHONPATH}:src/
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - model=gpt-4o
+    stdin_open: true
+    tty: true
+
+volumes:
+  ollama-data: {}
