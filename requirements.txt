@@ -66,3 +66,5 @@ tzdata==2025.2
 urllib3==2.4.0
 us==3.1.1
 watchdog==3.0.0
+tabulate
+huggingface-hub==0.25.2
