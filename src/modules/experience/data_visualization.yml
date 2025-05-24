@@ -1,4 +1,4 @@
-model: llama3:instruct
+model: qwen3
 vision_model: llava
 coding_model: codegemma:instruct
 

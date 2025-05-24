@@ -56,7 +56,25 @@ def get_author(authors_str):
         formatted = ', '.join(f"{author['first']} {author['last']}" for author in authors)
     return formatted
 
-def literature_search(query, messages = None):
+
+def MLA_citation(title, authors, year, doi):
+    '''
+    input: 
+        title: the title of the paper
+        authors: the authors of the paper
+        year: the year of publication
+        doi: the doi of the paper
+    output:
+        a string containing the MLA citation of the paper
+    '''
+    authors = get_author(authors)
+    if doi != 'No results found' and doi != 'Failed to fetch data':
+        return f"{authors}. \"{title}.\" {year}. {doi}"
+    else:
+        return f"{authors}. \"{title}.\" {year}."
+
+
+def literature_search(query):
     '''
     input: 
         query: the query to search for. For example, 'What is the relationship between climate change and wildfire?'
@@ -97,16 +115,18 @@ def literature_search(query, messages = None):
             else:
                 result['doi'] = 'Failed to fetch data'
     
-    message = f"Here are the 5 most relevant papers retrieved:\n\n"
+    message = ""
+    references = []
     for i, result in enumerate(results):
-        message += f"{i+1}. Title: {result['title']}\n\n"
+        message += f"Title: {result['title']}\n\n"
         message += f"Authors: {get_author(result['authors'])}\n\n"
         message += f"Year: {result['year']}\n\n"
         if result['doi'] != 'No results found' and result['doi'] != 'Failed to fetch data':
             message += f"DOI: {result['doi']}\n\n"
         message += f"Abstract: {result['abstract']}\n\n"
+        references.append(f"{MLA_citation(result['title'], result['authors'], result['year'], result['doi'])}\n\n")
         
-    return message
+    return message, references
 
 if __name__ == "__main__":
     query = "wildfire mitigation strategies for bridge construction in wildfire-prone areas"

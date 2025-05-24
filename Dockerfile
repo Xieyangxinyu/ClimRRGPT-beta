@@ -63,9 +63,9 @@ RUN pip3 install --upgrade pip && pip3 install -r requirements.txt
 
 CMD bash -c "ollama serve > /tmp/ollama.log 2>&1 & \
 	     sleep 2; \
-             if ! ollama list | grep -q 'llama3:instruct'; then \
+             if ! ollama list | grep -q 'qwen3'; then \
                 echo 'Model not found, pulling...'; \
-                ollama pull llama3:instruct 2>&1 | tee /dev/stdout; \
+                ollama pull qwen3 2>&1 | tee /dev/stdout; \
              else \
                 echo 'Model already present, skipping pull.'; \
              fi; \

@@ -57,13 +57,13 @@ Seasonal Temperature Maximum projections:
   subtitle: Explore historical, mid-century, and end-century seasonal maximum temperature values. Higher values indicate higher temperatures.
   season: True
   prompt: |
-    Analyze the following Seasonal Maximum Temperature data and provide a comprehensive interpretation:
+    Analyze the following Seasonal Maximum Temperature (in Fahrenheit) data and provide a comprehensive interpretation:
 
-    Mean Maximum Temperature Values (with Standard Deviation) in Markdown Table format:
+    Mean Maximum Temperature (in Fahrenheit) Values (with Standard Deviation) in Markdown Table format:
 
     {table_markdown}
 
-    Mean Maximum Temperature Values (with Standard Deviation) in JSON format:
+    Mean Maximum Temperature (in Fahrenheit) Values (with Standard Deviation) in JSON format:
 
     {table_json}
 
@@ -88,13 +88,13 @@ Seasonal Temperature Minimum projections:
   subtitle: Explore historical, mid-century, and end-century seasonal minimum temperature values. Higher values indicate higher temperatures.
   season: True
   prompt: |
-    Analyze the following Seasonal Minimum Temperature data and provide a comprehensive interpretation:
+    Analyze the following Seasonal Minimum Temperature (in Fahrenheit) data and provide a comprehensive interpretation:
 
-    Mean Minimum Temperature Values (with Standard Deviation) in Markdown Table format:
+    Mean Minimum Temperature (in Fahrenheit) Values (with Standard Deviation) in Markdown Table format:
 
     {table_markdown}
 
-    Mean Minimum Temperature Values (with Standard Deviation) in JSON format:
+    Mean Minimum Temperature (in Fahrenheit) Values (with Standard Deviation) in JSON format:
 
     {table_json}
 
@@ -117,13 +117,13 @@ Annual Temperature Maximum projections:
   season: False
   scenarios: True
   prompt: |
-    Analyze the following Annual Maximum Temperature data and provide a comprehensive interpretation:
+    Analyze the following Annual Maximum Temperature (in Fahrenheit) data and provide a comprehensive interpretation:
 
-    Mean Annual Maximum Temperature Values (with Standard Deviation) in Markdown Table format:
+    Mean Annual Maximum Temperature (in Fahrenheit) Values (with Standard Deviation) in Markdown Table format:
 
     {table_markdown}
 
-    Mean Annual Maximum Temperature Values (with Standard Deviation) in JSON format:
+    Mean Annual Maximum Temperature (in Fahrenheit) Values (with Standard Deviation) in JSON format:
 
     {table_json}
 
@@ -146,13 +146,13 @@ Annual Temperature Minimum projections:
   season: False
   scenarios: True
   prompt: |
-    Analyze the following Annual Minimum Temperature data and provide a comprehensive interpretation:
+    Analyze the following Annual Minimum Temperature (in Fahrenheit) data and provide a comprehensive interpretation:
 
-    Mean Annual Minimum Temperature Values (with Standard Deviation) in Markdown Table format:
+    Mean Annual Minimum Temperature (in Fahrenheit) Values (with Standard Deviation) in Markdown Table format:
 
     {table_markdown}
 
-    Mean Annual Minimum Temperature Values (with Standard Deviation) in JSON format:
+    Mean Annual Minimum Temperature (in Fahrenheit) Values (with Standard Deviation) in JSON format:
 
     {table_json}
 

@@ -34,7 +34,15 @@ class OpenSourceModels(ChatCompletion):
                 message_placeholder = st.empty()
                 for chunk in stream:
                     response += chunk['message']['content']
-                    message_placeholder.markdown(response)
+                    if "<think>" in response:
+                        # add small text display of thinking process
+                        message_placeholder.markdown("LLM is thinking...")
+                        if "</think>" in response:
+                            # response comes after </think>
+                            response = response.split("</think>")[1]
+                            message_placeholder.markdown(response)
+                    else:
+                        message_placeholder.markdown(response)
             return response
         else:
             if content:

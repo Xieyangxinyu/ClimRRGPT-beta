@@ -59,7 +59,7 @@ if not st.session_state.profile_done:
             for key, value in st.session_state.responses.items():
                 st.session_state.messages.append({"role": "assistant", "content": questions[key]})
                 st.session_state.messages.append({"role": "user", "content": value})
-            st.experimental_rerun()
+            st.rerun()
     else:
         suggestions_needed = st.button("Give me suggestions!", use_container_width=True)
         if suggestions_needed:
@@ -99,7 +99,7 @@ else:
     with col1:
         if st.button("Edit Profile", use_container_width=True):
             st.session_state.profile_done = False
-            st.experimental_rerun()
+            st.rerun()
     with col2:
         if st.button("Next Step", use_container_width=True):
             del st.session_state['instruction_message']

@@ -1,4 +1,4 @@
-model: llama3:instruct
+model: qwen3
 
 init_questions:
   Profession: What is your profession?
